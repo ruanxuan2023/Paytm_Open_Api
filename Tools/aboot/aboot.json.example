@@ -1,0 +1,12 @@
+{
+  "productionMode": false,
+  "saveLog": false,
+  "displayLog": true,
+  "usbOnly": true,
+  "usbAutoEnable": true,
+  "atFallback": false,
+  "autoBoot": false,
+  "reboot": false,
+  "baudRate": 115200,
+  "disabledGroups": ["5"]
+}

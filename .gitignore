@@ -1,0 +1,7 @@
+**/.vscode/
+
+/Code/sdk/out/
+/Code/kernel/*/customer_app.bin
+
+/Tools/aboot/*.zip
+

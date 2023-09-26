@@ -1,0 +1,137 @@
+{
+  "name": "CRANEW_MCU_DUAL_FLASH_LAYOUT",
+  "partitions": [
+    {
+      "name": "qspi",
+      "format": "flash",
+      "vstart": "0x60000000",
+      "partitions": [
+        {
+          "name": "bootloader",
+          "format": "ubi",
+          "size": "64KiB"
+        },
+        {
+          "name": "boot33_a",
+          "format": "raw",
+          "size": "120KiB"
+        },
+        {
+          "name": "system",
+          "format": "part",
+          "size": "0",
+          "partitions": [
+            {
+              "name": "ptable",
+              "format": "raw",
+              "size": "4KiB"
+            },
+            {
+              "name": "fwcerts",
+              "format": "raw",
+              "size": "4KiB"
+            },
+            {
+              "name": "mcu_l",
+              "format": "raw",
+              "size": "0"
+            },
+            {
+              "name": "mcu_f",
+              "format": "raw",
+              "size": "0"
+            },
+            {
+              "name": "boot33_b",
+              "format": "raw",
+              "size": "0"
+            }
+          ]
+        },
+        {
+          "name": "reserved",
+          "format": "raw",
+          "size": "-1"
+        },
+        {
+          "name": "modem_tag",
+          "format": "raw",
+          "size": "4KiB"
+        }
+      ]
+    },
+    {
+      "name": "emmc",
+      "format": "flash",
+      "vstart": "0x90000000",
+      "partitions": [
+        {
+          "name": "sysdata",
+          "format": "part",
+          "size": "32MiB",
+          "partitions": [
+            {
+              "name": "factory",
+              "format": "part",
+              "size": "0",
+              "partitions": [
+                {
+                  "name": "factory_a",
+                  "format": "raw",
+                  "size": "64KiB"
+                },
+                {
+                  "name": "factory_b",
+                  "format": "raw",
+                  "size": "64KiB"
+                }
+              ]
+            },
+            {
+              "name": "system2",
+              "format": "part",
+              "size": "0",
+              "partitions": [
+                {
+                  "name": "rootfs",
+                  "format": "rfs",
+                  "size": "0"
+                },
+                {
+                  "name": "modem_fw",
+                  "format": "raw",
+                  "size": "0"
+                },
+                {
+                  "name": "jacana_fw",
+                  "format": "raw",
+                  "size": "0"
+                }
+              ]
+            },
+            {
+              "name": "reserved2",
+              "format": "raw",
+              "size": "-1"
+            },
+            {
+              "name": "fota_param",
+              "format": "raw",
+              "size": "4KiB"
+            }
+          ]
+        },
+        {
+          "name": "userdata",
+          "format": "lfs",
+          "size": "32MiB"
+        },
+        {
+          "name": "storage",
+          "format": "ffs",
+          "size": -1
+        }
+      ]
+    }
+  ]
+}

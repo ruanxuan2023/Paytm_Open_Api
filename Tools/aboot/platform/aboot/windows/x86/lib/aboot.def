@@ -1,0 +1,19 @@
+EXPORTS
+    aboot_download_config_trainings @1
+    aboot_download_enable_device @2
+    aboot_download_get_trainings @3
+    aboot_download_init @4
+    aboot_download_start @5
+    aboot_download_stop @6
+    aboot_engine_exit @7
+    aboot_engine_init @8
+    aboot_engine_register_cb @9
+    aboot_engine_unregister_cb @10
+    aboot_prodmode_start @11
+    aboot_prodmode_stop @12
+    aboot_release_generate @13
+    aboot_release_keygen @14
+    aboot_release_list_products @15
+    aboot_release_sign @16
+    aboot_release_list_images @17
+    aboot_download_cust @18

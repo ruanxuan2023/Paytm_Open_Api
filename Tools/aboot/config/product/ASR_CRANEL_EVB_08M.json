@@ -1,0 +1,40 @@
+{
+  "name": "ASR_CRANEL_EVB_08M",
+  "product": "arom-tiny",
+  "version": "0.5",
+  "version-bootrom": "2021.10.16",
+  "template": "CRANEL_A0_TEMPLATE_08M",
+  "layout": "CRANEL_SINGLE_FLASH_LAYOUT_08M",
+  "keyAlg": "rsa",
+  "hashAlg": "sha256",
+  "secureBoot": false,
+  "firmwareGenerator": {
+    "name": "crane",
+    "call-max-download-size": "60KiB",
+    "flash-max-download-size": "1MiB",
+    "use-lzma-compression": true
+  },
+  "fota": ["system"],
+  "variants": [
+    {
+      "name": "CRANEL_A0_04MB",
+      "flashes": [
+        {
+          "name": "qspi",
+          "port": "QSPI",
+          "flash": "QSPI_NOR_4MB_B64KB_S4KB_P256"
+        }
+      ]
+    },
+    {
+      "name": "CRANEL_A0_08MB",
+      "flashes": [
+        {
+          "name": "qspi",
+          "port": "QSPI",
+          "flash": "QSPI_NOR_8MB_B64KB_S4KB_P256"
+        }
+      ]
+    }
+  ]
+}
