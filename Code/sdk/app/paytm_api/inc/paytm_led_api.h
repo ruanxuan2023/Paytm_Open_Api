@@ -6,19 +6,21 @@
 #include "mfpr_api.h"
 #include "mfpr.h"
 
-#define PAYTM_LED_RED_PIN       (21)
-#define PAYTM_LED_GREEN_PIN     (25)
-#define PAYTM_LED_BLUE_PIN      (26)
-
-#define PAYTM_LED_RED_PINMUX     (GPIO_21)
-#define PAYTM_LED_GREEN_PINMUX   (GPIO_25)
-#define PAYTM_LED_BLUE_PINMUX    (GPIO_26)
-
 #define PAYTM_MAX_LED_NUM       (3)
 
+#define PAYTM_LED_RED_PIN       (33)
+#define PAYTM_LED_GREEN_PIN     (34)
+#define PAYTM_LED_BLUE_PIN      (36)
+
+#define PAYTM_LED_RED_PINMUX     (GPIO_33)
+#define PAYTM_LED_GREEN_PINMUX   (GPIO_34)
+#define PAYTM_LED_BLUE_PINMUX    (GPIO_36)
+
+#define PAYTM_LED_RED_FUN       (MFP_AF0)
 #define PAYTM_LED_GREEN_FUN     (MFP_AF0)
 #define PAYTM_LED_BLUE_FUN      (MFP_AF0)
-#define PAYTM_LED_RED_FUN       (MFP_AF0)
+
+#define PAYTM_LED_BLINK_MS      (250)
 
 typedef enum {
     LED_OFF = 0x00,
@@ -35,6 +37,7 @@ typedef struct{
     uint32_t id;
     bool curLvl;
     uint32_t interval;
+    osiTimer_t *ledTimer;
 }ledPin_t;
 
 led_color_type_t Paytm_LED_GetColor(void);

@@ -3,9 +3,9 @@
 
 #include "paytm_sys_api.h"
 
-#define KEY_BUTTON_PIN      (1)     
-#define KEY_BUTTON_MUX      (GPIO_01)     
-#define KEY_DOWN_FUN        (MFP_AF0)
+#define KEY_BUTTON_PIN      (51)     
+#define KEY_BUTTON_MUX      (GPIO_51)     
+#define KEY_BUTTON_FUN      (MFP_AF0)
 
 typedef enum button_subtask_userstate_e{
     STATE_BUTTON_DOUBLE_CLICK = 0,
