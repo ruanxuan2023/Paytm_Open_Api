@@ -1,1 +1,2 @@
 add_subdirectory_if_exist(paytm_api)
+add_subdirectory_if_exist(paytm_speaker_api)

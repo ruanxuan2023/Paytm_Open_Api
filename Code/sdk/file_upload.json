@@ -1,0 +1,14 @@
+{
+  "COM_PORT": "auto",
+  "upload_list": [
+    {
+      "local_path": "C:/Project/paytm/English_AMR",
+      "flash_fs_path": "D:/English"
+    },
+    {
+      "local_path": "C:/Project/paytm/Hindi_AMR",
+      "flash_fs_path": "D:/Hindi"
+    }
+  ]
+
+}

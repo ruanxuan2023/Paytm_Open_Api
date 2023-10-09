@@ -8,7 +8,7 @@ typedef enum{
     CERTIFICATE_NVRAM
 }Enum_Certificate_Location;
 
-#define MQTT_CA_LOC  "mqtt_ca.bin"
+#define MQTT_CA_LOC     "mqtt_ca.bin"
 #define MQTT_CERT_LOC   "mqtt_ca.crt"
 #define MQTT_KEY_LOC    "mqtt_ca.key"
 
@@ -24,39 +24,37 @@ typedef struct
     uint8_t *clientkey;
 }secure_connection_t;
 
-static secure_connection_t self_secure_cert = {0};
-//--TODO 未定义
 typedef struct 
 {
-    /* data */
-    int id;
+    char * cert_name;
+    char * cert_path;
 }Paytm_certificate_t;
 
-//清除预设的证书信息
+//clear mqtt & http global cert array data
 int32 secure_connection_clear(secure_connection_t *ssl);
 
-//设置mqtt 的 ssl证书，是设置证书文件地址还是填充证书文件内容
+//copy the data in ssl to mqtt cert arrray
 int32 secure_connection_mqtt_location(secure_connection_t *ssl, Enum_Certificate_Location location);
 
-//设置http 的 ssl证书，是设置证书文件地址还是填充证书文件内容
+//copy the data in ssl to http cert arrray
 int32 secure_connection_http_location(secure_connection_t *ssl, Enum_Certificate_Location location);
 
-//计算这个证书文件的check_sum 256
+//calculate checksum of certs in ssl 
 int32 Paytm_SSL_Certificate_ReadChecksum(secure_connection_t *ssl);
 
-//检查这个证书文件是否存在？--flash里查找此文件
+//found if the ssl file exists in flash
 uint8 Paytm_SSL_Certificates_Found(const secure_connection_t *ssl);
 
-//删除这个证书文件--删除flash内文件名为ssl.location的文件
+//delete cert data in ssl and remove file which name is ssl->cert_location
 int32 Paytm_SSL_Certificate_Delete(secure_connection_t *ssl);
 
-//将入参的证书信息写入cert--数据写入flash
+//write the cert data to the file which file name is cert->cert_path + cert->name
 int32 Paytm_SSL_Certificate_WriteContent(Paytm_certificate_t *cert, const char *certificate, uint32 certificate_len, uint16 timeout);
 
-//将入参的证书、私钥等写入ssl_cert--数据写入flash
+//write cert data to ssl
 int32 Paytm_SSL_WriteCertificates(secure_connection_t *ssl, const char *_cacert, const char *_clientcert, const char *_clientkey);
 
-//配置SSL可能用到的证书私钥、公钥、CA证书等等--从flash中读出来
+//copy ssl data to http global ssl array
 int32 Paytm_SSL_Config_Http(secure_connection_t *ssl);
 
 #endif

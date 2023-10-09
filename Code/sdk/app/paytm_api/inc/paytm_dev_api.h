@@ -5,6 +5,8 @@
 #include "paytm_sys_api.h"
 #include "paytm_audio_api.h"
 
+#define PAYTM_TOKEN_32 "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);
 int64 Paytm_GetFreeROM(void);
@@ -14,7 +16,6 @@ int64 Paytm_GetTotalHeapSize(void);
 int64 Paytm_GetFreeHeapSize(void);
 int64 Paytm_GetPhysicalRAM(void);
 int64 Paytm_GetTotalRAM(void);
-
 
 int32 Paytm_readToken32Byte(char *token, uint32 token_len);
 int32 Paytm_readAuthID(char *authID, uint32 authID_len);

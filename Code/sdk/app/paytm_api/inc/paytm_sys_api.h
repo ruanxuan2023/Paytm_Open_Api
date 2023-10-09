@@ -53,15 +53,15 @@ int32 Paytm_hex2bin(const char *hex_str, uint32 hex_len, uint8 *bytearrray, uint
 /*********************************    TIME FUNCTIONS    ***********************************/
 
 typedef struct {
-    uint8 month;
-    uint8 day;
-    uint8 hour;
-    uint8 minute;
-    uint8 second;
-    uint8 wday;
+    int32 month;
+    int32 day;
+    int32 hour;
+    int32 minute;
+    int32 second;
+    int32 wday;
 
-    uint16 year;
-    uint16 millisecond;
+    int32 year;
+    int32 millisecond;
     int32 timezone;
 }Paytm_Time;
 
@@ -104,7 +104,7 @@ int32 Paytm_random(void);
 /********************************    TASKS RELATED FUNCTIONS    *********************************/
 
 typedef struct{
-    uint8_t * msg;
+    uint8_t  msg[8];
     uint32_t param1;
     uint32_t param2;
 }ST_MSG;
@@ -154,5 +154,7 @@ int32 Paytm_TakeMutex(uint32 mutex_id, uint32 timeout_msec);
 
 //0-success -1-fail
 int32 Paytm_GiveMutex(uint32 mutex_id);
+
+int32_t Paytm_CreateTask(const char *name, void* entry, void *argument, uint8_t priority, uint32_t stack_size);
 
 #endif

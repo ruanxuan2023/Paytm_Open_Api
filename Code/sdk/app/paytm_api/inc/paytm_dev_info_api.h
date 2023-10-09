@@ -53,9 +53,4 @@ int32 Paytm_GetCpuUsage(void);
 int32 Paytm_ReadIMEI(char imei[]);
 int32 Paytm_GetIMEI(char imei[]);
 
-
-
-
-
-
 #endif

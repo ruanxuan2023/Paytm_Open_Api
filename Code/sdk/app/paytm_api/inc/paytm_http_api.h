@@ -8,6 +8,7 @@
 #define HTTP_URL_LEN (128)
 #define FS_FILE_PATH_MAX (32)
 #define FS_DIR_NAME_MAX (32)
+#define HTTP_BUF_SIZE (2 * 1024)
 
 typedef enum{
     HTTP_GET_REQUEST = 0,

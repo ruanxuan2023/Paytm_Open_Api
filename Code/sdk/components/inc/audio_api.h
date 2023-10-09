@@ -139,6 +139,21 @@ typedef enum AmrPlaybackEventType {
 /** amr playback handle, held and used by amr playback user*/
 typedef uint32_t AmrPlaybackHandle;
 
+typedef enum AmrPlaybackEventValue {
+        /** play out all for file or stream*/
+        AMR_PLAYBACK_STATUS_ENDED = 0,
+        /** indicate current playback is started*/
+        AMR_PLAYBACK_STATUS_STARTED,
+
+        AMR_PLAYBACK_STATUS_STREAM = 100,
+        /** indicate amr data producer should slow down to avoid overrun*/
+        AMR_STREAM_STATUS_NEARLY_OVERRUN,
+        AMR_STREAM_STATUS_SLOW_DOWN = AMR_STREAM_STATUS_NEARLY_OVERRUN,
+        /** indicate amr data producer should fast up to avoid underrun*/
+        AMR_STREAM_STATUS_NEARLY_UNDERRUN,
+        AMR_STREAM_STATUS_FAST_UP = AMR_STREAM_STATUS_NEARLY_UNDERRUN,
+    }AmrPlaybackEventValue;
+
 typedef void(*AmrPlaybackEventCallback)(AmrPlaybackEventType, int);
 typedef struct AmrPlaybackConfigInfo {
     /** playback option in bitmap format, refer @ref AUDIO_PLAY_OPTION in @ref acm_audio_def.h */

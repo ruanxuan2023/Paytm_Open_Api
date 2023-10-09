@@ -9,6 +9,10 @@
 
 extern void app_main(void);
 
+static void prvMainTask(void *param){
+    app_main();
+}
+
 int appimg_enter(void *param)
 {
     RTI_LOG("application image enter");
@@ -16,7 +20,7 @@ int appimg_enter(void *param)
     RTI_LOG("welcome, %s,%s", __DATE__, __TIME__);
 
     // jumo to soundBox app 
-    app_main();
+    osiThreadCreate("app_main", prvMainTask,NULL, 100, 10*1024);
     return 0;
 }
 
