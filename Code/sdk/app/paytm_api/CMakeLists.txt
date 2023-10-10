@@ -23,4 +23,5 @@ target_link_libraries(${target} PRIVATE ${libc_file_name} ${libm_file_name} ${li
 target_include_directories(${target} PUBLIC inc)
 target_sources(${target} PUBLIC
 	src/app_main.c
+	src/server_ca_cert.c
 )

@@ -205,8 +205,8 @@ void * mqttCb(void * p)
 #define DEMO_USER_PWD 			"12345611"
 
 #define DEMO_SUB_TOPIC			"publish/2"
-#define DEMO_PUB_TOPIC          "demo/003"
-#define DEMO_PUB_DATA			"publish list"
+#define DEMO_PUB_TOPIC          "demo/004"
+#define DEMO_PUB_DATA			"this publish infomation"
 
 void testMqtt(void)
 {
@@ -256,7 +256,7 @@ void testMqtt(void)
     }
 
     topic_list.topic[0] = DEMO_SUB_TOPIC;
-    topic_list.qos[0] = Paytm_QOS0_AT_MOST_ONECE;
+    topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
     topic_list.count = 1;
 
     rc = Paytm_MQTT_Subscribe(&topic_list);
@@ -269,7 +269,116 @@ void testMqtt(void)
     publish.topic = DEMO_PUB_TOPIC;
     publish.message = DEMO_PUB_DATA;
     publish.message_length = strlen(publish.message);
-    publish.qos = Paytm_QOS0_AT_MOST_ONECE;
+    publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
+    publish.retain = false;
+
+    rc = Paytm_MQTT_Publish(&publish);
+    if(rc != 0)
+    {
+        Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
+    }
+
+    while (1)
+    {
+        /* code */
+        osiThreadSleep(1000);
+    }
+}
+
+#define ALI_PK  "gd6j110a9nE"
+#define ALI_DN  "4GPAYTM00001"
+#define ALI_DS  "10bb968206631a7f1b33f8285abe23af"
+#define ALIS_PK "gd6jlD70qXQ"
+#define ALIS_DN "lock00000001"
+#define ALIS_DS "485cc516b6ccbb61e65b31285144c4bc"
+
+#define ALI_HOST    ALI_PK".iot-as-mqtt.cn-shanghai.aliyuncs.com"
+#define ALIS_HOST   "x509.itls.cn-shanghai.aliyuncs.com"
+#define ALI_PORT   (443)
+#define ALIS_PORT  (1883)
+
+#define ALI_SUB_TOPIC   "/sys/gd6j110a9nE/4GPAYTM00001/thing/service/property/set"
+#define ALI_PUB_TOPIC   "/gd6j110a9nE/4GPAYTM00001/user/update/pub1"
+#define ALI_PUB_DATA    "{'name':'ali_1'}"
+#define ALIS_SUB_TOPIC  "/sys/gd6jlD70qXQ/lock00000001/thing/service/property/set"
+#define ALIS_PUB_TOPIC  "/gd6jlD70qXQ/lock00000001/user/update/pub1"
+#define ALIS_PUB_DATA   "{'name':'alis_2'}"
+
+extern int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret, 
+                     	char clientId[150], char username[65], char password[65]); 
+void aliyunMqtt(void)
+{
+    int rc = 0;
+
+    net_connect();
+
+    char clientId[150] = {0};
+	char username[65] = {0};
+	char password[65] = {0};
+
+    Paytm_mqtt_connect_Packet_t mqtt_packet = {0};
+    ST_MQTT_topic_info_t topic_list = {0};
+    Paytm_mqtt_publish_Packet_t publish = {0};
+
+    if ((rc = aiotMqttSign(ALI_PK, ALI_DN, ALI_DS, clientId, username, password) < 0)) {
+		Paytm_TRACE("aiotMqttSign -%0x4x\n", -rc);
+		return ;
+	}
+
+    Paytm_TRACE("clientId: %s", clientId);
+    Paytm_TRACE("username: %s", username);
+    Paytm_TRACE("password: %s", password);
+
+    mqtt_packet.host = ALI_HOST;
+    mqtt_packet.port = ALI_PORT;
+    mqtt_packet.client_id = clientId;
+    mqtt_packet.username = username;
+    mqtt_packet.password = password;
+    mqtt_packet.enable_ssl = false;
+    mqtt_packet.keepalive_sec = 60;
+    mqtt_packet.cleansession = 1;
+
+    rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
+    if(rc < 0)
+    {
+        Paytm_TRACE("Mqtt init fail %d!", rc);
+        return;
+    }
+
+    rc = Paytm_MQTT_Open();
+    if(rc != 0)
+    {
+        Paytm_TRACE("Mqtt socket open fail %d!", rc);
+        if(rc == -29)
+        {
+            RTI_LOG("Mqtt already opened");
+            Paytm_MQTT_Disconnect();
+        }
+        return;
+    }   
+
+    rc = Paytm_MQTT_Connect();
+    if(rc != 0)
+    {
+        Paytm_TRACE("Mqtt socket connect fail %d!", rc);
+        return;
+    }
+
+    topic_list.topic[0] = ALI_SUB_TOPIC;
+    topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
+    topic_list.count = 1;
+
+    rc = Paytm_MQTT_Subscribe(&topic_list);
+    if(rc != 0)
+    {
+        Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
+    }
+
+    publish.messageId = 58;
+    publish.topic = ALI_PUB_TOPIC;
+    publish.message = ALI_PUB_DATA;
+    publish.message_length = strlen(publish.message);
+    publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
     publish.retain = false;
 
     rc = Paytm_MQTT_Publish(&publish);
@@ -290,7 +399,7 @@ void app_main(void)
 {
     sys_initialize();
     Paytm_Uart_Init();
-    testMqtt();
+    aliyunMqtt();
     while (1)
     {
         //LogTest();

@@ -12,7 +12,8 @@ typedef enum{
 
 typedef struct 
 {
-    uint16_t id;
+    char name[64];
+    uint32_t size;
     struct node_t* next;
 }node_t;
 
