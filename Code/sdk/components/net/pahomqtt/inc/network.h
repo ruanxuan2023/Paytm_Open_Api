@@ -21,12 +21,16 @@ typedef struct network {
     int                         channel;        /* tcp or tls */
     const char                  *ca_crt;
     unsigned int                ca_crt_len;
+    const char                  *client_cert;
+    unsigned int                client_cert_len;
+    const char                  *client_pk;
+    unsigned int                client_pk_len;
     unsigned int                timeout_ms;            // SSL handshake timeout in millisecond
     void                        *nettype_tls_params;
 #endif
 } network_t;
 
-int network_init(network_t *n, const char *host, const char *port, const char *ca);
+int network_init(network_t *n, const char *host, const char *port, const char *ca, const char *cert, const char *pk);
 int network_set_ca(network_t *n, const char *ca);
 void network_set_channel(network_t *n, int channel);
 int network_set_host_port(network_t* n, char *host, char *port);

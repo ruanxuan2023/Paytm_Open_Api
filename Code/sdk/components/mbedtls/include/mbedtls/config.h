@@ -26,6 +26,8 @@
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 
+#include "mbedtls/build_info.h"
+
 #ifndef MBEDTLS_CONFIG_H
 
 /*
@@ -34,12 +36,6 @@
  */
 #if !defined(MBEDTLS_ENTROPY_HARDWARE_ALT) && !defined(MBEDTLS_TEST_NULL_ENTROPY) && \
     !defined(MBEDTLS_ENTROPY_NV_SEED)
-
-#ifdef PLAT_USE_ALIOS
-#include "alios_mbedtls_config.h"
-#else
-#include "asros_mbedtls_config.h"
-#endif
 
 #if defined(MBEDTLS_USER_CONFIG_FILE)
 #include MBEDTLS_USER_CONFIG_FILE

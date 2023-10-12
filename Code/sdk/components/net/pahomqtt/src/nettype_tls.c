@@ -94,6 +94,20 @@ static int nettype_tls_init(network_t* n, nettype_tls_params_t* nettype_tls_para
         }
     }
 
+    if(NULL != n->client_cert && NULL != n->client_pk){
+        if (0 != (rc = (mbedtls_x509_crt_parse(&(nettype_tls_params->client_cert), (unsigned char *)n->client_cert,
+                                          (n->client_cert_len + 1))))) {
+            KAWAII_MQTT_LOG_E("%s:%d %s()... parse client cert failed returned 0x%04x", __FILE__, __LINE__, __FUNCTION__, (rc < 0 )? -rc : rc);
+            RETURN_ERROR(rc);
+        }
+
+        if (0 != (rc = (mbedtls_pk_parse_key(&(nettype_tls_params->private_key), (unsigned char *)n->client_pk,
+                                          (n->client_pk_len + 1), NULL, 0)))) {
+            KAWAII_MQTT_LOG_E("%s:%d %s()... parse client private key failed returned 0x%04x", __FILE__, __LINE__, __FUNCTION__, (rc < 0 )? -rc : rc);
+            RETURN_ERROR(rc);
+        }
+    }
+
     mbedtls_ssl_conf_ca_chain(&(nettype_tls_params->ssl_conf), &(nettype_tls_params->ca_cert), NULL);
 
     if ((rc = mbedtls_ssl_conf_own_cert(&(nettype_tls_params->ssl_conf),

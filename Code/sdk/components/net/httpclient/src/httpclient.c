@@ -228,16 +228,17 @@ static int _httpSsl_conn(httpclient_t *client, char *host){
         goto ERR_EXIT;
     }
     HTTPC_LOG("SSL mbedtls_ctr_drbg_seed dont");
-    if (NULL != client->server_cert)
+    //
+    if (client->verify_mode >= 1 && client->verify_mode <= 2 && NULL != client->server_cert)
     {
         if (0 != (ret = mbedtls_x509_crt_parse(&(ssl->cacert), (const unsigned char *)client->server_cert, client->server_cert_len)))
         {
-            HTTPC_LOG(" failed ! x509parse_crt returned -0x%04x\n", -ret);
+            HTTPC_LOG(" failed ! x509parse_crt returned -0x%04x %d\n", -ret, strlen(client->server_cert));
             goto ERR_EXIT;
         }
     }
-
-    if(NULL != client->client_cert && NULL != client->client_pk){
+    //
+    if(client->verify_mode == 2 &&  NULL != client->client_cert && NULL != client->client_pk){
         
         ret = mbedtls_x509_crt_parse(&(ssl->clicert), (const unsigned char *)client->client_cert, client->client_cert_len);
         if (ret != 0)
@@ -260,7 +261,7 @@ static int _httpSsl_conn(httpclient_t *client, char *host){
         HTTPC_LOG(" failed ! net_connect returned -0x%04x\n", -ret);
         goto ERR_EXIT;
     }
-    
+
     if ((ret = mbedtls_net_set_block(&(ssl->net_ctx))) != 0) {
         HTTPC_LOG("set block faliled returned 0x%04x", ret < 0 ? -ret : ret);
         goto ERR_EXIT;
@@ -272,11 +273,11 @@ static int _httpSsl_conn(httpclient_t *client, char *host){
         goto ERR_EXIT;
     }
     mbedtls_ssl_conf_verify(&(ssl->ssl_conf), _serverCertificateVerify, (void *)host);
-    mbedtls_ssl_conf_authmode(&(ssl->ssl_conf), MBEDTLS_SSL_VERIFY_NONE);
-    if (NULL != client->server_cert){
+    mbedtls_ssl_conf_authmode(&(ssl->ssl_conf), client->verify_mode);
+    if (client->verify_mode >= 1 && client->verify_mode <= 2 && NULL != client->server_cert){
         mbedtls_ssl_conf_ca_chain(&(ssl->ssl_conf), &(ssl->cacert), NULL);
     }
-    if(NULL != client->client_cert && NULL != client->client_pk){
+    if(client->verify_mode == 2 && NULL != client->client_cert && NULL != client->client_pk){
         if ((ret = mbedtls_ssl_conf_own_cert(&(ssl->ssl_conf), &(ssl->clicert), &(ssl->pkey))) != 0)
         {
             HTTPC_LOG(" failed\n  ! mbedtls_ssl_conf_own_cert returned %d\n", ret);
@@ -294,6 +295,11 @@ static int _httpSsl_conn(httpclient_t *client, char *host){
 
     mbedtls_ssl_set_bio(&(ssl->ssl_ctx), &(ssl->net_ctx), mbedtls_net_send, mbedtls_net_recv,
                         mbedtls_net_recv_timeout);
+    // ret = mbedtls_net_connect(&(ssl->net_ctx), host, port_str, MBEDTLS_NET_PROTO_TCP);
+    // if(ret != 0){
+    //     HTTPC_LOG("failed! mbedtls_net_connect ret: -0x%x\n", -ret);
+    //     goto ERR_EXIT;
+    // }
 
     while ((ret = mbedtls_ssl_handshake(&(ssl->ssl_ctx))) != 0)
     {
@@ -311,6 +317,7 @@ static int _httpSsl_conn(httpclient_t *client, char *host){
     HTTPC_LOG(" ok\n");
     return HTTPCLIENT_OK;
 ERR_EXIT:
+    //http_close 会free，这里就不用了
     // _sslContextfree(ssl);
     // client->ssl = NULL;
     return HTTPCLIENT_ERROR_CONN;
@@ -692,6 +699,8 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
         } else if (ret == 0) {
             break;
         } else {
+            if(readLen > 0)
+                break;
             HTTPC_LOG("\nConnection error (recv returned %d errno: %d)\n", ret, errno);
             *p_read_len = readLen;
             return HTTPCLIENT_ERROR_CONN;

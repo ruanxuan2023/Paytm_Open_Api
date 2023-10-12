@@ -19,6 +19,7 @@ typedef UINT8 OSA_STATUS;
 /*Customer log defined here!!!*/
 #undef mqtt_printf
 #include "osi_api.h"
+#include "asros_mbedtls_config.h"
 
 #if 0//debug print enable
 #define mqtt_printf(fmt,args...)	    do { RTI_LOG("[MQTT]"fmt, ##args); } while(0)
@@ -28,7 +29,7 @@ typedef UINT8 OSA_STATUS;
 
 #define KAWAII_MQTT_LOG_LEVEL           (KAWAII_MQTT_LOG_DEBUG_LEVEL)
 
-//#define     KAWAII_MQTT_NETWORK_TYPE_TLS
+#define     KAWAII_MQTT_NETWORK_TYPE_TLS
 #define     MQTT_MAX_PACKET_ID                  (0xFFFF - 1)
 #define     MQTT_TOPIC_LEN_MAX                  64
 #define     MQTT_ACK_HANDLER_NUM_MAX            64

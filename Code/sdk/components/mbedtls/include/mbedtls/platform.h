@@ -136,7 +136,7 @@ extern "C" {
 #if defined(MBEDTLS_PLATFORM_FREE_MACRO) && \
     defined(MBEDTLS_PLATFORM_CALLOC_MACRO)
 
-#ifdef PLAT_USE_ALIOS
+#ifdef MBEDTLS_PLAT_USE_ALIOS
 /* Modify for AliOS Things begin. 2019-01-09 */
 #define MBEDTLS_PLATFORM_CALLOC_MACRO aos_mbedtls_calloc
 #define MBEDTLS_PLATFORM_FREE_MACRO aos_mbedtls_free

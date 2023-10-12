@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "osi_api.h"
+#include "mbedtls/ssl.h"
 
 #include "paytm_button_api.h"
 #include "paytm_http_api.h"
@@ -11,6 +13,8 @@
 #include "paytm_sim_api.h"
 #include "paytm_debug_uart_api.h"
 #include "paytm_led_api.h"
+
+#include "drv_adc.h"
 
 void LogTest(void)
 {
@@ -33,7 +37,7 @@ void LogTest(void)
     Paytm_TRACE_DATETIME_PAYTM("L7", "2023-09-23", "Demo9", "%d", 456);
 }
 
-void* buttoncb(void * p)
+void buttoncb(void * p)
 {
     RTI_LOG1("This is buttoncb, action is ");
     if(*(int*)p == STATE_BUTTON_DOUBLE_CLICK)
@@ -54,17 +58,18 @@ void ButtonTest(void)
     Paytm_Button_events(true);
 }
 
-/**
- * 结果：
-*/
 #define HTTP_GET_URL    "http://www.kuaidi100.com/query?type=shunfeng&postid=SF1420349064432"
 #define HTTP_POST_URL   "http://pay.chinainfosafe.com:6003"
-#define HTTPS_POST_URL  "https://visit.chinainfosafe.com/platform-admin/other/device/verification"
+#define HTTPS_URL       "https://www.chinainfosafe.com:1883"
 static char *post_data = "Hello chinainfosafe";
+
+extern const char http_client_key[1705];
+extern const char http_client_cert[1173];
+extern const char http_server_cert[4789];
 
 void net_connect(void)
 {
-    int stat = 0;
+    int32 stat = 0;
 
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
     
@@ -79,13 +84,21 @@ void net_connect(void)
 void testHttpGet(void * p)
 {
     int rc = 0;
-    char *get_url = HTTP_GET_URL;
-
-    net_connect();
+    char *get_url = HTTPS_URL;
+    secure_connection_t http_ssl = {0};
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
     http.content = (char*)Paytm_malloc(HTTP_BUF_SIZE);
+    http.verify_mode = MBEDTLS_SSL_VERIFY_REQUIRED;
+    
+    http.use_ssl = true;
+    http_ssl.cacert = (char*)http_server_cert;
+    http_ssl.clientcert = (char*)http_client_cert;
+    http_ssl.clientkey = (char*)http_client_key;
+
+    Paytm_SSL_Clear_Http();
+    Paytm_SSL_Config_Http(&http_ssl);
 
     rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, get_url, 0, NULL);
     if(rc < 0)
@@ -110,22 +123,12 @@ void testHttpGet(void * p)
     {
         osiThreadSleep(1000);
     }
-    
 }
 
 void testHttpPost(void * p)
 {
-    int stat = 0, rc = 0;
+    int rc = 0;
     char *post_url = HTTP_POST_URL;
-
-    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
-    
-    while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
-    {
-        Paytm_delayMilliSeconds(1000);
-    }
-    
-    Paytm_TRACE("Network connected!");
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
@@ -159,13 +162,20 @@ void testHttpPost(void * p)
 void testHttpSSLPost(void * p)
 {
     int rc = 0;
-    char *post_url = HTTPS_POST_URL;
-
-    net_connect();
+    char *post_url = HTTPS_URL;
+    secure_connection_t http_ssl = {0};
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
     http.content = (char*)Paytm_malloc(HTTP_BUF_SIZE);
+    http.verify_mode = MBEDTLS_SSL_VERIFY_REQUIRED;
+
+    http.use_ssl = true;
+    http_ssl.cacert = (char*)http_server_cert;
+    http_ssl.clientcert = (char*)http_client_cert;
+    http_ssl.clientkey = (char*)http_client_key;
+
+    Paytm_SSL_Config_Http(&http_ssl);
 
     rc = Paytm_HTTP_Initialise_POST(&http, post_url, NULL, post_data, true);
     if(rc < 0)
@@ -192,13 +202,13 @@ void testHttpSSLPost(void * p)
     }
 }
 
-void * mqttCb(void * p)
+void mqttCb(void * p)
 {
 
 }
 
-#define DEMO_MQTT_HOST  "pay.chinainfosafe.com"
-#define DEMO_MQTT_PORT			6883
+#define DEMO_MQTT_HOST  "www.chinainfosafe.com"
+#define DEMO_MQTT_PORT			8883
 
 #define DEMO_MQTT_PRODUCT_KEY 	"demo3"
 #define DEMO_USER_NAME   		"china"
@@ -206,8 +216,11 @@ void * mqttCb(void * p)
 
 #define DEMO_SUB_TOPIC			"publish/2"
 #define DEMO_PUB_TOPIC          "demo/004"
-#define DEMO_PUB_DATA			"this publish infomation"
+#define DEMO_PUB_DATA			"I have published a message to you."
 
+extern const char  mqtt_client_key[1705];
+extern const char  mqtt_client_cert[1173];
+extern const char  mqtt_server_cert[4789];
 void testMqtt(void)
 {
     int rc = 0;
@@ -217,6 +230,9 @@ void testMqtt(void)
     char * password = DEMO_USER_PWD;
 
     net_connect();
+    
+    // config MQTT ca_cert&client_cert&client_privatekey
+    Paytm_MQTT_WriteCertificates(mqtt_server_cert, mqtt_client_cert, mqtt_client_key);
 
     Paytm_mqtt_connect_Packet_t mqtt_packet = {0};
     ST_MQTT_topic_info_t topic_list = {0};
@@ -227,7 +243,8 @@ void testMqtt(void)
     mqtt_packet.client_id = client_id;
     mqtt_packet.username = username;
     mqtt_packet.password = password;
-    mqtt_packet.enable_ssl = false;
+    // enable ssl  authentication
+    mqtt_packet.enable_ssl = true;
 
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
@@ -285,124 +302,17 @@ void testMqtt(void)
     }
 }
 
-#define ALI_PK  "gd6j110a9nE"
-#define ALI_DN  "4GPAYTM00001"
-#define ALI_DS  "10bb968206631a7f1b33f8285abe23af"
-#define ALIS_PK "gd6jlD70qXQ"
-#define ALIS_DN "lock00000001"
-#define ALIS_DS "485cc516b6ccbb61e65b31285144c4bc"
-
-#define ALI_HOST    ALI_PK".iot-as-mqtt.cn-shanghai.aliyuncs.com"
-#define ALIS_HOST   "x509.itls.cn-shanghai.aliyuncs.com"
-#define ALI_PORT   (443)
-#define ALIS_PORT  (1883)
-
-#define ALI_SUB_TOPIC   "/sys/gd6j110a9nE/4GPAYTM00001/thing/service/property/set"
-#define ALI_PUB_TOPIC   "/gd6j110a9nE/4GPAYTM00001/user/update/pub1"
-#define ALI_PUB_DATA    "{'name':'ali_1'}"
-#define ALIS_SUB_TOPIC  "/sys/gd6jlD70qXQ/lock00000001/thing/service/property/set"
-#define ALIS_PUB_TOPIC  "/gd6jlD70qXQ/lock00000001/user/update/pub1"
-#define ALIS_PUB_DATA   "{'name':'alis_2'}"
-
-extern int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret, 
-                     	char clientId[150], char username[65], char password[65]); 
-void aliyunMqtt(void)
-{
-    int rc = 0;
-
-    net_connect();
-
-    char clientId[150] = {0};
-	char username[65] = {0};
-	char password[65] = {0};
-
-    Paytm_mqtt_connect_Packet_t mqtt_packet = {0};
-    ST_MQTT_topic_info_t topic_list = {0};
-    Paytm_mqtt_publish_Packet_t publish = {0};
-
-    if ((rc = aiotMqttSign(ALI_PK, ALI_DN, ALI_DS, clientId, username, password) < 0)) {
-		Paytm_TRACE("aiotMqttSign -%0x4x\n", -rc);
-		return ;
-	}
-
-    Paytm_TRACE("clientId: %s", clientId);
-    Paytm_TRACE("username: %s", username);
-    Paytm_TRACE("password: %s", password);
-
-    mqtt_packet.host = ALI_HOST;
-    mqtt_packet.port = ALI_PORT;
-    mqtt_packet.client_id = clientId;
-    mqtt_packet.username = username;
-    mqtt_packet.password = password;
-    mqtt_packet.enable_ssl = false;
-    mqtt_packet.keepalive_sec = 60;
-    mqtt_packet.cleansession = 1;
-
-    rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
-    if(rc < 0)
-    {
-        Paytm_TRACE("Mqtt init fail %d!", rc);
-        return;
-    }
-
-    rc = Paytm_MQTT_Open();
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt socket open fail %d!", rc);
-        if(rc == -29)
-        {
-            RTI_LOG("Mqtt already opened");
-            Paytm_MQTT_Disconnect();
-        }
-        return;
-    }   
-
-    rc = Paytm_MQTT_Connect();
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt socket connect fail %d!", rc);
-        return;
-    }
-
-    topic_list.topic[0] = ALI_SUB_TOPIC;
-    topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
-    topic_list.count = 1;
-
-    rc = Paytm_MQTT_Subscribe(&topic_list);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
-    }
-
-    publish.messageId = 58;
-    publish.topic = ALI_PUB_TOPIC;
-    publish.message = ALI_PUB_DATA;
-    publish.message_length = strlen(publish.message);
-    publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
-    publish.retain = false;
-
-    rc = Paytm_MQTT_Publish(&publish);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
-    }
-
-    while (1)
-    {
-        /* code */
-        osiThreadSleep(1000);
-    }
-}
-
 extern void sys_initialize(void);
+extern void testSsl(void* p);
 void app_main(void)
 {
     sys_initialize();
-    Paytm_Uart_Init();
-    aliyunMqtt();
+
+    net_connect();
+    Paytm_CreateTask("post", testMqtt, NULL, 100, 30 * 1024);
+
     while (1)
     {
-        //LogTest();
         osiThreadSleep(1000);
     }
 

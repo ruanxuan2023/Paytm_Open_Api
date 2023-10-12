@@ -113,7 +113,8 @@ void mbedtls_net_init( mbedtls_net_context *ctx );
  *
  * \note           Sets the socket in connected mode even with UDP.
  */
-int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto );
+int mbedtls_net_connect2( mbedtls_net_context *ctx, const char *host, const char *port, int proto, int addressFamily);
+int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto);
 
 /**
  * \brief          Create a receiving socket on bind_ip:port in the chosen
@@ -256,6 +257,8 @@ int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len );
  */
 int mbedtls_net_recv_timeout( void *ctx, unsigned char *buf, size_t len,
                       uint32_t timeout );
+
+int mbedtls_net_recv_hook( void *ctx, unsigned char *buf, size_t len);
 
 /**
  * \brief          Gracefully shutdown the connection and free associated data

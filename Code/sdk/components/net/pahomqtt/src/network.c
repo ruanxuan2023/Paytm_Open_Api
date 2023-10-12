@@ -51,7 +51,7 @@ void network_disconnect(network_t *n)
         nettype_tcp_disconnect(n);
 }
 
-int network_init(network_t *n, const char *host, const char *port, const char *ca)
+int network_init(network_t *n, const char *host, const char *port, const char *ca, const char *cert, const char *pk)
 {
     if (NULL == n)
         RETURN_ERROR(KAWAII_MQTT_NULL_VALUE_ERROR);
@@ -65,6 +65,12 @@ int network_init(network_t *n, const char *host, const char *port, const char *c
 
     if (NULL != ca) {
         network_set_ca(n, ca);
+        if(cert != NULL && pk != NULL){
+            n->client_cert = cert;
+            n->client_cert_len = strlen(cert);
+            n->client_pk = pk;
+            n->client_pk_len = strlen(pk);
+        }
     }
 #endif
     RETURN_ERROR(KAWAII_MQTT_SUCCESS_ERROR);

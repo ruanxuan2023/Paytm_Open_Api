@@ -985,9 +985,9 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
 
 
 #ifdef KAWAII_MQTT_NETWORK_TYPE_TLS
-    rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, c->mqtt_ca);
+    rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, c->mqtt_ca, c->mqtt_client_cert, c->mqtt_client_pk);
 #else
-    rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL);
+    rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL, NULL, NULL);
 #endif
 
     rc = network_connect(c->mqtt_network);
@@ -1137,6 +1137,8 @@ KAWAII_MQTT_CLIENT_SET_DEFINE(password, char*, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(host, char*, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(port, char*, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(ca, char*, NULL)
+KAWAII_MQTT_CLIENT_SET_DEFINE(client_cert, char*, NULL)
+KAWAII_MQTT_CLIENT_SET_DEFINE(client_pk, char*, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(reconnect_data, void*, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(keep_alive_interval, uint16_t, 0)
 KAWAII_MQTT_CLIENT_SET_DEFINE(will_flag, uint32_t, 0)
@@ -1455,7 +1457,7 @@ int mqtt_list_subscribe_topic(mqtt_client_t* c)
         msg_handler = LIST_ENTRY(curr, message_handlers_t, list);
         /* determine whether a node already exists by mqtt topic, but wildcards are not supported */
         if (NULL != msg_handler->topic_filter) {
-            KAWAII_MQTT_LOG_I("%s:%d %s()...[%d] subscribe topic: %s", __FILE__, __LINE__, __FUNCTION__, ++i ,msg_handler->topic_filter);
+            KAWAII_MQTT_LOG_I("%s:%d %s()... subscribe topic: %s", __FILE__, __LINE__, __FUNCTION__ ,msg_handler->topic_filter);
         }
     }
 
@@ -1500,11 +1502,11 @@ int mqtt_open_with_results(mqtt_client_t* c)
 
 	if(c->mqtt_ssl_enable)
 	{
-		rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, c->mqtt_ca);
+		rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, c->mqtt_ca, c->mqtt_client_cert, c->mqtt_client_pk);
 	}
 	else
 	{
-		rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL);
+		rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL, NULL, NULL);
 	}
 
     rc = network_connect(c->mqtt_network);

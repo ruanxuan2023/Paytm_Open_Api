@@ -54,7 +54,7 @@ typedef struct mbedtls_threading_mutex_t
 
 #if defined(MBEDTLS_THREADING_ALT)
 /* You should define the mbedtls_threading_mutex_t type in your header */
-#ifdef PLAT_USE_ALIOS
+#ifdef MBEDTLS_PLAT_USE_ALIOS
 #include "alios_mbedtls_threading_alt.h"
 #else
 #include "threading_alt.h"

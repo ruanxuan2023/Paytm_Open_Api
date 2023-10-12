@@ -7,18 +7,18 @@
 #define KEY_BUTTON_MUX      (GPIO_51)     
 #define KEY_BUTTON_FUN      (MFP_AF0)
 
-typedef enum button_subtask_userstate_e{
+typedef enum {
     STATE_BUTTON_DOUBLE_CLICK = 0,
     STATE_BUTTON_SINGLE_CLICK,
     STATE_BUTTON_LONG_PRESS
-};
+}button_subtask_userstate_e;
 
-typedef enum buttons_enum_t{
+typedef enum {
     BUTTON_PLUS = 0,
     BUTTON_MINUS,
     BUTTON_FUNCTION,
     BUTTON_COUNT
-};
+}buttons_enum_t;
 
 int32 Paytm_Button_events(uint8 enable);
 int32_t Paytm_Button_init(void);

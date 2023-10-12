@@ -136,6 +136,7 @@ typedef struct {
     int client_pk_len;              /**< Client private key lenght, client_pk buffer size. */
     const char *pk_pwd;
     int pk_len;
+    int verify_mode;                /*0-VERIFY_NONE 1-VERIFY_OPTIONAL 2-VERIFY_REQUIRED 3-UNSET*/
     httpclient_ssl_t *ssl;          /**< Ssl content. */
 #endif
 } httpclient_t;

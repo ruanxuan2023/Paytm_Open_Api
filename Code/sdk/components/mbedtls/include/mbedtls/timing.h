@@ -59,7 +59,7 @@ typedef struct mbedtls_timing_delay_context
 } mbedtls_timing_delay_context;
 
 #else  /* MBEDTLS_TIMING_ALT */
-#include "timing_alt.h"
+//#include "timing_alt.h"
 #endif /* MBEDTLS_TIMING_ALT */
 
 extern volatile int mbedtls_timing_alarmed;
@@ -93,7 +93,9 @@ unsigned long mbedtls_timing_hardclock( void );
  *                 get_timer(0) }` the value time1+time2 is only approximately
  *                 the delay since the first reset.
  */
+#if !defined(MBEDTLS_TIMING_ALT)
 unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset );
+#endif
 
 /**
  * \brief          Setup an alarm clock

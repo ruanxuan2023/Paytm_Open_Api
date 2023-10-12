@@ -19,9 +19,9 @@ typedef enum{
 typedef struct 
 {
     char* cert_location;
-    uint8_t *cacert;
-    uint8_t *clientcert;
-    uint8_t *clientkey;
+    char *cacert;
+    char *clientcert;
+    char *clientkey;
 }secure_connection_t;
 
 typedef struct 

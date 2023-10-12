@@ -73,6 +73,8 @@ typedef struct
     char *authorization;
     char *cache_control;
     char *custom_headers;
+    int verify_mode;                /*0-VERIFY_NONE 1-VERIFY_OPTIONAL 2-VERIFY_REQUIRED 3-UNSET*/
+    bool use_ssl;
     int32 error_code;
     //sb_location_t storage_location;
     char filepath[FS_FILE_PATH_MAX];

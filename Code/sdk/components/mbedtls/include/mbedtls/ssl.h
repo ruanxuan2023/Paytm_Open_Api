@@ -1314,6 +1314,10 @@ struct mbedtls_ssl_context
                             *   Possible values are #MBEDTLS_SSL_CID_ENABLED
                             *   and #MBEDTLS_SSL_CID_DISABLED. */
 #endif /* MBEDTLS_SSL_DTLS_CONNECTION_ID */
+
+    mbedtls_ssl_recv_t *f_recv_hook; /*!< Callback for network hook receive */
+    uint8_t* read_buf_hook;
+    size_t   read_buf_hook_len;
 };
 
 #if defined(MBEDTLS_SSL_HW_RECORD_ACCEL)
@@ -1536,6 +1540,10 @@ void mbedtls_ssl_set_bio( mbedtls_ssl_context *ssl,
                           mbedtls_ssl_send_t *f_send,
                           mbedtls_ssl_recv_t *f_recv,
                           mbedtls_ssl_recv_timeout_t *f_recv_timeout );
+
+void mbedtls_ssl_set_read_buf_hook( mbedtls_ssl_context *ssl,
+                                    uint8_t *read_buf_hook,
+                                    size_t read_buf_hook_len);
 
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
 

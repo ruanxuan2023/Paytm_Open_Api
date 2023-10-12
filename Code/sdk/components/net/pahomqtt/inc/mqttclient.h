@@ -121,6 +121,8 @@ typedef struct mqtt_client {
     char                        *mqtt_host;
     char                        *mqtt_port;
     char                        *mqtt_ca;
+    char                        *mqtt_client_cert;
+    char                        *mqtt_client_pk;
     void                        *mqtt_reconnect_data;
     uint8_t                     *mqtt_read_buf;
     uint8_t                     *mqtt_write_buf;
@@ -177,6 +179,8 @@ KAWAII_MQTT_CLIENT_SET_STATEMENT(password, char*)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(host, char*)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(port, char*)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(ca, char*)
+KAWAII_MQTT_CLIENT_SET_STATEMENT(client_cert, char*)
+KAWAII_MQTT_CLIENT_SET_STATEMENT(client_pk, char*)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_data, void*)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(keep_alive_interval, uint16_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(will_flag, uint32_t)
