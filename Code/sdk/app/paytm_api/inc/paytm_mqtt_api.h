@@ -4,6 +4,7 @@
 #include "paytm_typedef.h"
 #include "paytm_ssl_api.h"
 #include "osi_api.h"
+#include "mqttclient.h"
 
 #define MQTT_MAX_TOPIC (10)
 
@@ -59,7 +60,7 @@ typedef Paytm_MQTT_topic_info_t ST_MQTT_topic_info_t;
 int32 Paytm_MQTT_Initialise(const char *url, Enum_Certificate_Location location, Paytm_mqtt_connect_Packet_t *mqtt_handle);
 int32 Paytm_MQTT_Open();
 int32 Paytm_MQTT_Connect();
-int32 Paytm_MQTT_Subscribe(ST_MQTT_topic_info_t *mqtt_topic_info_t);
+int32 Paytm_MQTT_Subscribe(ST_MQTT_topic_info_t *mqtt_topic_info_t, message_handler_t global_cb);
 int32 Paytm_MQTT_Publish(Paytm_mqtt_publish_Packet_t*);
 int32 Paytm_MQTT_Close();
 

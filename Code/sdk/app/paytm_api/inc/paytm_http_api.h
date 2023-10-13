@@ -19,15 +19,24 @@ typedef enum{
 
 typedef enum{
     HTTP_CONTENT_ANY = 0,
-    HTTP_CONTENT_JSON,
+    HTTP_CONTENT_JSON,  //application/json
     HTTP_CONTENT_ZIP,
     HTTP_CONTENT_XML,
-    HTTP_CONTENT_HTML,
+    HTTP_CONTENT_HTML,  //
     HTTP_CONTENT_TEXT,
     HTTP_CONTENT_OCTET_STREAM,
     HTTP_CONTENT_URL_ENCODED,
     HTTP_CONTENT_TOTAL
 }Paytm_http_content_type_t;
+
+#define CONTENT_TYPE_ANY    " "
+#define CONTENT_TYPE_JSON   "application/json"
+#define CONTENT_TYPE_ZIP    " "
+#define CONTENT_TYPE_XML    " "
+#define CONTENT_TYPE_HTML   " "
+#define CONTENT_TYPE_TEXT   " "
+#define CONTENT_TYPE_OCTET_STREAM   " "
+#define CONTENT_TYPE_URL_ENCODED    " "
 
 typedef enum{
     STATE_HTTP_SOCKET_SEND = 0,

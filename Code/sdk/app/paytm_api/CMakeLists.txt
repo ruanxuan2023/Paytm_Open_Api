@@ -24,4 +24,9 @@ target_include_directories(${target} PUBLIC inc)
 target_sources(${target} PUBLIC
 	src/app_main.c
 	src/server_ca_cert.c
+
+	src/demo/filesystem_demo.c
+	src/demo/http_demo.c 
+	src/demo/mqtt_demo.c
+	src/demo/paytm_demo.c
 )

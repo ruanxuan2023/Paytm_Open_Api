@@ -3,8 +3,8 @@
 
 #include "paytm_sys_api.h"
 
-#define KEY_BUTTON_PIN      (51)     
-#define KEY_BUTTON_MUX      (GPIO_51)     
+#define KEY_BUTTON_PIN      (34)     
+#define KEY_BUTTON_MUX      (GPIO_34)     
 #define KEY_BUTTON_FUN      (MFP_AF0)
 
 typedef enum {
