@@ -3,6 +3,9 @@
 
 #include "paytm_sys_api.h"
 
+#define PAYTM_VOLUME_MIN    (1)
+#define PAYTM_VOLUME_MAX    (11)
+
 int32 Paytm_SetAudioVolume(uint8 volume);
 int32 Paytm_GetVolume(uint8 *volume);
 int32 Paytm_PlayFile(Paytm_location_t lc, const char *filePath, uint8 volume);

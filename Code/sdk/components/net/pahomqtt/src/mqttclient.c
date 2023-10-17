@@ -1559,7 +1559,7 @@ int mqtt_conn_with_results(mqtt_client_t* c)
 	platform_timer_cutdown(&c->mqtt_last_received, (c->mqtt_keep_alive_interval * 1000));
 
 	platform_mutex_lock(&c->mqtt_write_lock);
-	/* serialize connect packet ÐòÁÐ»¯Á¬½Ó°ü*/
+	/* serialize connect packet ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ó°ï¿½*/
 	if ((len = MQTTSerialize_connect(c->mqtt_write_buf, c->mqtt_write_buf_size, &connect_data)) <= 0)
 		goto exit;
 
@@ -1567,13 +1567,13 @@ int mqtt_conn_with_results(mqtt_client_t* c)
 	/*timer T1: resend the packet timer*/
 	platform_timer_cutdown(&connect_timer, c->mqtt_cmd_timeout);
 
-	/* send connect packet ·¢ËÍconnect±¨ÎÄ*/
+	/* send connect packet ï¿½ï¿½ï¿½ï¿½connectï¿½ï¿½ï¿½ï¿½*/
 	KAWAII_MQTT_LOG_D("---->send packet begin");
 	if ((rc = mqtt_send_packet(c, len, &connect_timer)) != KAWAII_MQTT_SUCCESS_ERROR)
 		goto exit;
 	KAWAII_MQTT_LOG_D("---->send packet end");
 
-	/*µÈ´ýÀ´×ÔMQTTµÄCONNACK±¨ÎÄ*/
+	/*ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½MQTTï¿½ï¿½CONNACKï¿½ï¿½ï¿½ï¿½*/
 	KAWAII_MQTT_LOG_D("---->wait packet begin");
 	if (mqtt_wait_packet(c, CONNACK, &connect_timer) == CONNACK)
 	{
@@ -1602,7 +1602,7 @@ exit:
 		if(NULL == c->mqtt_thread)
 		{
 			/* connect success, and need init mqtt thread, rt thread thread name max len is 8*/
-			//Á¬½Ó³É¹¦£¬³õÊ¼»¯MQTTÏß³Ì£¬
+			//ï¿½ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½MQTTï¿½ß³Ì£ï¿½
 			KAWAII_MQTT_LOG_D("->> come here A9");
 			c->mqtt_thread = platform_thread_init("mqtt", mqtt_yield_thread, c, KAWAII_MQTT_THREAD_STACK_SIZE, KAWAII_MQTT_THREAD_PRIO, KAWAII_MQTT_THREAD_TICK);
 			if (NULL != c->mqtt_thread)

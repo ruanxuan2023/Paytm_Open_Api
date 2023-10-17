@@ -58,16 +58,35 @@ void ButtonTest(void)
     Paytm_Button_events(true);
 }
 
+static void net_connect(void)
+{
+    int32 stat = 0;
+
+    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
+    
+    while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
+    {
+        Paytm_delayMilliSeconds(1000);
+    }
+    
+    Paytm_TRACE("Network connected!");
+}
+
 extern void sys_initialize(void);
 extern void getTaobaoSuggest(void* p);
 extern void testMqtt_india(void* p);
 extern void testMqtt(void* p);
-void PaytmHttpSSLPost(void * p);
+extern void PaytmHttpSSLPost(void * p);
+extern void Mqtt_0(void* p);
+extern void ntpDemo(void *p);
+extern void batteryDemo(void);
+extern void audioPlayDemo(void);
 void app_main(void)
 {
     sys_initialize();
 
-    Paytm_CreateTask("taobao", PaytmHttpSSLPost, NULL, 100, 30 * 1024);
+    audioPlayDemo();
+
     while (1)
     {
         osiThreadSleep(1000);
