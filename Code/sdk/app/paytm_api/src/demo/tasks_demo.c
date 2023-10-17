@@ -19,7 +19,6 @@ void * runTask_1(void* p)
             Paytm_TRACE("Task1 recv msg: %s, %d, %d", msg.msg, msg.param1, msg.param2);
         }
     }
-    
 }
 
 void * runTask_2(void* p)

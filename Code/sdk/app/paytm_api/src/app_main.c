@@ -85,8 +85,8 @@ void app_main(void)
 {
     sys_initialize();
 
-    audioPlayDemo();
-
+    // Paytm_CreateTask("mqtt", Mqtt_0, NULL, 110, 30 * 1024);
+    batteryDemo();
     while (1)
     {
         osiThreadSleep(1000);

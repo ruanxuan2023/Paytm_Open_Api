@@ -14,9 +14,9 @@ void batteryDemo(void)
 {
     Paytm_Battery_Initialise(20);
 
-    Paytm_BatteryLevelMonitoring(true);
-
     battery_charging_report_callback_register(b_cb);
+
+    Paytm_BatteryLevelMonitoring(true);
 
     Paytm_TRACE("The battery %s charging!", Paytm_GetChargingStatus() ? "is" : "is not");
 }

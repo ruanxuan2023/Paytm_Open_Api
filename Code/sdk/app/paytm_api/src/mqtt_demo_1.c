@@ -201,9 +201,9 @@ void Mqtt_0(void* p)
     rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
     if(rc != 0)
     {
-        Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
+        Paytm_TRACE("Mqtt subscribe 1 fail 0x%x!", rc);
     }else{
-        Paytm_TRACE("Mqtt subscribe success %d!", rc);
+        Paytm_TRACE("Mqtt subscribe 1 success %d!", rc);
     }
 
     publish.messageId = 58;
@@ -216,9 +216,9 @@ void Mqtt_0(void* p)
     rc = Paytm_MQTT_Publish(&publish);
     if(rc != 0)
     {
-        Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
+        Paytm_TRACE("Mqtt publish 1 fail 0x%x!", rc);
     }else{
-        Paytm_TRACE("Mqtt publish success %d!", rc);
+        Paytm_TRACE("Mqtt publish 1 success %d!", rc);
     }
 
     topic_list.topic[0] = DEMO_SUB_TOPIC_2;
@@ -228,9 +228,9 @@ void Mqtt_0(void* p)
     rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
     if(rc != 0)
     {
-        Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
+        Paytm_TRACE("Mqtt subscribe 2 fail 0x%x!", rc);
     }else{
-        Paytm_TRACE("Mqtt subscribe success %d!", rc);
+        Paytm_TRACE("Mqtt subscribe 2 success %d!", rc);
     }
 
     publish.messageId = 59;
@@ -243,9 +243,9 @@ void Mqtt_0(void* p)
     rc = Paytm_MQTT_Publish(&publish);
     if(rc != 0)
     {
-        Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
+        Paytm_TRACE("Mqtt publish 2 fail 0x%x!", rc);
     }else{
-        Paytm_TRACE("Mqtt publish success %d!", rc);
+        Paytm_TRACE("Mqtt publish 2 success %d!", rc);
     }
 
     while (1)
