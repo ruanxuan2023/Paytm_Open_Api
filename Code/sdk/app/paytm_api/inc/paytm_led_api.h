@@ -3,18 +3,17 @@
 
 #include "osi_api.h"
 #include "gpio_api.h"
-#include "mfpr_api.h"
-#include "mfpr.h"
+#include "drv_def.h"
 
 #define PAYTM_MAX_LED_NUM       (3)
 
-#define PAYTM_LED_RED_PIN       (33)
-#define PAYTM_LED_GREEN_PIN     (34)
-#define PAYTM_LED_BLUE_PIN      (36)
+#define PAYTM_LED_RED_PIN       (3)
+#define PAYTM_LED_GREEN_PIN     (54)
+#define PAYTM_LED_BLUE_PIN      (37)
 
-#define PAYTM_LED_RED_PINMUX     (GPIO_33)
-#define PAYTM_LED_GREEN_PINMUX   (GPIO_34)
-#define PAYTM_LED_BLUE_PINMUX    (GPIO_36)
+#define PAYTM_LED_RED_PINMUX     (GPIO_03)
+#define PAYTM_LED_GREEN_PINMUX   (GPIO_54)
+#define PAYTM_LED_BLUE_PINMUX    (GPIO_37)
 
 #define PAYTM_LED_RED_FUN       (MFP_AF0)
 #define PAYTM_LED_GREEN_FUN     (MFP_AF0)

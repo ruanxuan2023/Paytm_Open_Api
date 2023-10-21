@@ -152,13 +152,14 @@ void testHttpSSLPost(void * p)
     }
 }
 
+#define HEAD_URL    "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2"
+#define TAO_BAO_URL "https://suggest.taobao.com/sug?q=number"
 //HTTPS Without Certificate
 void getTaobaoSuggest(void* p)
 {
     int rc = 0;
     char *get_url = "https://suggest.taobao.com/sug?q=number";
-
-    net_connect();
+    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2";
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
@@ -167,7 +168,7 @@ void getTaobaoSuggest(void* p)
     
     http.use_ssl = true;
 
-    rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, get_url, 0, NULL);
+    rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
     if(rc < 0)
     {
         Paytm_TRACE("Get fail!");
@@ -192,3 +193,113 @@ void getTaobaoSuggest(void* p)
         osiThreadSleep(1000);
     }
 }
+
+#define SINGLE_DOWNLOAD_LEN     (5 * 1024)
+void httpDownload(void* p)
+{
+    int rc = 0;
+
+    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2";
+
+    http_request_t http = {0};
+    http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
+    http.content = (char*)Paytm_malloc(HTTP_BUF_SIZE);
+
+    http.verify_mode = MBEDTLS_SSL_VERIFY_NONE;
+    http.use_ssl = true;
+
+    rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
+    if(rc < 0)
+    {
+        Paytm_TRACE("Get fail!");
+    }
+
+    Paytm_TRACE("Header: %s", http.content);
+    Paytm_TRACE("rspBuf: %s", http.response_buffer);
+    Paytm_TRACE("RspCode: %d", http.response_head.http_code);
+
+    int start, end;
+    char *sStr, *pStr, *subStr;
+
+    sStr = strstr(http.content, "Content-Length:");
+    if(sStr == NULL)
+    {
+        goto exit;
+    }
+
+    http.custom_headers = (char*)Paytm_malloc(128);
+    start = sStr - http.content;
+    pStr = strstr(sStr, "\n");
+    end = pStr - http.content;
+
+    subStr = (char*)Paytm_malloc(end - start + 1);
+    memcpy(subStr, sStr, end - start);
+    subStr[end - start] = '\0';
+
+    size_t file_size = 0;
+
+    sscanf(subStr, "Content-Length: %d", &file_size);
+    Paytm_TRACE("Content %s, size %d", subStr, file_size);
+
+    //start to recv data
+    int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    start = 0;
+    end = 0;
+    while (get_len_sum < file_size)
+    {
+        get_len_this_time = (file_size - get_len_sum) > 4 * 1024 ? 4 * 1024 : (file_size - get_len_sum);
+        start = get_len_sum;
+        end = start + get_len_this_time;
+
+        sprintf(http.custom_headers,
+        "GET %s HTTP/1.1\r\n"
+        "Connection: keep-alive\r\n"
+        "Accept: */*\r\n"
+        "Range: bytes=%d-%d\r\n\r\n","", "600RGBFFD20G_0253_0255.bin_2", start, end - 1);
+        Paytm_TRACE("\nDownload: %ld - %ld", start, end - 1);
+
+        rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
+        if(rc < 0)
+        {
+            Paytm_TRACE("Get range buffer failed!");
+            break;
+        }
+        break;
+        
+        Paytm_TRACE("rspBuf: %s", http.response_buffer);
+        Paytm_TRACE("RspSize: %d", http.response_buffer_size);
+
+        get_len_sum += get_len_this_time;
+    }
+    
+exit:
+    if(http.custom_headers != NULL)
+    {
+        Paytm_free(http.custom_headers);
+    }
+
+    if(http.response_buffer != NULL)
+    {
+        Paytm_free(http.response_buffer);
+    }
+    
+    if(http.content != NULL)
+    {
+        Paytm_free(http.content);
+    }
+
+    while (1)
+    {
+        osiThreadSleep(1000);
+    }
+}
+
+/**
+ * Network connected!
+Header: Server: AliyunOSS
+Date: Sat, 21 Oct 2023 02:37:58 GMT
+Content-Type: application/octet-stream
+Content-Length: 229468
+rspBuf: FOTA_SEC
+RspCode: 200
+*/

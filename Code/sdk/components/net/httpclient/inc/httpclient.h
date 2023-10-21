@@ -277,6 +277,8 @@ HTTPCLIENT_RESULT httpclient_put(httpclient_t *client, char *url, httpclient_dat
  */
 HTTPCLIENT_RESULT httpclient_delete(httpclient_t *client, char *url, httpclient_data_t *client_data);
 
+HTTPCLIENT_RESULT httpclient_head(httpclient_t *client, char *url, httpclient_data_t *client_data);
+
 /**
  * @brief            This function establishes an HTTP connection with the remote server by given URL.
  * @param            client is a pointer to the #httpclient_t.

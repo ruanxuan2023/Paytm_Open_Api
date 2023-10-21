@@ -17,6 +17,8 @@ int32 Paytm_ReadIMSI(char imsi[]);
 int32 Paytm_GetIMSI(char imsi[]);
 int32 Paytm_ReadSimNumber(char sim_no[]);
 int32 Paytm_GetSimNumber(char sim_no[]);
+bool Paytm_GetCGPADDR(char addr[16]);
+bool PaytmGetAPN(char apn[64]);
 int32 Paytm_ReadSubscriberNumber(char subscriber_number[]);
 //TODO--这个类型无定义
 //Paytm_network_provider_t Paytm_GetNetworkProvider(uint16 mcc, uint16 mnc);

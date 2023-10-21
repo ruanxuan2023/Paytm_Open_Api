@@ -588,6 +588,8 @@ static int mqtt_try_do_reconnect(mqtt_client_t* c)
 {
     int rc = KAWAII_MQTT_CONNECT_FAILED_ERROR;
 
+    network_disconnect(c->mqtt_network);
+
     if (CLIENT_STATE_CONNECTED != mqtt_get_client_state(c))
         rc = mqtt_connect(c);       /* reconnect */
 
@@ -920,7 +922,6 @@ static int mqtt_yield(mqtt_client_t* c, int timeout_ms)
         } else if (CLIENT_STATE_CONNECTED != state) {
             /* mqtt not connect, need reconnect */
             rc = mqtt_try_reconnect(c);
-
             if (KAWAII_MQTT_RECONNECT_TIMEOUT_ERROR == rc)
             {
                 RETURN_ERROR(rc);
@@ -989,7 +990,6 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
 #else
     rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL, NULL, NULL);
 #endif
-
     rc = network_connect(c->mqtt_network);
     if (KAWAII_MQTT_SUCCESS_ERROR != rc) {
         /*when connect faile, you should call network_release to release socket file descriptor zhaoshimin 20200629*/
@@ -1508,7 +1508,6 @@ int mqtt_open_with_results(mqtt_client_t* c)
 	{
 		rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, NULL, NULL, NULL);
 	}
-
     rc = network_connect(c->mqtt_network);
     if (KAWAII_MQTT_SUCCESS_ERROR != rc)
 	{

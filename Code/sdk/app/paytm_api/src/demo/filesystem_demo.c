@@ -69,3 +69,25 @@ void fileSystemDemo(void)
 
     return;
 }
+
+#define TEST_FILE_NAME  "compare.txt"
+void fileHeapLeakDemo(void* p)
+{
+    PFILE fd = 0;
+    uint8_t buf[4];
+
+    Paytm_fcreate(LOC_INTER_MEM, TEST_FILE_NAME, NULL);
+
+    fd = Paytm_fopen(LOC_INTER_MEM, TEST_FILE_NAME, NULL);
+
+    Paytm_fwrite("123", 3, 1, fd);
+
+    while (1)
+    {
+        Paytm_fread(buf, 3, 1, fd);
+        Paytm_delayMilliSeconds(10 * 1000);
+        Paytm_TRACE("Free Heap Info: %d", Paytm_GetFreeHeapSize());
+    }
+
+    Paytm_fclose(fd);
+}

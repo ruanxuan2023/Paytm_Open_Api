@@ -39,7 +39,7 @@
 #define HTTPCLIENT_SEND_BUF_SIZE  4096
 
 #define HTTPCLIENT_MAX_HOST_LEN   64
-#define HTTPCLIENT_MAX_URL_LEN    256
+#define HTTPCLIENT_MAX_URL_LEN    2048
 
 static int httpclient_parse_url(const char *url, char *scheme, size_t max_scheme_len, char *host, size_t maxhost_len, int *port, char *path, size_t max_path_len);
 static int httpclient_tcp_send_all(int sock_fd, char *data, int length);
@@ -1146,6 +1146,11 @@ HTTPCLIENT_RESULT httpclient_put(httpclient_t *client, char *url, httpclient_dat
 HTTPCLIENT_RESULT httpclient_delete(httpclient_t *client, char *url, httpclient_data_t *client_data)
 {
     return httpclient_common(client, url, HTTPCLIENT_DELETE, client_data);
+}
+
+HTTPCLIENT_RESULT httpclient_head(httpclient_t *client, char *url, httpclient_data_t *client_data)
+{
+    return httpclient_common(client, url, HTTPCLIENT_HEAD, client_data);
 }
 
 int httpclient_get_response_header_value(char *header_buf, char *name, int *val_pos, int *val_len)

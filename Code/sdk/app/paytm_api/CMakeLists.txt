@@ -25,6 +25,7 @@ target_sources(${target} PUBLIC
 	src/app_main.c
 	src/server_ca_cert.c
 
+	src/demo/ali_mqtt_demo.c
 	src/demo/audio_demo.c
 	src/demo/battery_demo.c
 	src/demo/devSys_demo.c
@@ -32,7 +33,7 @@ target_sources(${target} PUBLIC
 	src/demo/http_demo.c 
 	src/demo/mqtt_demo.c
 	src/demo/ntp_demo.c
-	src/demo/paytm_demo.c
+	src/demo/sim_demo.c
 	src/demo/tasks_demo.c
 	src/mqtt_demo_1.c
 

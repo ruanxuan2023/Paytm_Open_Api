@@ -107,4 +107,5 @@ int32 Paytm_HTTP_Request_Clear(http_request_t *http);
 int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port, const char *file);
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);
+int Paytm_HTTP_FILE_SIZE(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
 #endif  
