@@ -56,5 +56,5 @@ int32 Paytm_dir_create_all_subdirectories(Paytm_location_t sl, const char *direc
 int32 Paytm_dir_delete(Paytm_location_t sl, const char *);
 int32 Paytm_dir_delete_all_subdirectories(Paytm_location_t sl, const char *directory);
 int32 Paytm_dir_exists(Paytm_location_t sl, const char *directory);
-
+int32 Paytm_Unzip(Paytm_location_t sl, const char *zipfile, const char *directory);
 #endif

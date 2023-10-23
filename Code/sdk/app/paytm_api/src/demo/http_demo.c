@@ -4,6 +4,7 @@
 #include "osi_api.h"
 #include "mbedtls/ssl.h"
 
+#include "paytm_file_api.h"
 #include "paytm_http_api.h"
 #include "paytm_net_api.h"
 
@@ -193,13 +194,13 @@ void getTaobaoSuggest(void* p)
         osiThreadSleep(1000);
     }
 }
-
+extern void fileUnzip(void);
 #define SINGLE_DOWNLOAD_LEN     (5 * 1024)
 void httpDownload(void* p)
 {
     int rc = 0;
 
-    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2";
+    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/paytm_res_en.czip";
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);
@@ -207,16 +208,15 @@ void httpDownload(void* p)
 
     http.verify_mode = MBEDTLS_SSL_VERIFY_NONE;
     http.use_ssl = true;
+    http.is_chunked = false;
 
-    rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
+    rc = Paytm_HTTP_Initialise_HEAD(LOC_EXTER_MEM, &http, cis_url, 0);
     if(rc < 0)
     {
         Paytm_TRACE("Get fail!");
     }
 
     Paytm_TRACE("Header: %s", http.content);
-    Paytm_TRACE("rspBuf: %s", http.response_buffer);
-    Paytm_TRACE("RspCode: %d", http.response_head.http_code);
 
     int start, end;
     char *sStr, *pStr, *subStr;
@@ -243,19 +243,39 @@ void httpDownload(void* p)
 
     //start to recv data
     int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    
     start = 0;
     end = 0;
+    //create file
+    PFILE fd;
+    if(Paytm_fexists(LOC_EXTER_MEM, "paytm_res_en.czip") != 0)
+    {
+        Paytm_fremove(LOC_EXTER_MEM, "paytm_res_en.czip");
+
+        fd = Paytm_fcreate(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
+        if(fd <= 0)
+        {
+            Paytm_TRACE("Create file failed");
+            goto exit;
+        }
+    }
+
+    fd = Paytm_fopen(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
+    if(fd <= 0)
+    {
+        Paytm_TRACE("Create open failed");
+        goto exit;
+    }
+
+
     while (get_len_sum < file_size)
     {
-        get_len_this_time = (file_size - get_len_sum) > 4 * 1024 ? 4 * 1024 : (file_size - get_len_sum);
+        get_len_this_time = (file_size - get_len_sum) > HTTP_BUF_SIZE ? HTTP_BUF_SIZE : (file_size - get_len_sum);
         start = get_len_sum;
         end = start + get_len_this_time;
 
         sprintf(http.custom_headers,
-        "GET %s HTTP/1.1\r\n"
-        "Connection: keep-alive\r\n"
-        "Accept: */*\r\n"
-        "Range: bytes=%d-%d\r\n\r\n","", "600RGBFFD20G_0253_0255.bin_2", start, end - 1);
+        "Range: bytes=%d-%d\r\n\r\n", "paytm_res_en.czip", start, end - 1);
         Paytm_TRACE("\nDownload: %ld - %ld", start, end - 1);
 
         rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
@@ -264,14 +284,20 @@ void httpDownload(void* p)
             Paytm_TRACE("Get range buffer failed!");
             break;
         }
-        break;
         
-        Paytm_TRACE("rspBuf: %s", http.response_buffer);
-        Paytm_TRACE("RspSize: %d", http.response_buffer_size);
+        Paytm_TRACE("http->response_buffer_Len: %d", http.response_buffer_read_length);
+        Paytm_TRACE_HEX_BUFFER("http->response_buffer", http.response_buffer, strlen(http.response_buffer));
 
-        get_len_sum += get_len_this_time;
+        Paytm_fseek(fd, get_len_sum, Paytm_File_Begin);
+        Paytm_fwrite(http.response_buffer, 1, http.response_buffer_read_length, fd);
+
+        get_len_sum += http.response_buffer_read_length;
+        memset(http.response_buffer, 0x00, HTTP_BUF_SIZE);
     }
-    
+
+    Paytm_fclose(fd);
+
+    fileUnzip();
 exit:
     if(http.custom_headers != NULL)
     {

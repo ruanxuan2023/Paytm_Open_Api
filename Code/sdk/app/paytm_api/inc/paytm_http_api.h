@@ -3,12 +3,14 @@
 
 #include "paytm_ssl_api.h"
 #include "paytm_typedef.h"
+#include "httpclient.h"
 #include "osi_api.h"
 
 #define HTTP_URL_LEN (128)
 #define FS_FILE_PATH_MAX (32)
 #define FS_DIR_NAME_MAX (32)
-#define HTTP_BUF_SIZE (2 * 1024)
+#define HTTP_HEADER_SIZE    (1 * 1024)
+#define HTTP_BUF_SIZE       HTTPCLIENT_CHUNK_SIZE
 
 typedef enum{
     HTTP_GET_REQUEST = 0,
@@ -84,6 +86,7 @@ typedef struct
     char *custom_headers;
     int verify_mode;                /*0-VERIFY_NONE 1-VERIFY_OPTIONAL 2-VERIFY_REQUIRED 3-UNSET*/
     bool use_ssl;
+    bool is_chunked;
     int32 error_code;
     //sb_location_t storage_location;
     char filepath[FS_FILE_PATH_MAX];
@@ -107,5 +110,5 @@ int32 Paytm_HTTP_Request_Clear(http_request_t *http);
 int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port, const char *file);
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);
-int Paytm_HTTP_FILE_SIZE(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
+int Paytm_HTTP_Initialise_HEAD(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
 #endif  

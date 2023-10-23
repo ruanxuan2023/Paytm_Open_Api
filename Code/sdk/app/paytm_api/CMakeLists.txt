@@ -28,6 +28,7 @@ target_sources(${target} PUBLIC
 	src/demo/ali_mqtt_demo.c
 	src/demo/audio_demo.c
 	src/demo/battery_demo.c
+	src/demo/button_demo.c
 	src/demo/devSys_demo.c
 	src/demo/filesystem_demo.c
 	src/demo/http_demo.c 

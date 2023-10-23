@@ -41,6 +41,13 @@ extern "C"
 {
 #endif
 
+#define HTTPCLIENT_AUTHB_SIZE     128
+
+#define HTTPCLIENT_CHUNK_SIZE     40 * 1024
+#define HTTPCLIENT_SEND_BUF_SIZE  4096
+
+#define HTTPCLIENT_MAX_HOST_LEN   64
+#define HTTPCLIENT_MAX_URL_LEN    2048
 
 /**
  * @addtogroup HttpClient

@@ -13,4 +13,5 @@ int32 Paytm_PlayFileFromDir(Paytm_location_t sl, const char *path, const char *f
 int32 Paytm_StopPlay(void);
 void playback_state_callback_register(message_callback_t cb);
 int32 paytm_AudioInit(void);
+int32 Paytm_PlayFileFromDir(Paytm_location_t sl, const char *path, const char *filename, uint8 volume);
 #endif

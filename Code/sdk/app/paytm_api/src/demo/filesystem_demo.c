@@ -91,3 +91,84 @@ void fileHeapLeakDemo(void* p)
 
     Paytm_fclose(fd);
 }
+
+void fileUnzip(void)
+{
+    int rc = 0;
+    if(Paytm_fexists(LOC_EXTER_MEM, "paytm_res_en.czip") != 0)
+    {
+        Paytm_TRACE("File paytm_res_en.czip not exists");
+        return;
+    }
+
+    PFILE fd = 0;
+    fd = Paytm_fopen(LOC_EXTER_MEM, "paytm_res_en.czip", "rb+");
+    if(fd < 0)
+    {
+        Paytm_TRACE("File paytm_res_en.czip open fail");
+        return;
+    }
+
+    Paytm_TRACE("paytm_res_en.czip size %d", Paytm_fsize(fd));
+    
+    Paytm_fclose(fd);
+
+    rc = Paytm_Unzip(LOC_EXTER_MEM, "paytm_res_en.czip", "");
+    if(!rc)
+    {
+        Paytm_TRACE("Unzip file paytm_res_en.czip fail");
+        return;
+    }
+    Paytm_TRACE("fileUnzip 3");
+    Paytm_list_item_t item_list = {0};
+    memset(&item_list, 0, sizeof(item_list));
+    int cnt = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, "resources/sounds/en", 255);
+
+    Paytm_TRACE("read %d item from external directory resources", cnt);
+    node_t *file_node = item_list.files;
+    while (file_node)
+    {
+        Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
+        file_node = file_node->next;
+    }
+    Paytm_list_item_free(&item_list);
+}
+
+void fileLite(void)
+{
+    int rc = 0;
+    char data[4] = {'o', 'p', 'd', 'e'};
+
+    if(Paytm_fexists(LOC_INTER_MEM, "devinfo.cfg") != 0)
+    {
+        Paytm_TRACE("File devinfo.cfg not exists");
+        return;
+    }
+
+    PFILE fd = 0;
+    fd = Paytm_fopen(LOC_INTER_MEM, "devinfo.cfg", "wb+");
+    if(fd < 0)
+    {
+        Paytm_TRACE("File devinfo.cfg open fail");
+        return;
+    }
+
+    Paytm_TRACE("devinfo.cfg size %d", Paytm_fsize(fd));
+
+    rc = Paytm_fwrite(data, 4, 1, fd);
+    if(rc != 4)
+    {
+        Paytm_TRACE("Paytm_fwrite devinfo.cfg fail");
+    }
+
+    Paytm_fseek(fd, 8, 0);
+
+    rc = Paytm_fread(data, 4, 1, fd);
+    if(rc != 4)
+    {
+        Paytm_TRACE("Paytm_fread devinfo.cfg fail");
+    }
+
+    Paytm_TRACE("Read %s", data);
+    Paytm_fclose(fd);
+}

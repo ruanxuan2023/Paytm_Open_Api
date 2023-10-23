@@ -7,13 +7,13 @@
 
 #define PAYTM_MAX_LED_NUM       (3)
 
-#define PAYTM_LED_RED_PIN       (3)
-#define PAYTM_LED_GREEN_PIN     (54)
-#define PAYTM_LED_BLUE_PIN      (37)
+#define PAYTM_LED_RED_PIN       (2)
+#define PAYTM_LED_GREEN_PIN     (74)
+#define PAYTM_LED_BLUE_PIN      (53)
 
-#define PAYTM_LED_RED_PINMUX     (GPIO_03)
-#define PAYTM_LED_GREEN_PINMUX   (GPIO_54)
-#define PAYTM_LED_BLUE_PINMUX    (GPIO_37)
+#define PAYTM_LED_RED_PINMUX     (GPIO_02)
+#define PAYTM_LED_GREEN_PINMUX   (GPIO_74)
+#define PAYTM_LED_BLUE_PINMUX    (GPIO_53)
 
 #define PAYTM_LED_RED_FUN       (MFP_AF0)
 #define PAYTM_LED_GREEN_FUN     (MFP_AF0)

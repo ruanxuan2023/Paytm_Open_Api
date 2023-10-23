@@ -33,14 +33,6 @@
 #define MIN(x,y) (((x)<(y))?(x):(y))
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
-#define HTTPCLIENT_AUTHB_SIZE     128
-
-#define HTTPCLIENT_CHUNK_SIZE     4096
-#define HTTPCLIENT_SEND_BUF_SIZE  4096
-
-#define HTTPCLIENT_MAX_HOST_LEN   64
-#define HTTPCLIENT_MAX_URL_LEN    2048
-
 static int httpclient_parse_url(const char *url, char *scheme, size_t max_scheme_len, char *host, size_t maxhost_len, int *port, char *path, size_t max_path_len);
 static int httpclient_tcp_send_all(int sock_fd, char *data, int length);
 static int _httpTcp_conn(httpclient_t *client, char *host);
@@ -690,7 +682,7 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
             ret = recv(client->socket, buf + readLen, max_len - readLen, 0);
         #endif
         }else{
-            ret = _httpSslRead(client->ssl, buf + readLen, max_len - readLen, 1000);
+            ret = _httpSslRead(client->ssl, buf + readLen, max_len - readLen, 200);
             HTTPC_LOG("\n_httpSslRead ret: %d\n", ret);
         }
 
@@ -756,9 +748,36 @@ int httpclient_retrieve_content(httpclient_t *client, char *data, int len, httpc
         }
     }
 
+    /* Added branch to support http download via Range method */
+    if(client_data->response_content_len > 0 && client_data->is_chunked == false)
+    {
+        count = 0;
+        while (true)
+        {
+            int ret = 0, to_read_len = 0, max_len = 0;
+
+            max_len = MIN(HTTPCLIENT_CHUNK_SIZE - 1, client_data->response_buf_len - count);
+            ret = httpclient_recv(client, data, 1, max_len, &len);
+
+            if (ret == HTTPCLIENT_ERROR_CONN) {
+                HTTPC_LOG("\nret == HTTPCLIENT_ERROR_CONN\n");
+                return ret;
+            }
+
+            if (len == 0) {/* read no more data */
+                HTTPC_LOG("\nno more len == 0\n");
+                client_data->is_more = false;
+                return HTTPCLIENT_OK;
+            }
+
+            memcpy(client_data->response_buf, data, len);
+            client_data->response_buf_len = len;
+        }
+        
+    }
+
     while (true) {
         size_t readLen = 0;
-
         if ( client_data->is_chunked && client_data->retrieve_len <= 0) {
             /* Read chunk header */
             bool foundCrlf;
@@ -982,7 +1001,7 @@ int httpclient_response_parse(httpclient_t *client, char *data, int len, httpcli
             return HTTPCLIENT_ERROR;
         }
     }
-
+    RTI_LOG("To call httpclient_retrieve_content: %d", len);
     return httpclient_retrieve_content(client, data, len, client_data);
 }
 
