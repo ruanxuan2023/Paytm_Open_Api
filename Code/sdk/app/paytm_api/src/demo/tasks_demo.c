@@ -16,7 +16,7 @@ void * runTask_1(void* p)
 
         if(Paytm_GetMessage(task_1, &msg) == 0)
         {
-            Paytm_TRACE("Task1 recv msg: %s, %d, %d", msg.msg, msg.param1, msg.param2);
+            Paytm_TRACE("Task1 recv msg: %d, %d, %d", msg.message, msg.param1, msg.param2);
         }
     }
 }

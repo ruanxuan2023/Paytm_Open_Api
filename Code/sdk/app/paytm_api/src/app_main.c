@@ -14,11 +14,9 @@
 #include "paytm_sim_api.h"
 #include "paytm_debug_uart_api.h"
 #include "paytm_led_api.h"
-<<<<<<< Updated upstream
 #include "paytm_audio_api.h"
-=======
 #include "paytm_tls_verify.h"
->>>>>>> Stashed changes
+
 
 
 void LogTest(void)

@@ -104,9 +104,10 @@ int32 Paytm_random(void);
 /********************************    TASKS RELATED FUNCTIONS    *********************************/
 
 typedef struct{
-    uint8_t  msg[8];
+    uint32_t message;
     uint32_t param1;
     uint32_t param2;
+    uint32_t srcTaskID;
 }ST_MSG;
 
 typedef struct 
