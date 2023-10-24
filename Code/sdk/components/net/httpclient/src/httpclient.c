@@ -687,7 +687,6 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
         }
 
         if (ret > 0) {
-
             readLen += ret;
         } else if (ret == 0) {
             break;
@@ -750,34 +749,34 @@ int httpclient_retrieve_content(httpclient_t *client, char *data, int len, httpc
     }
 
     /* Added branch to support http download via Range method */
-    if(client_data->response_content_len > 0 && client_data->is_chunked == false)
-    {
-        count = 0;
-        while (true)
-        {
-            int ret = 0, to_read_len = 0, max_len = 0;
+    // if(client_data->response_content_len > 0 && client_data->is_chunked == false)
+    // {
+    //     count = 0;
+    //     while (true)
+    //     {
+    //         int ret = 0, to_read_len = 0, max_len = 0;
 
-            max_len = MIN(HTTPCLIENT_CHUNK_SIZE - 1, client_data->response_buf_len - count);
-            ret = httpclient_recv(client, data, 1, max_len, &len);
+    //         max_len = MIN(HTTPCLIENT_CHUNK_SIZE - 1, client_data->response_buf_len - count);
+    //         ret = httpclient_recv(client, data, 1, max_len, &len);
 
-            if (ret == HTTPCLIENT_ERROR_CONN) {
-                HTTPC_LOG("\nret == HTTPCLIENT_ERROR_CONN\n");
-                return ret;
-            }
+    //         if (ret == HTTPCLIENT_ERROR_CONN) {
+    //             HTTPC_LOG("\nret == HTTPCLIENT_ERROR_CONN\n");
+    //             return ret;
+    //         }
 
-            if (len == 0) {/* read no more data */
-                HTTPC_LOG("\nno more len == 0\n");
-                client_data->is_more = false;
-                return HTTPCLIENT_OK;
-            }
+    //         if (len == 0) {/* read no more data */
+    //             HTTPC_LOG("\nno more len == 0\n");
+    //             client_data->is_more = false;
+    //             return HTTPCLIENT_OK;
+    //         }
 
-            memcpy(client_data->response_buf, data, len);
-            client_data->response_buf_len = len;
-            count += len;
-            
-        }
+    //         memcpy(client_data->response_buf, data, len);
+    //         client_data->response_buf_len = len;
+    //         count += len;
+    //         RTI_LOG("httpclient_recv: %d-%d-%d", len, count, client_data->response_buf_len);
+    //     }
         
-    }
+    // }
 
     while (true) {
         size_t readLen = 0;
@@ -1004,8 +1003,10 @@ int httpclient_response_parse(httpclient_t *client, char *data, int len, httpcli
             return HTTPCLIENT_ERROR;
         }
     }
-
-    return httpclient_retrieve_content(client, data, len, client_data);
+    if(client->method != HTTPCLIENT_HEAD)
+        return httpclient_retrieve_content(client, data, len, client_data);
+    else
+        return HTTPCLIENT_OK;
 }
 
 
@@ -1138,6 +1139,7 @@ static HTTPCLIENT_RESULT httpclient_common(httpclient_t *client, char *url, int 
     ret = httpclient_connect(client, url);
 
     if (!ret) {
+        client->method = method;
         ret = httpclient_send_request(client, url, method, client_data);
 
         if (!ret) {

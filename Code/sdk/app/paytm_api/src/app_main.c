@@ -109,6 +109,8 @@ typedef enum
 	WM_CALCULATE_SHA256        = 65,
 	WM_TASK_TERMINATE          = 67,
 	WM_TASK_RESUME             = 68,
+    WM_CJSON_CREATE            = 69,
+    WM_CJSON_PRASE             = 70,
 	
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -139,6 +141,8 @@ extern void httpDownload(void* p);
 extern void ButtonTest(void);
 extern void fileUnzip(void);
 extern void fileLite(void);
+extern void cJsonCreate(void);
+extern uint8 cJsonPrase(const char*  val);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -167,6 +171,8 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_FILE_DOWNLOAD:
         break;
     case WM_APP_DOWNLOAD:
+        net_connect();
+        Paytm_CreateTask("http", httpDownload, NULL, 100, 80 * 1024);
         break;
     case WM_HTTP_TEST:
         testHttpGet(NULL);
@@ -280,6 +286,27 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case WM_TASK_RESUME:
         break;
+    case WM_CJSON_CREATE:
+        cJsonCreate();
+        break;
+    case WM_CJSON_PRASE :
+    {
+        char val[] = "{ \
+        \"SceneID\": 6,   \
+        \"Enable\": 1,    \
+        \"Count\": 1,     \
+        \"Data\": [       \
+            {           \
+            \"BrightValue\": 37   \
+            },                  \
+            {                   \
+            \"ColorTempValue\": 4937      \
+            }           \
+        ]               \
+        }";
+        cJsonPrase(val);
+        break;
+    }
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -297,9 +324,8 @@ void app_main(void)
 {
     sys_initialize();
 
-    // net_connect();
-    // Paytm_CreateTask("http", httpDownload, NULL, 100, 80 * 1024);
-    ButtonTest();
+    OpenDemoViaId(WM_APP_DOWNLOAD);
+
     while (1)
     {
         osiThreadSleep(1000);

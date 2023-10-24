@@ -34,11 +34,11 @@ void buttoncb(void * p)
         break;
     case BUTTON_FUNCTION:
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
-            Paytm_TRACE("FUn key single press");
+            Paytm_TRACE("Fun key single press");
         }else if(msg->state == STATE_BUTTON_DOUBLE_CLICK){
-            Paytm_TRACE("FUn key double press");
+            Paytm_TRACE("Fun key double press");
         }else{
-            Paytm_TRACE("FUn key long press");
+            Paytm_TRACE("Fun key long press");
         }
         
         //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/Freq_sweep_61_0dB.mp3",20 );

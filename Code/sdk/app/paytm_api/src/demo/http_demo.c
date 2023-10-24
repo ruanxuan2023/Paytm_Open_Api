@@ -248,6 +248,7 @@ void httpDownload(void* p)
     end = 0;
     //create file
     PFILE fd;
+    Paytm_fremove(LOC_EXTER_MEM, "paytm_res_en.czip");
     if(Paytm_fexists(LOC_EXTER_MEM, "paytm_res_en.czip") != 0)
     {
         fd = Paytm_fcreate(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
@@ -273,7 +274,7 @@ void httpDownload(void* p)
         end = start + get_len_this_time;
 
         sprintf(http.custom_headers,
-        "Range: bytes=%d-%d\r\n\r\n", "paytm_res_en.czip", start, end - 1);
+        "Range: bytes=%d-%d\r\n\r\n", start, end - 1);
 
         rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
         if(rc < 0)
@@ -282,7 +283,7 @@ void httpDownload(void* p)
             break;
         }
         
-        Paytm_TRACE("http->response_buffer_Len: %d", http.response_buffer_read_length);
+        Paytm_TRACE("http->response_buffer_read_length: %d lastByte: 0x%x", http.response_buffer_read_length,http.response_buffer[http.response_buffer_read_length-1]);
 
         Paytm_fseek(fd, get_len_sum, Paytm_File_Begin);
         Paytm_fwrite(http.response_buffer, 1, http.response_buffer_read_length, fd);

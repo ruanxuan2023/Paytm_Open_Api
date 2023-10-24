@@ -114,12 +114,12 @@ void fileUnzip(void)
     Paytm_fclose(fd);
 
     rc = Paytm_Unzip(LOC_EXTER_MEM, "paytm_res_en.czip", "");
-    if(!rc)
+    if(rc)
     {
-        Paytm_TRACE("Unzip file paytm_res_en.czip fail");
+        Paytm_TRACE("Unzip file paytm_res_en.czip fail, rc = %d", rc);
         return;
     }
-    Paytm_TRACE("fileUnzip 3");
+
     Paytm_list_item_t item_list = {0};
     memset(&item_list, 0, sizeof(item_list));
     int cnt = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, "resources/sounds/en", 255);

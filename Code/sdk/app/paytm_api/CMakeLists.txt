@@ -17,7 +17,7 @@ add_library(${target} STATIC ${dummy_c_file})
 set_target_properties(${target} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${out_lib_dir})
 
 file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/*.a")
-target_link_libraries(${target} PUBLIC ${LIBS_PATH} httpclient pahomqtt)
+target_link_libraries(${target} PUBLIC ${LIBS_PATH} httpclient json pahomqtt )
 target_link_libraries(${target} PRIVATE ${libc_file_name} ${libm_file_name} ${libgcc_file_name})
 
 target_include_directories(${target} PUBLIC inc)
@@ -32,6 +32,7 @@ target_sources(${target} PUBLIC
 	src/demo/devSys_demo.c
 	src/demo/filesystem_demo.c
 	src/demo/http_demo.c 
+	src/demo/json_demo.c
 	src/demo/mqtt_demo.c
 	src/demo/ntp_demo.c
 	src/demo/sim_demo.c

@@ -43,7 +43,7 @@ extern "C"
 
 #define HTTPCLIENT_AUTHB_SIZE     128
 
-#define HTTPCLIENT_CHUNK_SIZE     40 * 1024
+#define HTTPCLIENT_CHUNK_SIZE     (40 * 1024 + 16)
 #define HTTPCLIENT_SEND_BUF_SIZE  4096
 
 #define HTTPCLIENT_MAX_HOST_LEN   64
@@ -146,6 +146,7 @@ typedef struct {
     int verify_mode;                /*0-VERIFY_NONE 1-VERIFY_OPTIONAL 2-VERIFY_REQUIRED 3-UNSET*/
     httpclient_ssl_t *ssl;          /**< Ssl content. */
 #endif
+    int method;
 } httpclient_t;
 
 /** @brief   This structure defines the HTTP data structure.  */
