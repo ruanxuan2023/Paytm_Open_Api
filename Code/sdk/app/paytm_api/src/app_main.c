@@ -45,7 +45,7 @@ static void net_connect(void)
     
     while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
     {
-        RTI_LOG("Networking connecting");
+        //RTI_LOG("Networking connecting");
         Paytm_delayMilliSeconds(1000);
     }
     
@@ -298,8 +298,8 @@ void app_main(void)
     sys_initialize();
 
     // net_connect();
-    // Paytm_CreateTask("http", httpDownload, NULL, 100, 60 * 1024);
-    fileLite();
+    // Paytm_CreateTask("http", httpDownload, NULL, 100, 80 * 1024);
+    ButtonTest();
     while (1)
     {
         osiThreadSleep(1000);

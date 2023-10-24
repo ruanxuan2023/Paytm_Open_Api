@@ -195,7 +195,7 @@ void getTaobaoSuggest(void* p)
     }
 }
 extern void fileUnzip(void);
-#define SINGLE_DOWNLOAD_LEN     (5 * 1024)
+
 void httpDownload(void* p)
 {
     int rc = 0;
@@ -250,8 +250,6 @@ void httpDownload(void* p)
     PFILE fd;
     if(Paytm_fexists(LOC_EXTER_MEM, "paytm_res_en.czip") != 0)
     {
-        Paytm_fremove(LOC_EXTER_MEM, "paytm_res_en.czip");
-
         fd = Paytm_fcreate(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
         if(fd <= 0)
         {
@@ -276,7 +274,6 @@ void httpDownload(void* p)
 
         sprintf(http.custom_headers,
         "Range: bytes=%d-%d\r\n\r\n", "paytm_res_en.czip", start, end - 1);
-        Paytm_TRACE("\nDownload: %ld - %ld", start, end - 1);
 
         rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
         if(rc < 0)
@@ -286,13 +283,13 @@ void httpDownload(void* p)
         }
         
         Paytm_TRACE("http->response_buffer_Len: %d", http.response_buffer_read_length);
-        Paytm_TRACE_HEX_BUFFER("http->response_buffer", http.response_buffer, strlen(http.response_buffer));
 
         Paytm_fseek(fd, get_len_sum, Paytm_File_Begin);
         Paytm_fwrite(http.response_buffer, 1, http.response_buffer_read_length, fd);
 
         get_len_sum += http.response_buffer_read_length;
         memset(http.response_buffer, 0x00, HTTP_BUF_SIZE);
+        Paytm_TRACE("Range: %d/%d, To get: %d, Real get %d/%d\n\n", start, end - 1, get_len_this_time, get_len_sum, file_size);
     }
 
     Paytm_fclose(fd);

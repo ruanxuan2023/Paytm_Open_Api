@@ -33,8 +33,14 @@ void buttoncb(void * p)
         Paytm_TRACE("Volume down");
         break;
     case BUTTON_FUNCTION:
-        /* code */
-        RTI_LOG("mp3 play test");
+        if(msg->state == STATE_BUTTON_SINGLE_CLICK){
+            Paytm_TRACE("FUn key single press");
+        }else if(msg->state == STATE_BUTTON_DOUBLE_CLICK){
+            Paytm_TRACE("FUn key double press");
+        }else{
+            Paytm_TRACE("FUn key long press");
+        }
+        
         //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/Freq_sweep_61_0dB.mp3",20 );
         Paytm_TRACE("Audio test");
         break;

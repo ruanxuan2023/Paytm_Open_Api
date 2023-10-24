@@ -109,7 +109,7 @@ void fileUnzip(void)
         return;
     }
 
-    Paytm_TRACE("paytm_res_en.czip size %d", Paytm_fsize(fd));
+    Paytm_TRACE("paytm_res_en.czip size %d", Paytm_filesize(LOC_EXTER_MEM, "paytm_res_en.czip"));
     
     Paytm_fclose(fd);
 
@@ -153,18 +153,20 @@ void fileLite(void)
         return;
     }
 
-    Paytm_TRACE("devinfo.cfg size %d", Paytm_fsize(fd));
+    Paytm_TRACE("devinfo.cfg size %d, fd = %d", Paytm_filesize(LOC_INTER_MEM, "devinfo.cfg"), fd);
 
-    rc = Paytm_fwrite(data, 4, 1, fd);
-    if(rc != 4)
+    rc = Paytm_fwrite(data, 1, 4, fd);
+    if(rc <= 0)
     {
         Paytm_TRACE("Paytm_fwrite devinfo.cfg fail");
     }
 
-    Paytm_fseek(fd, 8, 0);
+    Paytm_TRACE("Paytm_fwrite devinfo.cfg %d bytes", rc);
 
-    rc = Paytm_fread(data, 4, 1, fd);
-    if(rc != 4)
+    Paytm_fseek(fd, 0, 0);
+
+    rc = Paytm_fread(data, 1, 4, fd);
+    if(rc <= 0)
     {
         Paytm_TRACE("Paytm_fread devinfo.cfg fail");
     }

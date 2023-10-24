@@ -687,6 +687,7 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
         }
 
         if (ret > 0) {
+
             readLen += ret;
         } else if (ret == 0) {
             break;
@@ -772,6 +773,8 @@ int httpclient_retrieve_content(httpclient_t *client, char *data, int len, httpc
 
             memcpy(client_data->response_buf, data, len);
             client_data->response_buf_len = len;
+            count += len;
+            
         }
         
     }
@@ -1001,7 +1004,7 @@ int httpclient_response_parse(httpclient_t *client, char *data, int len, httpcli
             return HTTPCLIENT_ERROR;
         }
     }
-    RTI_LOG("To call httpclient_retrieve_content: %d", len);
+
     return httpclient_retrieve_content(client, data, len, client_data);
 }
 
