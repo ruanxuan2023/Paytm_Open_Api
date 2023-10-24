@@ -18,5 +18,11 @@ void batteryDemo(void)
 
     Paytm_BatteryLevelMonitoring(true);
 
-    Paytm_TRACE("The battery %s charging!", Paytm_GetChargingStatus() ? "is" : "is not");
+    while (1)
+    {
+        /* code */
+        Paytm_delayMilliSeconds(5000);
+        Paytm_TRACE("The battery %s charging!", Paytm_GetChargingStatus() ? "is" : "is not");
+    }
+    
 }

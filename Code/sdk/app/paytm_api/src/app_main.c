@@ -324,7 +324,7 @@ void app_main(void)
 {
     sys_initialize();
 
-    OpenDemoViaId(WM_APP_DOWNLOAD);
+    OpenDemoViaId(WM_BATTERY_CHECK);
 
     while (1)
     {

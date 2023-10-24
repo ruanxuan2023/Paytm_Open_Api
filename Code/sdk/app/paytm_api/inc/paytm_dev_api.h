@@ -5,7 +5,8 @@
 #include "paytm_sys_api.h"
 #include "paytm_audio_api.h"
 
-#define PAYTM_TOKEN_32 "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+#define PAYTM_TOKEN_32      "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+#define PAYTM_DEV_INFO_FILE "paytm_dev_info.cfg"
 
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);
