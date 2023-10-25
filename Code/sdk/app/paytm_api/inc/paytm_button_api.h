@@ -17,6 +17,11 @@ typedef enum {
     BUTTON_COUNT
 } buttons_enum_t;
 
+#define ANTI_SHAKE_MS (60)
+#define SINGLE_PRESS_MS (180)   /* single press duration*/
+#define DOUBLE_GAP_MS   (500)   /* max time gap between two press */
+#define LONG_PRESS_MS   (1000)  /* minimum time gap to see as long press */
+
 typedef struct {
     buttons_enum_t id;
     button_subtask_userstate_e state;
