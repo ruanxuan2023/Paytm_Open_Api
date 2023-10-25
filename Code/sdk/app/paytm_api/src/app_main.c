@@ -438,7 +438,8 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_SAVE_READ_AUTHID);
+    OpenDemoViaId(WM_BATTERY_CHECK);
+    
     while (1)
     {
         osiThreadSleep(1000);
