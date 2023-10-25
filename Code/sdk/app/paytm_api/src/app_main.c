@@ -328,7 +328,7 @@ void OpenDemoViaId(TASK_SELECTION id)
 
         Paytm_readAuthID(auth_id, 120);
         Paytm_readToken32Byte(token, 32);
-        Paytm_TRACE("auth_id: %s", auth_id);
+        Paytm_TRACE("id: %s", auth_id);
         Paytm_TRACE("token: %s", token);
 
         memset(auth_id_set, 0x41, 120);
@@ -438,7 +438,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(TEST_APP_SIGN_VERIFY);
+    OpenDemoViaId(WM_SAVE_READ_AUTHID);
     while (1)
     {
         osiThreadSleep(1000);
