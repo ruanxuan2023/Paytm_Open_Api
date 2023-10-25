@@ -22,3 +22,12 @@ For the first-time usage, follow these steps to update the firmware:
 
 3. Wait for the following message to be printed, indicating that the firmware update is completed:
    aboot download engine stopped successfully.
+
+## Generate new RSA key pairs
+.\arelease.exe -c . -k --key-alg=rsa
+
+## Generate efuse data(root key and Public key hash)
+arelease.exe -c . -g --fuse-only -p ASR1602_EVB -v ASR1602_OPEN_04MB
+
+## CZIP tool
+czip.exe ./resource resource.czip

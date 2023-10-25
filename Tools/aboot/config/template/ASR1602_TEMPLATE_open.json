@@ -69,7 +69,7 @@
       "type": "image",
       "partition": "fwcerts",
       "group": "2",
-      "disable": true
+      "disable": false
     },
     {
       "command": "flash",
@@ -329,6 +329,10 @@
           {
             "id": "DSP_IMAGE_ID",
             "image": "dsp"
+          },
+          {
+            "id": "APP_IMAGE_ID",
+            "image": "customer_app"
           }
         ],
         "callBoot2": false,

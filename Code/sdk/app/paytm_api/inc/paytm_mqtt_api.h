@@ -79,4 +79,7 @@ int32 Paytm_MQTT_Disconnect();
 int32 Paytm_Mqtt_Recv_Register(char* topic, void* callback);
 
 
+int32 Paytm_Read_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, char* mqtt_cert, char* mqtt_key);
+int32 Paytm_Write_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, int32 ca_len, char* mqtt_cert, int32 cert_len, char* mqtt_key, int32 key_len);
+
 #endif

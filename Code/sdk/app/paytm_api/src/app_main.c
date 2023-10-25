@@ -342,17 +342,16 @@ void OpenDemoViaId(TASK_SELECTION id)
     }
     case WM_PLAY_COMBINE_AUDIOS:
     {
-        char *path = "list";
-        char *name = " ";
-        Paytm_PlayFileFromDir(LOC_EXTER_MEM, path, name, 7);
+        Paytm_PlayFileFromDir(LOC_EXTER_MEM, "resources/sounds/en", "Received.amr,10000.amr,and.amr,num90.amr", 7);
         break;
     }
     case WM_CERT_READ_WRITE:
     {
+       
         int http_ca_len = 0, http_cert_len = 0, http_key_len = 0;
         char *http_ca, *http_cert, *http_key;
-        int read_len = 0;
-        
+        int rc = 0;
+     #if 1
         http_ca_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CA_FILE);
         http_cert_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CERT_FILE);
         http_key_len = Paytm_filesize(LOC_INTER_MEM,  HTTP_KEY_FILE);
@@ -362,17 +361,48 @@ void OpenDemoViaId(TASK_SELECTION id)
         http_ca = (char*)Paytm_malloc(http_ca_len + 1);
         http_cert = (char*)Paytm_malloc(http_cert_len + 1);
         http_key = (char*)Paytm_malloc(http_key_len + 1);
+        http_ca[http_ca_len] = '\0';
+        http_cert[http_cert_len] = '\0';
+        http_key[http_key_len] = '\0';
 
-        PFILE fd = 0;
-
-        fd = Paytm_fopen(LOC_INTER_MEM, HTTP_CA_FILE, "rb+");
-        if(fd <= 0){
-            Paytm_TRACE("Open ca fail");
-        }
-
-        read_len = Paytm_fread(http_ca, 1, http_ca_len, fd);
+        Paytm_Read_HTTP_Certs(LOC_INTER_MEM, http_ca , http_cert, http_key);
+        
         Paytm_TRACE("http_ca: %s", http_ca);
-        Paytm_fclose(fd);
+        Paytm_TRACE("http_cert: %s", http_cert);
+        Paytm_TRACE("http_key: %s", http_key);
+        Paytm_free(http_key);
+        Paytm_free(http_ca);
+        Paytm_free(http_cert);
+        #endif
+        char *ca_f = "AAAAACCCCCEEEEEBBBBBDDDDDFFFFF";
+        char *cert_f = "012345678901234567890123456789";
+        char *key_f = "+++++-----@@@@@*****((((()))))";
+        
+        rc = Paytm_Write_HTTP_Certs(LOC_INTER_MEM, ca_f, strlen(ca_f), cert_f, strlen(cert_f), key_f, strlen(key_f));
+        Paytm_TRACE("Paytm_Write_HTTP_Certs rc = %d", rc);
+
+        http_ca_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CA_FILE);
+        http_cert_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CERT_FILE);
+        http_key_len = Paytm_filesize(LOC_INTER_MEM,  HTTP_KEY_FILE);
+
+        Paytm_TRACE("Size %d, %d, %d", http_ca_len, http_cert_len, http_key_len);
+
+        http_ca = (char*)Paytm_malloc(http_ca_len + 1);
+        http_cert = (char*)Paytm_malloc(http_cert_len + 1);
+        http_key = (char*)Paytm_malloc(http_key_len + 1);
+        http_ca[http_ca_len] = '\0';
+        http_cert[http_cert_len] = '\0';
+        http_key[http_key_len] = '\0';
+
+        Paytm_Read_HTTP_Certs(LOC_INTER_MEM, http_ca , http_cert, http_key);
+        
+        Paytm_TRACE("http_ca: %s", http_ca);
+        Paytm_TRACE("http_cert: %s", http_cert);
+        Paytm_TRACE("http_key: %s", http_key);
+        Paytm_free(http_key);
+        Paytm_free(http_ca);
+        Paytm_free(http_cert);
+
         break;
     }
     case WM_DEVICE_CRASH_TEST_A:
@@ -408,8 +438,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_SAVE_READ_AUTHID);
-    
+    OpenDemoViaId(WM_CERT_READ_WRITE);
     while (1)
     {
         osiThreadSleep(1000);

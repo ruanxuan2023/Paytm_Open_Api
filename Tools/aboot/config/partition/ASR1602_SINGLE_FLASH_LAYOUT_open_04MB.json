@@ -22,12 +22,6 @@
               "size": "4KiB"
             },
             {
-              "name": "fwcerts",
-              "format": "raw",
-              "size": "12KiB",
-              "disable": true
-            },
-            {
               "name": "rd",
               "format": "raw",
               "size": "8KiB"
@@ -58,6 +52,11 @@
               "format": "raw",
               "size": "0",
               "disable": true
+            },{
+              "name": "fwcerts",
+              "format": "raw",
+              "size": "12KiB",
+              "disable": false
             }
           ]
         },
@@ -69,7 +68,7 @@
         {
           "name": "nvm",
           "format": "raw",
-          "size": "96KiB"
+          "size": "128KiB"
         },
         {
           "name": "customer_app",

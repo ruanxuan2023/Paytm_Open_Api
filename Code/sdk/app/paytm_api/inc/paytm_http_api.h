@@ -115,4 +115,6 @@ int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);
 int Paytm_HTTP_Initialise_HEAD(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
+int32 Paytm_Read_HTTP_Certs(Paytm_location_t lc, char* http_ca, char* http_cert, char* http_key);
+int32 Paytm_Write_HTTP_Certs(Paytm_location_t lc, char* http_ca, int32 ca_len, char* http_cert, int32 cert_len, char* http_key, int32 key_len);
 #endif  
