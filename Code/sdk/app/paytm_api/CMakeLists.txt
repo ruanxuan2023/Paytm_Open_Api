@@ -33,6 +33,7 @@ target_sources(${target} PUBLIC
 	src/demo/filesystem_demo.c
 	src/demo/http_demo.c 
 	src/demo/json_demo.c
+	src/demo/led_demo.c
 	src/demo/mqtt_demo.c
 	src/demo/ntp_demo.c
 	src/demo/sim_demo.c

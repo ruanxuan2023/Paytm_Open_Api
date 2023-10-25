@@ -7,6 +7,8 @@
 
 #define PAYTM_TOKEN_32      "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 #define PAYTM_DEV_INFO_FILE "paytm_dev_info.cfg"
+#define PAYTM_TOKEN_FILE    "paytm_token.txt"
+#define PAYTM_AUTHID_FILE   "paytm_authid.txt"
 
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);

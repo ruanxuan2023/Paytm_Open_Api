@@ -257,15 +257,14 @@ void httpDownload(void* p)
             Paytm_TRACE("Create file failed");
             goto exit;
         }
+    }else{
+        fd = Paytm_fopen(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
+        if(fd <= 0)
+        {
+            Paytm_TRACE("Create open failed");
+            goto exit;
+        }
     }
-
-    fd = Paytm_fopen(LOC_EXTER_MEM, "paytm_res_en.czip", "wb+");
-    if(fd <= 0)
-    {
-        Paytm_TRACE("Create open failed");
-        goto exit;
-    }
-
 
     while (get_len_sum < file_size)
     {

@@ -15,9 +15,9 @@ void buttoncb(void * p)
         vol++;
         if(vol >= PAYTM_VOLUME_MAX){
             vol = PAYTM_VOLUME_MAX;
-            //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/vol_max.wav",vol );
+            Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/maxvol.amr",vol );
         }else{
-            //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/vol_up.wav",vol );
+            Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/minvol.amr",vol );
         }
         Paytm_TRACE("Volume up");
         // appAudioTipsPushQue(0, "音量加", 0, false);
@@ -26,9 +26,9 @@ void buttoncb(void * p)
         vol--;
         if(vol <= PAYTM_VOLUME_MIN){
             vol = PAYTM_VOLUME_MIN;
-            //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/vol_min.wav",vol );
+            Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/minvol.amr",vol );
         }else{
-            //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/vol_down.wav",vol );
+            Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/minvol.amr",vol );
         }
         Paytm_TRACE("Volume down");
         break;
@@ -40,15 +40,16 @@ void buttoncb(void * p)
         }else{
             Paytm_TRACE("Fun key long press");
         }
-        
+        Paytm_PlayFileFromDir(LOC_EXTER_MEM, "resources/sounds/en", "Received.amr,10000.amr,and.amr,num90.amr", vol);
         //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/Freq_sweep_61_0dB.mp3",20 );
         Paytm_TRACE("Audio test");
         break;
     case BUTTON_POWER:
         if(msg->state == STATE_BUTTON_LONG_PRESS){
-            Paytm_PlayFile(LOC_INTER_MEM, "D:/test/power_off.wav",vol);
+            Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/DI_powOff.amr",vol);
+            osiSysPoweroff();
         }
-        osiSysPoweroff();
+        
     default:
         break;
     }

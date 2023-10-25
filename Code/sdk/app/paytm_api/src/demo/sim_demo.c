@@ -17,8 +17,14 @@ void gprsCb(void * p)
     Paytm_TRACE("This is gprs cb, val = ");
 }
 
+void net_status_task(void* p)
+{
+    
+}
+
 void testNetWorkReconected(void)
 {
+
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
 
     network_state_callback_register(simCb);
@@ -54,14 +60,27 @@ void testNetWorkDisconected(void)
 
 void simMonitor(void * p)
 {
-    Paytm_TRACE("This is simMonitor func ");
+    if(*(int*)p == NW_SIM_EJECTED)
+    {
+        Paytm_TRACE("Sim card ejected");
+    }else if(*(int*)p == NW_SIM_INSERTED){
+        Paytm_TRACE("Sim card inserted");
+    }else if(*(int*)p == NW_SIM_EJECTED_FOR_LONG_TIME){
+        Paytm_TRACE("Sim card ejected for 15 minutes");
+    }
 }
 
 void testSim(void)
 {
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
 
-    Paytm_delayMilliSeconds(8000);
+    while (!Paytm_Net_IsConnected())
+    {
+        RTI_LOG("Networking connecting");
+        Paytm_delayMilliSeconds(1000);
+    }
+
+    Paytm_GetModemFunction(simMonitor);
 
     char imsi[33] = {0};
     Paytm_ReadIMSI(imsi);
@@ -70,8 +89,6 @@ void testSim(void)
     char sim_no[23] = {0};
     Paytm_ReadSimNumber(sim_no);
     Paytm_TRACE("CCID: %s", sim_no);
-
-    Paytm_GetModemFunction(simMonitor);
 
     int csq = Paytm_GetSignalStrength();
     Paytm_TRACE("CSQ: %d", csq);

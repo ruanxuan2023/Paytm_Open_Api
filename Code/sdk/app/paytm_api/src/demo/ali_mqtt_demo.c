@@ -7,20 +7,6 @@
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
 
-static void net_connect(void)
-{
-    int32 stat = 0;
-
-    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
-    
-    while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
-    {
-        Paytm_delayMilliSeconds(1000);
-    }
-    
-    Paytm_TRACE("Network connected!");
-}
-
 static void topic_handler(void* client, message_data_t* msg)
 {
 	char *rsp = NULL;
@@ -64,9 +50,6 @@ void AliMqttDemo(void* p)
 {
     int rc = 0;
     char * host = ALI_MQTT_HOST;
-    char * client_id = ALIS_PK;
-    char * username = ALIS_DN;
-    char * password = ALIS_DS;
 
     Paytm_TRACE("Ali X.509 test!");
 

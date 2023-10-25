@@ -8,14 +8,6 @@ typedef enum{
     CERTIFICATE_NVRAM
 }Enum_Certificate_Location;
 
-#define MQTT_CA_LOC     "mqtt_ca.bin"
-#define MQTT_CERT_LOC   "mqtt_ca.crt"
-#define MQTT_KEY_LOC    "mqtt_ca.key"
-
-#define HTTP_CA_LOC     "http_ca.bin"
-#define HTTP_CERT_LOC   "http_ca.cert"
-#define HTTP_KEY_LOC    "http_ca.key"
-
 typedef struct 
 {
     char* cert_location;

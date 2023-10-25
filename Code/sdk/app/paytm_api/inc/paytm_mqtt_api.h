@@ -8,6 +8,10 @@
 
 #define MQTT_MAX_TOPIC (10)
 
+#define MQTT_CA_FILE    "mqtt.ca"
+#define MQTT_CERT_FILE  "mqtt.cert"
+#define MQTT_KEY_FILE   "mqtt.key"
+
 typedef enum{
     Paytm_QOS0_AT_MOST_ONECE = 0, //<At most once
     Paytm_QOS1_AT_LEASET_ONCE, //< At least once

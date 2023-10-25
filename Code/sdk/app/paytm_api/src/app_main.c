@@ -3,18 +3,21 @@
 #include <string.h>
 #include "osi_api.h"
 #include "mbedtls/ssl.h"
+#include "mbedtls/sha256.h"
 #include "drv_adc.h"
 
+#include "paytm_audio_api.h"
 #include "paytm_button_api.h"
+#include "paytm_debug_uart_api.h"
+#include "paytm_dev_api.h"
+#include "paytm_file_api.h"
 #include "paytm_http_api.h"
+#include "paytm_led_api.h"
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
-#include "paytm_sys_api.h"
-#include "paytm_file_api.h"
 #include "paytm_sim_api.h"
-#include "paytm_debug_uart_api.h"
-#include "paytm_led_api.h"
-#include "paytm_audio_api.h"
+#include "paytm_sys_api.h"
+#include "paytm_tls_verify.h"
 
 void LogTest(void)
 {
@@ -39,13 +42,18 @@ void LogTest(void)
 
 static void net_connect(void)
 {
-    int32 stat = 0;
-
-    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
     
-    while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
+    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
+    //int32 stat = 0;
+    // while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
+    // {
+    //     //RTI_LOG("Networking connecting");
+    //     Paytm_delayMilliSeconds(1000);
+    // }
+    
+    while (!Paytm_Net_IsConnected())
     {
-        //RTI_LOG("Networking connecting");
+        RTI_LOG("Networking connecting");
         Paytm_delayMilliSeconds(1000);
     }
     
@@ -111,6 +119,9 @@ typedef enum
 	WM_TASK_RESUME             = 68,
     WM_CJSON_CREATE            = 69,
     WM_CJSON_PRASE             = 70,
+    WM_SAVE_READ_AUTHID        = 71,
+    WM_PLAY_COMBINE_AUDIOS     = 72,
+    WM_CERT_READ_WRITE         = 73,
 	
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -143,6 +154,8 @@ extern void fileUnzip(void);
 extern void fileLite(void);
 extern void cJsonCreate(void);
 extern uint8 cJsonPrase(const char*  val);
+extern void ledRun(void);
+extern void devInfoDemo(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -225,7 +238,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     {
         uint8_t digest[32];
         int ret = 0;
-        ret = Paytm_Cal_File_Hash(LOC_INTER_MEM, "customer_app.bin", digest);
+        ret = Paytm_Cal_File_Hash(LOC_EXTER_MEM, "resources/sounds/en/welc.amr", digest);
         if(ret == 0)
         {
             Paytm_TRACE_HEX_BUFFER("Digest", digest, sizeof(digest));
@@ -307,6 +320,61 @@ void OpenDemoViaId(TASK_SELECTION id)
         cJsonPrase(val);
         break;
     }
+    case WM_SAVE_READ_AUTHID:
+    {
+        char token[32] = {0};
+        char auth_id[120 + 1] = {0};
+        char auth_id_set[120] = {0};
+
+        Paytm_readAuthID(auth_id, 120);
+        Paytm_readToken32Byte(token, 32);
+        Paytm_TRACE("auth_id: %s", auth_id);
+        Paytm_TRACE("token: %s", token);
+
+        memset(auth_id_set, 0x41, 120);
+        Paytm_setAuthID(auth_id_set, 120);
+
+        memset(auth_id, 0x00, 120);
+        Paytm_readAuthID(auth_id, 120);
+        auth_id[120] = '\0';
+        Paytm_TRACE("auth_id: %s", auth_id);
+        break;
+    }
+    case WM_PLAY_COMBINE_AUDIOS:
+    {
+        char *path = "list";
+        char *name = " ";
+        Paytm_PlayFileFromDir(LOC_EXTER_MEM, path, name, 7);
+        break;
+    }
+    case WM_CERT_READ_WRITE:
+    {
+        int http_ca_len = 0, http_cert_len = 0, http_key_len = 0;
+        char *http_ca, *http_cert, *http_key;
+        int read_len = 0;
+        
+        http_ca_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CA_FILE);
+        http_cert_len = Paytm_filesize(LOC_INTER_MEM, HTTP_CERT_FILE);
+        http_key_len = Paytm_filesize(LOC_INTER_MEM,  HTTP_KEY_FILE);
+
+        Paytm_TRACE("Size %d, %d, %d", http_ca_len, http_cert_len, http_key_len);
+
+        http_ca = (char*)Paytm_malloc(http_ca_len + 1);
+        http_cert = (char*)Paytm_malloc(http_cert_len + 1);
+        http_key = (char*)Paytm_malloc(http_key_len + 1);
+
+        PFILE fd = 0;
+
+        fd = Paytm_fopen(LOC_INTER_MEM, HTTP_CA_FILE, "rb+");
+        if(fd <= 0){
+            Paytm_TRACE("Open ca fail");
+        }
+
+        read_len = Paytm_fread(http_ca, 1, http_ca_len, fd);
+        Paytm_TRACE("http_ca: %s", http_ca);
+        Paytm_fclose(fd);
+        break;
+    }
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -319,13 +387,29 @@ void OpenDemoViaId(TASK_SELECTION id)
     }
 }  
 
+void print_net_status(void* p)
+{
+    while (1)
+    {
+        if(Paytm_Net_IsConnected())
+        {
+            RTI_LOG("Networking connected");
+        }else{
+            RTI_LOG("Networking not connected");
+        }
+        
+        Paytm_delayMilliSeconds(1000);
+    }
+}
 
 void app_main(void)
 {
     sys_initialize();
 
-    OpenDemoViaId(WM_BATTERY_CHECK);
+    Paytm_TRACE("************************************************\n");
 
+    OpenDemoViaId(WM_SAVE_READ_AUTHID);
+    
     while (1)
     {
         osiThreadSleep(1000);

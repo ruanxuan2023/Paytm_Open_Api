@@ -12,6 +12,10 @@
 #define HTTP_HEADER_SIZE    (1 * 1024)
 #define HTTP_BUF_SIZE       HTTPCLIENT_CHUNK_SIZE
 
+#define HTTP_CA_FILE    "http.ca"
+#define HTTP_CERT_FILE  "http.cert"
+#define HTTP_KEY_FILE   "http.key"
+
 typedef enum{
     HTTP_GET_REQUEST = 0,
     HTTP_POST_REQUEST,

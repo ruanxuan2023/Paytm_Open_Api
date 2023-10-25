@@ -18,11 +18,14 @@ void batteryDemo(void)
 
     Paytm_BatteryLevelMonitoring(true);
 
+    int voltage = 0;
+
     while (1)
     {
         /* code */
+        Paytm_GetBatteryVoltage(&voltage);
         Paytm_delayMilliSeconds(5000);
-        Paytm_TRACE("The battery %s charging!", Paytm_GetChargingStatus() ? "is" : "is not");
+        Paytm_TRACE("The battery %s charging! Voltage = %d", voltage, Paytm_GetChargingStatus() ? "is" : "is not");
     }
     
 }

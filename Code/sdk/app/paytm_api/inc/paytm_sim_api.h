@@ -13,6 +13,12 @@ typedef enum
     NW_STAT_REGISTERED_ROAMING
 }Paytm_gprs_state_e;
 
+typedef enum{
+    NW_SIM_EJECTED = 0,
+    NW_SIM_INSERTED,
+    NW_SIM_EJECTED_FOR_LONG_TIME
+}Paytm_sim_state_e;
+
 int32 Paytm_ReadIMSI(char imsi[]);
 int32 Paytm_GetIMSI(char imsi[]);
 int32 Paytm_ReadSimNumber(char sim_no[]);
