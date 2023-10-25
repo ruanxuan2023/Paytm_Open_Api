@@ -438,7 +438,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_CERT_READ_WRITE);
+    OpenDemoViaId(TEST_APP_SIGN_VERIFY);
     while (1)
     {
         osiThreadSleep(1000);
