@@ -464,8 +464,14 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_OTA_TEST_QA);
-    
+    // OpenDemoViaId(WM_GET_SIM_INFO);
+
+    Paytm_PlayFile(LOC_INTER_MEM, "tuijian1.mp3", 4);
+
+    Paytm_delayMilliSeconds(2000);
+    Paytm_PlayFileFromDir(LOC_INTER_MEM, "", "tuijian1.mp3", 4);
+
+
     while (1)
     {
         osiThreadSleep(1000);
