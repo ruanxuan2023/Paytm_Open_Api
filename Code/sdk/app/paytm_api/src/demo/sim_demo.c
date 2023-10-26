@@ -74,13 +74,13 @@ void testSim(void)
 {
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
 
+    Paytm_GetModemFunction(simMonitor);
+
     while (!Paytm_Net_IsConnected())
     {
-        RTI_LOG("Networking connecting");
-        Paytm_delayMilliSeconds(1000);
+        Paytm_TRACE("Networking connecting");
+        Paytm_delayMilliSeconds(2000);
     }
-
-    Paytm_GetModemFunction(simMonitor);
 
     char imsi[33] = {0};
     Paytm_ReadIMSI(imsi);

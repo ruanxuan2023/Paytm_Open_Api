@@ -438,7 +438,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_BATTERY_CHECK);
+    OpenDemoViaId(WM_GET_SIM_INFO);
     
     while (1)
     {

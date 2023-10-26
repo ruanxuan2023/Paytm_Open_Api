@@ -26,6 +26,7 @@ int32 Paytm_setAuthID(char *authID, uint32 authID_len);
 uint8 Paytm_ValidateHardwareConfig(void);
 int32 Paytm_requestFOTA(Paytm_location_t sl, char *binfilename, char *sigfilename, uint8 *verifyOk);
 int32 Paytm_resetForFOTA(void);
+bool Paytm_CheckFOTAFileValid(const char *fw_path);
 
 typedef enum {
     STATE_POWERKEY_PRESSED = 0,
