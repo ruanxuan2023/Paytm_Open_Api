@@ -233,6 +233,8 @@ void auPlayVolumeSet(uint32_t volume);
 int amrPlayStart(const char* file_name, const AmrPlaybackConfigInfo* config, AmrPlaybackHandle* handle);
 
 int amrPlayStop(AmrPlaybackHandle handle, int drain);
+
+int32_t auPlaySoftGainSet(int32_t gain);
 #ifdef __cplusplus
 }
 #endif
