@@ -125,6 +125,7 @@ typedef enum
     WM_PWK_DEMO                = 74,
     WM_BUTTON_DEMO             = 75,
     WM_TIMEZONE_CHANGE         = 76,
+    WM_POWER_ON_OFF_FLOW       = 78,
 	
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -420,6 +421,12 @@ void OpenDemoViaId(TASK_SELECTION id)
         net_connect();
         timeZoneSet();
         break;
+    case WM_POWER_ON_OFF_FLOW:
+        //add code to do power down flow
+
+        //then call function to shut down the device
+        Paytm_PowerDown(0);
+        break;
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -453,7 +460,6 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_PWK_DEMO);
     
     while (1)
     {
