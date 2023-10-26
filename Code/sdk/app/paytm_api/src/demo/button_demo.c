@@ -72,6 +72,6 @@ void pwkCb(void* p)
 
 void pwkDemo(void)
 {
-    Paytm_Set_PowerKey_LongPress_Time(6000);
+    Paytm_Set_PowerKey_LongPress_Time(2000);
     powerkey_action_callback_register(pwkCb);
 }

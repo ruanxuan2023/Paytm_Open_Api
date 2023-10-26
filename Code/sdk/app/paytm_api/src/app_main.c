@@ -453,7 +453,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_TIMEZONE_CHANGE);
+    OpenDemoViaId(WM_PWK_DEMO);
     
     while (1)
     {
