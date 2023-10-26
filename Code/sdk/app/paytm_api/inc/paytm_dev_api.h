@@ -9,6 +9,7 @@
 #define PAYTM_DEV_INFO_FILE "paytm_dev_info.cfg"
 #define PAYTM_TOKEN_FILE    "paytm_token.txt"
 #define PAYTM_AUTHID_FILE   "paytm_authid.txt"
+#define PAYTM_FOTA_FILE     "FOTA_APP.bin"
 
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);
@@ -26,6 +27,7 @@ int32 Paytm_setAuthID(char *authID, uint32 authID_len);
 uint8 Paytm_ValidateHardwareConfig(void);
 int32 Paytm_requestFOTA(Paytm_location_t sl, char *binfilename, char *sigfilename, uint8 *verifyOk);
 int32 Paytm_resetForFOTA(void);
+bool Paytm_SetFOTAFileReady(const char *fw_path);
 bool Paytm_CheckFOTAFileValid(const char *fw_path);
 
 typedef enum {

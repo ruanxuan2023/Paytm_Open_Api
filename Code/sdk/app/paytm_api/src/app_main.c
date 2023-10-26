@@ -162,6 +162,7 @@ extern void ledRun(void);
 extern void devInfoDemo(void);
 extern void pwkDemo(void);
 extern void timeZoneSet(void);
+extern void fota_download(void* p);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -282,6 +283,8 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_MBED_DEMO:
         break;
     case WM_OTA_TEST_QA:
+        net_connect();
+        Paytm_CreateTask("fota", fota_download, NULL, 100, 60 * 1024);
         break;
     case WM_ASYNC_INIT:
         break;;
@@ -330,18 +333,19 @@ void OpenDemoViaId(TASK_SELECTION id)
     {
         char token[32] = {0};
         char auth_id[120 + 1] = {0};
-        char auth_id_set[120] = {0};
+        // char auth_id_set[120] = {0};
+        char *authid = "qa3-iot-int/client/74cbc5e6-355d-4334-b4d1-7702fcbf124b_WAM4GS_864180051437643";
 
         Paytm_readAuthID(auth_id, 120);
         Paytm_readToken32Byte(token, 32);
-        Paytm_TRACE("id: %s", auth_id);
+        Paytm_TRACE("auth_id: %s", auth_id);
         Paytm_TRACE("token: %s", token);
 
-        memset(auth_id_set, 0x41, 120);
-        Paytm_setAuthID(auth_id_set, 120);
+        // memset(auth_id_set, 0x41, 120);
+        Paytm_setAuthID(authid, strlen(authid));
 
         memset(auth_id, 0x00, 120);
-        Paytm_readAuthID(auth_id, 120);
+        Paytm_readAuthID(auth_id, strlen(authid));
         auth_id[120] = '\0';
         Paytm_TRACE("auth_id: %s", auth_id);
         break;
@@ -460,6 +464,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
+    OpenDemoViaId(WM_OTA_TEST_QA);
     
     while (1)
     {
