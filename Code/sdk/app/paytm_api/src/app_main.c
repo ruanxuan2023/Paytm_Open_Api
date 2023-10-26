@@ -122,6 +122,9 @@ typedef enum
     WM_SAVE_READ_AUTHID        = 71,
     WM_PLAY_COMBINE_AUDIOS     = 72,
     WM_CERT_READ_WRITE         = 73,
+    WM_PWK_DEMO                = 74,
+    WM_BUTTON_DEMO             = 75,
+    WM_TIMEZONE_CHANGE         = 76,
 	
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -156,6 +159,8 @@ extern void cJsonCreate(void);
 extern uint8 cJsonPrase(const char*  val);
 extern void ledRun(void);
 extern void devInfoDemo(void);
+extern void pwkDemo(void);
+extern void timeZoneSet(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -405,6 +410,16 @@ void OpenDemoViaId(TASK_SELECTION id)
 
         break;
     }
+    case WM_PWK_DEMO:
+        pwkDemo();
+        break;
+    case WM_BUTTON_DEMO:
+        ButtonTest();
+        break;
+    case WM_TIMEZONE_CHANGE:
+        net_connect();
+        timeZoneSet();
+        break;
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -438,7 +453,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_TIMEZONE_CHANGE);
     
     while (1)
     {

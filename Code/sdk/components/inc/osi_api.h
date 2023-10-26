@@ -68,6 +68,11 @@ typedef struct osiWorkQueue osiWorkQueue_t;
 typedef struct osiWork osiWork_t;
 
 /**
+ * function type of callback
+ */
+typedef void (*osiCallback_t)(void *ctx);
+
+/**
  * osique data structure for Flag
  */
 typedef void osiFlag_t;
@@ -182,7 +187,6 @@ bool osiThreadGetPriority(osiThread_t *thread, uint8_t *Priority);
  * \param oldPriority   thread old Priority
  */
 bool osiThreadChangePriority(osiThread_t *thread, uint8_t newPriority, uint8_t *oldPriority);
-
 
 
 /**
@@ -348,7 +352,6 @@ osiWorkQueue_t *osiSysWorkQueueHighPriority(void);
  * \return  the system low priority work queue
  */
 osiWorkQueue_t *osiSysWorkQueueLowPriority(void);
-
 
 /**
  * get system tick  
@@ -770,8 +773,8 @@ void osiCacheClean(void *pMem, uint32_t size);
  * \brief set dump config
  *
  * \param enable     
- *              - ture    when system comes to crash, wait and dump
- *              - flase    when system comes to crash, reset
+ *              - ture    when system comes to crash, reset
+ *              - flase    when system comes to crash, wait and dump
  */
 void osiExceptionDumpEnable(bool enable);
 
@@ -807,10 +810,30 @@ long osiMkTime(const osiTime_t *tm);
 void osiGetTime(osiTime_t *time);
 
 /**
+ * \brief Set RTC time
+ * 
+* \param time RTC time     
+ *
+ */
+void osiSetTime(osiTime_t *time);
+
+/**
  * \brief record timezone info
  *
  */
 int32_t osiGetTimeZone(void);
+
+/**
+ * \brief record timezone info in minute
+ *
+ */
+int32_t osiGetTimeZoneMin(void);
+
+/**
+ * \brief set timezone info in minute
+ *
+ */
+int32_t osiSetTimeZoneMin(int32_t time_zone);
 
 /**
  * \brief record time info
@@ -919,16 +942,6 @@ osiMessageQueue_t *osiGetTms2ATMsgQRef(void);
 void osiSetPMEnableSleep(bool enable);
 
 /**
- * \brief load sub app
- *
- * \param start_address     sub app start address in flash
- * \param ctx               sub app entry param
- * \return                  -1 : load sub app false
- *                          other: sub app enter function return value
- */
-int osiLoadSubApp(void *start_address, void *ctx);
-
-/**
  * \brief get eps apn 
  *
  */
@@ -945,6 +958,31 @@ int osiGetEpsIpType(void);
  *
  */
 bool osiIsSecBootEnable(void);
+
+/**
+ * \brief enter critical section
+ *
+ * The underlay RTOS may have different implementation for critical
+ * section. It may manipulate CPU IRQ enable bit(s), or manipulate
+ * IRQ mask.
+ *
+ * This can be called in ISR.
+ *
+ * \return  critical section flags
+ */
+uint32_t osiEnterCritical(void);
+
+/**
+ * \brief exit critical section
+ *
+ * Critical section flags is implementation depend. It should be the value
+ * returned by \p osiEnterCritical, and don't change the value manually.
+ *
+ * This can be called in ISR.
+ *
+ * \param critical  critical section flags
+ */
+void osiExitCritical(uint32_t critical);
 
 #ifdef __cplusplus
 }

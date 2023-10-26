@@ -31,4 +31,7 @@ int32 Paytm_Button_events(uint8 enable);
 int32_t Paytm_Button_init(void);
 void button_action_callback_register(message_callback_t cb);
 
+void powerkey_action_callback_register(message_callback_t cb);
+void Paytm_Set_PowerKey_LongPress_Time(uint16_t time_ms);
+
 #endif 

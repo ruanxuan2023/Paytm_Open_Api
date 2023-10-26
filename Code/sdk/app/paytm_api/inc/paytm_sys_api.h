@@ -71,6 +71,9 @@ int32 Paytm_GetLocalTime(Paytm_Time *dt);
 uint64 Paytm_Mktime(Paytm_Time* dt);
 uint64 Paytm_millis(void);
 void Paytm_delayMilliSeconds(uint32 msec);
+/* UTC+8, zone = 8 * 60; UTC +5.5, zone = 5.5 * 60; UTC-3, zone = -3 * 60 */
+void Paytm_SetTimezone(int32_t zone);
+int32_t Paytm_GetTimezone(void);
 
 /*********************************    TIMER FUNCTIONS    ***********************************/
 

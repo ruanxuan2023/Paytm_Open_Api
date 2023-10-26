@@ -16,5 +16,30 @@ void ntpDemo(void *p)
     Paytm_Time gi = {0};
 
     Paytm_GetTime(&gi);
-    RTI_LOG("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+    Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+}
+
+void timeZoneSet(void)
+{
+    Paytm_ntp_sync(NTP_TEST_HOST, 60 * 60);
+
+    Paytm_delayMilliSeconds(3 * 1000);
+
+    Paytm_Time gi = {0};
+
+    Paytm_SetTimezone(8 * 60);
+    Paytm_GetTime(&gi);
+    Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+    Paytm_TRACE("Now timezone = %d", Paytm_GetTimezone());
+
+    Paytm_SetTimezone(-2 * 60);
+    Paytm_GetTime(&gi);
+    Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+    Paytm_TRACE("Now timezone = %d", Paytm_GetTimezone());
+
+    Paytm_SetTimezone(330);
+    Paytm_GetTime(&gi);
+    Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+    Paytm_TRACE("Now timezone = %d", Paytm_GetTimezone());
+
 }

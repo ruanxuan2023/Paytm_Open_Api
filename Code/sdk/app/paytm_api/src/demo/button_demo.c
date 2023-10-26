@@ -60,3 +60,18 @@ void ButtonTest(void)
 
     Paytm_Button_events(true);
 }
+
+void pwkCb(void* p)
+{
+    if(*(int*)p == STATE_BUTTON_SINGLE_CLICK){
+        Paytm_TRACE("Pwk single press");
+    }else if(*(int*)p == STATE_BUTTON_LONG_PRESS){
+        Paytm_TRACE("Pwk long press");
+    }
+}
+
+void pwkDemo(void)
+{
+    Paytm_Set_PowerKey_LongPress_Time(6000);
+    powerkey_action_callback_register(pwkCb);
+}
