@@ -60,13 +60,25 @@ void testNetWorkDisconected(void)
 
 void simMonitor(void * p)
 {
-    if(*(int*)p == NW_SIM_EJECTED)
+    int result = *(int*)p;
+
+    RTI_LOG1(">>>>");
+    if(result == URC_SIM_REMOVED)
     {
         Paytm_TRACE("Sim card ejected");
-    }else if(*(int*)p == NW_SIM_INSERTED){
+    }else if(result == URC_SIM_INSERTED){
         Paytm_TRACE("Sim card inserted");
-    }else if(*(int*)p == NW_SIM_EJECTED_FOR_LONG_TIME){
+    }else if(result == URC_SIM_EJECTED_FOR_LONG_TIME){
         Paytm_TRACE("Sim card ejected for 15 minutes");
+    }else if(result == URC_PDP_ACTIVE )
+    {
+        Paytm_TRACE("The pdp is active");
+    }else if(result == URC_NET_ACTIVE ){
+        Paytm_TRACE("The net connected successfully");
+    }else if(result == URC_NET_DISCONNECTED ){
+        Paytm_TRACE("The net is disconected");
+    }else if(result == URC_SIM_READY){
+        Paytm_TRACE("The sim card is ready");
     }
 }
 

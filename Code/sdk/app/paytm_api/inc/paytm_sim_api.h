@@ -3,16 +3,6 @@
 
 #include "paytm_sys_api.h"
 
-typedef enum 
-{
-    NW_STAT_NOT_REGISTERED = 0,
-    NW_STAT_REGISTERED, 
-    NW_STAT_SEARCHING, 
-    NW_STAT_REG_DENIED, 
-    NW_STAT_UNKNOWN,
-    NW_STAT_REGISTERED_ROAMING
-}Paytm_gprs_state_e;
-
 typedef enum{
     NW_SIM_EJECTED = 0,
     NW_SIM_INSERTED,
