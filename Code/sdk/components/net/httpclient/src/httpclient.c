@@ -595,6 +595,7 @@ int httpclient_send_header(httpclient_t *client, char *url, int method, httpclie
 
     /* Add user header information */
     if (client->header) {
+        RTI_LOG("httpclient_send_header %s", (char *)client->header );
         httpclient_get_info(client, send_buf, &len, (char *)client->header, strlen(client->header));
     }
 

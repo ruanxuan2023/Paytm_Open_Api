@@ -195,13 +195,15 @@ void getTaobaoSuggest(void* p)
         osiThreadSleep(1000);
     }
 }
+
 extern void fileUnzip(void);
+#define SINGLE_DOWNLOAD_LEN     (5 * 1024)
 
 void httpDownload(void* p)
 {
     int rc = 0;
+    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2";
 
-    char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/paytm_res_en.czip";
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);

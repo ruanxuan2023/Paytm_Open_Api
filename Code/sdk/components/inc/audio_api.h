@@ -235,6 +235,8 @@ int amrPlayStart(const char* file_name, const AmrPlaybackConfigInfo* config, Amr
 int amrPlayStop(AmrPlaybackHandle handle, int drain);
 
 int32_t auPlaySoftGainSet(int32_t gain);
+
+void auPlayPcmStop(uint32_t timeout);
 #ifdef __cplusplus
 }
 #endif

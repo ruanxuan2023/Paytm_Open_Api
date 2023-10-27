@@ -4,6 +4,8 @@
 #include "paytm_audio_api.h"
 #include "paytm_button_api.h"
 
+int task_id = 0;
+
 void buttoncb(void * p)
 {
     int32_t vol = Paytm_GetVolume(NULL);
@@ -12,6 +14,7 @@ void buttoncb(void * p)
     switch (msg->id)
     {
     case BUTTON_PLUS:
+    	Paytm_StopPlay();
         vol++;
         if(vol >= PAYTM_VOLUME_MAX){
             vol = PAYTM_VOLUME_MAX;
@@ -23,6 +26,7 @@ void buttoncb(void * p)
         // appAudioTipsPushQue(0, "音量加", 0, false);
         break;
     case BUTTON_MINUS:
+    	Paytm_StopPlay();
         vol--;
         if(vol <= PAYTM_VOLUME_MIN){
             vol = PAYTM_VOLUME_MIN;
@@ -40,8 +44,10 @@ void buttoncb(void * p)
         }else{
             Paytm_TRACE("Fun key long press");
         }
+         Paytm_StopPlay();
         Paytm_PlayFileFromDir(LOC_EXTER_MEM, "resources/sounds/en", "Received.amr,10000.amr,and.amr,num90.amr", vol);
-        //Paytm_PlayFile(LOC_INTER_MEM, "D:/test/Freq_sweep_61_0dB.mp3",20 );
+       
+        // Paytm_PlayFile(LOC_EXTER_MEM, "test/292KB.mp3",vol );
         Paytm_TRACE("Audio test");
         break;
     case BUTTON_POWER:
@@ -49,6 +55,8 @@ void buttoncb(void * p)
             Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/DI_powOff.amr",vol);
             osiSysPoweroff();
         }
+        // Paytm_PlayFile(LOC_EXTER_MEM, "test/BatCrtkl.wav",vol );
+        // Paytm_StopPlay();
         
     default:
         break;
@@ -65,13 +73,35 @@ void pwkCb(void* p)
 {
     if(*(int*)p == STATE_BUTTON_SINGLE_CLICK){
         Paytm_TRACE("Pwk single press");
+        Paytm_SendMessage_From_ISR(task_id, 1, 55, 129);
     }else if(*(int*)p == STATE_BUTTON_LONG_PRESS){
         Paytm_TRACE("Pwk long press");
+        Paytm_SendMessage_From_ISR(task_id, 2, 47, 266);
     }
+}
+
+
+void msgTask(void* p)
+{
+    ST_MSG msg = {0};
+
+    while (1)
+    {
+        if(Paytm_GetMessage(task_id, &msg))
+        {
+            Paytm_TRACE("Recv msg [%d %d %d]", msg.message, msg.param1, msg.param2);
+        }
+
+        Paytm_delayMilliSeconds(100);
+    }
+    
 }
 
 void pwkDemo(void)
 {
     Paytm_Set_PowerKey_LongPress_Time(2000);
     powerkey_action_callback_register(pwkCb);
+
+
+    task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 1 * 1024);
 }

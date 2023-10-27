@@ -95,6 +95,7 @@ typedef enum {
 
 /** @brief   This enumeration defines the API return type.  */
 typedef enum {
+    HTTPCLIENT_MALLOC_FAIL = -7,
     HTTPCLIENT_ERROR_PARSE = -6,           /**< A URL parse error occurred. */
     HTTPCLIENT_UNRESOLVED_DNS = -5,        /**< Could not resolve the hostname. */
     HTTPCLIENT_ERROR_PRTCL = -4,           /**< A protocol error occurred. */
