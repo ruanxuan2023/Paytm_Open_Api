@@ -76,11 +76,11 @@ void tasksDemo(void)
 {
     mutex_id = Paytm_CreateMutex("mutex_1");
 
-    // task_1 = Paytm_CreateTask("it", runTask_1, NULL, 120, 3 * 1024);
-    // task_2 = Paytm_CreateTask("he", runTask_2, NULL, 120, 3 * 1024);
+    task_1 = Paytm_CreateTask("it", runTask_1, NULL, 120, 3 * 1024);
+    task_2 = Paytm_CreateTask("he", runTask_2, NULL, 120, 3 * 1024);
 
-    task_1 = Paytm_CreateTask("is", runTask_3, NULL, 120, 3 * 1024);
-    task_2 = Paytm_CreateTask("du", runTask_4, NULL, 120, 3 * 1024);
+    // task_1 = Paytm_CreateTask("is", runTask_3, NULL, 120, 3 * 1024);
+    // task_2 = Paytm_CreateTask("du", runTask_4, NULL, 120, 3 * 1024);
 
     Paytm_TRACE("Create two task: %d %d",task_1, task_2);
 }

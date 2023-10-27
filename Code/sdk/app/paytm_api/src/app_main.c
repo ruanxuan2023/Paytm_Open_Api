@@ -110,7 +110,8 @@ typedef enum
     WM_BUTTON_DEMO             = 75,
     WM_TIMEZONE_CHANGE         = 76,
     WM_POWER_ON_OFF_FLOW       = 78,
-	
+	WM_RTC_TIME_SET            = 79,
+
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
 	WM_DEVICE_CRASH_TEST_C     = 92,
@@ -147,6 +148,7 @@ extern void devInfoDemo(void);
 extern void pwkDemo(void);
 extern void timeZoneSet(void);
 extern void fota_download(void* p);
+extern void rtcTimeSet(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -415,6 +417,9 @@ void OpenDemoViaId(TASK_SELECTION id)
         //then call function to shut down the device
         Paytm_PowerDown(0);
         break;
+    case WM_RTC_TIME_SET:
+        rtcTimeSet();
+        break;
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -448,7 +453,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_RTC_TIME_SET);
 
     while (1)
     {

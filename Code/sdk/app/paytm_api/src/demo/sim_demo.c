@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "osi_api.h"
 
+static int task_id = 0;
 void simCb(void * p)
 {
     Paytm_TRACE("This is sim cb, val = ");
@@ -66,8 +67,10 @@ void simMonitor(void * p)
     if(result == URC_SIM_REMOVED)
     {
         Paytm_TRACE("Sim card ejected");
+        Paytm_SendMessage_From_ISR(task_id, 1, 55, 129);
     }else if(result == URC_SIM_INSERTED){
         Paytm_TRACE("Sim card inserted");
+        Paytm_SendMessage_From_ISR(task_id, 5, 81, 366);
     }else if(result == URC_SIM_EJECTED_FOR_LONG_TIME){
         Paytm_TRACE("Sim card ejected for 15 minutes");
     }else if(result == URC_PDP_ACTIVE )
@@ -82,6 +85,22 @@ void simMonitor(void * p)
     }
 }
 
+static void msgTask0(void* p)
+{
+    ST_MSG msg = {0};
+
+    while (1)
+    {
+        if(Paytm_GetMessage(task_id, &msg) == 0)
+        {
+            Paytm_TRACE("Recv msg [%d %d %d]", msg.message, msg.param1, msg.param2);
+        }
+
+        Paytm_delayMilliSeconds(10);
+    }
+    
+}
+
 void testSim(void)
 {
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
@@ -93,6 +112,9 @@ void testSim(void)
         Paytm_TRACE("Networking connecting");
         Paytm_delayMilliSeconds(2000);
     }
+
+    task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 1 * 1024);
+    Paytm_TRACE("Create task %d", task_id);
 
     char imsi[33] = {0};
     Paytm_ReadIMSI(imsi);

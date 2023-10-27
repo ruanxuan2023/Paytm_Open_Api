@@ -43,3 +43,23 @@ void timeZoneSet(void)
     Paytm_TRACE("Now timezone = %d", Paytm_GetTimezone());
 
 }
+
+void rtcTimeSet(void)
+{
+    Paytm_Time gi = {
+        .year = 1998,
+        .month = 7,
+        .day = 7,
+        .hour = 19,
+        .minute = 11,
+        .second = 39
+    };
+
+    Paytm_SetTime(&gi);
+
+    Paytm_delayMilliSeconds(5000);
+
+    memset(&gi, 0x00, sizeof(gi));
+    Paytm_GetTime(&gi);
+    Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
+}

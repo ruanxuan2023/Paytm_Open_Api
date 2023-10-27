@@ -4,7 +4,7 @@
 #include "paytm_audio_api.h"
 #include "paytm_button_api.h"
 
-int task_id = 0;
+static int task_id = 0;
 
 void buttoncb(void * p)
 {
@@ -81,13 +81,13 @@ void pwkCb(void* p)
 }
 
 
-void msgTask(void* p)
+static void msgTask(void* p)
 {
     ST_MSG msg = {0};
 
     while (1)
     {
-        if(Paytm_GetMessage(task_id, &msg))
+        if(Paytm_GetMessage(task_id, &msg) == 0)
         {
             Paytm_TRACE("Recv msg [%d %d %d]", msg.message, msg.param1, msg.param2);
         }
@@ -104,4 +104,6 @@ void pwkDemo(void)
 
 
     task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 1 * 1024);
+
+    Paytm_TRACE("Create task %d", task_id);
 }
