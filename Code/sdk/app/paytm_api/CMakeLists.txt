@@ -35,6 +35,7 @@ target_sources(${target} PUBLIC
 	src/demo/json_demo.c
 	src/demo/led_demo.c
 	src/demo/mqtt_demo.c
+	src/demo/net_demo.c
 	src/demo/ntp_demo.c
 	src/demo/sim_demo.c
 	src/demo/tasks_demo.c

@@ -111,6 +111,7 @@ typedef enum
     WM_TIMEZONE_CHANGE         = 76,
     WM_POWER_ON_OFF_FLOW       = 78,
 	WM_RTC_TIME_SET            = 79,
+    WM_SET_APN                 = 80,
 
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -149,6 +150,7 @@ extern void pwkDemo(void);
 extern void timeZoneSet(void);
 extern void fota_download(void* p);
 extern void rtcTimeSet(void);
+extern void setApn(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -420,6 +422,9 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_RTC_TIME_SET:
         rtcTimeSet();
         break;
+    case WM_SET_APN:
+        setApn();
+        break;
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -453,7 +458,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_RTC_TIME_SET);
+    OpenDemoViaId(WM_SET_APN);
 
     while (1)
     {
