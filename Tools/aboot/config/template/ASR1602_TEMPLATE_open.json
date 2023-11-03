@@ -120,8 +120,7 @@
       "name": "updater",
       "type": "image",
       "partition": "updater",
-      "group": "2",
-      "disable": true
+      "group": "2"
     },
     {
       "command": "flash",

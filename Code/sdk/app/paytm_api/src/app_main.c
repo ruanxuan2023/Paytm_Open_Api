@@ -149,6 +149,7 @@ extern void devInfoDemo(void);
 extern void pwkDemo(void);
 extern void timeZoneSet(void);
 extern void fota_download(void* p);
+extern void dfota_download(void* p);
 extern void rtcTimeSet(void);
 extern void setApn(void);
 void OpenDemoViaId(TASK_SELECTION id)
@@ -265,6 +266,8 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_CLEAR_QUEUE:
         break;
     case WM_DFOTA_HTTP_DEMO:
+        net_connect();
+        Paytm_CreateTask("Dfota", dfota_download, NULL, 100, 60 * 1024);
         break;
     case WM_SSL_DEMO:
         break;
@@ -458,7 +461,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_SET_APN);
+    OpenDemoViaId(WM_DFOTA_HTTP_DEMO);
 
     while (1)
     {

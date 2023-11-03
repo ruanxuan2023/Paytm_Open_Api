@@ -10,6 +10,7 @@
 #define PAYTM_TOKEN_FILE    "paytm_token.txt"
 #define PAYTM_AUTHID_FILE   "paytm_authid.txt"
 #define PAYTM_FOTA_FILE     "FOTA_APP.bin"
+#define PAYTM_DFOTA_FILE     "FOTA_KERNEL.bin"
 
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);
@@ -29,6 +30,8 @@ int32 Paytm_requestFOTA(Paytm_location_t sl, char *binfilename, char *sigfilenam
 int32 Paytm_resetForFOTA(void);
 bool Paytm_SetFOTAFileReady(const char *fw_path);
 bool Paytm_CheckFOTAFileValid(const char *fw_path);
+bool Paytm_SetDFOTAFileReady(const char *path);
+
 
 typedef enum {
     STATE_POWERKEY_PRESSED = 0,

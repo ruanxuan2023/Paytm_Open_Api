@@ -9,7 +9,7 @@
         {
           "name": "bootloader",
           "format": "ubi",
-          "size": "84KiB"
+          "size": "96KiB"
         },
         {
           "name": "system",
@@ -20,7 +20,8 @@
               "name": "ptable",
               "format": "raw",
               "size": "4KiB"
-            },{
+            },
+            {
               "name": "fwcerts",
               "format": "raw",
               "size": "12KiB",
@@ -66,9 +67,14 @@
           "size": "-1"
         },
         {
+          "name": "updater",
+          "format": "raw",
+          "size": "136KiB"
+        },
+        {
           "name": "nvm",
           "format": "raw",
-          "size": "512KiB"
+          "size": "1280KiB"
         },
         {
           "name": "customer_app",

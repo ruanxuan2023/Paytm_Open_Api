@@ -19,6 +19,11 @@ extern "C" {
  */
 char *kernelVersion(void);
 
+/**
+ * get current kervel git version info
+ */
+char *kernelGitVersion(void);
+
 #define OSI_WAIT_FOREVER (-1U)
 #define OSI_DELAY_MAX (-1U)
 
