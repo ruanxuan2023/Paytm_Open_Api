@@ -2,6 +2,7 @@
 
 /Code/sdk/out/
 /Code/kernel/*/customer_app.bin
+/Code/kernel/*/customer_app_pad.bin
 
 /Tools/aboot/*.zip
 

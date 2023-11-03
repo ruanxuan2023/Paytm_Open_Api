@@ -33,6 +33,8 @@ set folder_dw_tool=%folder_dw_current%\..\..\Tools\aboot\
 set file_dw_download_modify_script=%folder_dw_current%\tools\download_modify.py
 set cmd_dw_7z=%folder_dw_current%\prebuilts\win32\bin\7z.exe
 set cmd_dw_python=%folder_dw_current%\prebuilts\win32\python3\python3.exe
+set scrip_app_padding_python=%folder_dw_current%\tools\app_padding.py
+set app_partition_cfg=%folder_dw_tool%\config\partition\ASR1602_SINGLE_FLASH_LAYOUT_open_04MB.json
 
 set para_dw_target=app
 set cmd_dw_del_folder=rmdir /s /q
@@ -186,6 +188,8 @@ set file_dw_logo_bin=%folder_dw_bin%\logo.bin
 set file_dw_updater_bin=%folder_dw_bin%\updater.bin
 set file_dw_boot33_bin=%folder_dw_bin%\boot33.bin
 set file_dw_app_bin=%folder_dw_bin%\customer_app.bin
+set file_dw_app_pad_bin=%folder_dw_bin%\customer_app_pad.bin
+
 if not exist %file_dw_cp_bin% (
     echo cp.bin not exist
     exit /B 1
@@ -215,6 +219,16 @@ if not exist %file_dw_app_bin% (
     echo F | %cmd_dw_file_copy% %folder_dw_tool%\images\customer_app.bin %file_dw_app_bin%
 )
 
+if exist %file_dw_app_pad_bin% (
+    %cmd_dw_del_file% %file_dw_app_pad_bin%
+)
+
+%cmd_dw_python% %scrip_app_padding_python% %file_dw_app_bin% %app_partition_cfg%  %file_dw_app_pad_bin%
+if not exist %file_dw_app_pad_bin% (
+    echo customer_app_pad.bin not exist, copy default[no app]
+    exit /B 1
+)
+
 @REM goto aboot tool folder
 cd %folder_dw_tool%
 
@@ -223,8 +237,8 @@ cd %folder_dw_tool%
 set para_dw_release_all_name=%para_dw_release_name%_all
 set folder_dw_release_all=.\%para_dw_release_all_name%\
 set file_dw_release_all=.\%para_dw_release_all_name%.zip
-echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_bin% %file_dw_release_all%
-arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_bin% %file_dw_release_all%
+echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
+arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
 if not "%errorlevel%"=="0" (
     echo Release package error
     goto fail_exit

@@ -35,7 +35,8 @@ char *Paytm_strrchr(const char *s, char c);
 int32 Paytm_strrcasecmp(const char *s1, const char *s2);
 int32 Paytm_strncasecmp(const char *s1, const char *s2, Paytm_size_t len);
 int32 Paytm_vsnprintf(char *str, Paytm_size_t size, const char *format, ...);
-int32 Paytm_snprintf(char *str, Paytm_size_t size, const char *format, ...);
+//int32 Paytm_snprintf(char *str, Paytm_size_t size, const char *format, ...);
+#define Paytm_snprintf snprintf
 int32 Paytm_sscanf(const char* , const char*, ...);
 int32 Paytm_IsEmptyStr(const char *str);
 int32 Paytm_isspace(char ch);
