@@ -461,7 +461,19 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_DFOTA_HTTP_DEMO);
+    char *str = "";
+    char *name = "James";
+    char buf[50] = {0};
+    char data[50] = {0};
+
+    int age = 34;
+
+    Paytm_TRACE("The string %s empty", Paytm_IsEmptyStr(str) ? "is" : "is not");
+
+    Paytm_snprintf(buf, 32, "His name is %s and is %d year old", name, age);
+    snprintf(data, 32, "His name is %s and is %d year old", name, age);
+    Paytm_TRACE("Buf: %s", buf);
+    Paytm_TRACE("Date: %s", data);
 
     while (1)
     {
