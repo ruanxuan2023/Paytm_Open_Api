@@ -5,6 +5,81 @@
 
 #include "paytm_file_api.h"
 #include "paytm_debug_uart_api.h"
+#define TEST_FILE_SIZE (128*1024)
+
+void fileFormatDemo(void){
+    char *test_dir = "TestDir";
+    char *test_buf = malloc(TEST_FILE_SIZE);
+    uint32 free_size = Paytm_fs_freesize(LOC_EXTER_MEM);
+    int ret = 0;
+
+    for(int i = 0; i < TEST_FILE_SIZE; i++){
+        test_buf[i] = i%0xff;
+    }
+
+    while (1)
+    {
+        Paytm_TRACE("1.format file systemm free_size: %d", free_size);
+        // formart file system
+        Paytm_fs_format(LOC_EXTER_MEM);
+        free_size = Paytm_fs_freesize(LOC_EXTER_MEM);
+        Paytm_TRACE("2.format file systemm done! free_size: %d ", free_size);
+
+        // check Directory exist
+        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) == 0){
+            Paytm_TRACE("Ext Flash directory %s not exist", test_dir);
+            // create Directory
+            Paytm_dir_create(LOC_EXTER_MEM, test_dir);
+            Paytm_TRACE("Ext Flash create directory %s", test_dir);
+        }else{
+            Paytm_TRACE("Ext Flash directory %s exist", test_dir);
+        }
+    
+        // create 40 files
+        for(int i = 0; i < 40; i++){
+            char fname[64] = {0};
+            snprintf(fname, sizeof(fname), "%s/Test_%d.txt", test_dir, i);
+            PFILE fd = Paytm_fcreate(LOC_EXTER_MEM, fname, "wb+");
+            Paytm_fwrite(test_buf, TEST_FILE_SIZE, 1, fd);
+            Paytm_fclose(fd);
+            Paytm_TRACE("Ext Flash write %s done size: %d", fname, ret);
+            osiThreadSleep(20);
+        }
+
+        // list directory
+        Paytm_list_item_t item_list = {0};
+        memset(&item_list, 0, sizeof(item_list));
+        int cnt = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, test_dir, 255);
+
+        Paytm_TRACE("read %d item from external directory %s", cnt, test_dir);
+        node_t *file_node = item_list.files;
+        while (file_node)
+        {
+            Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
+            file_node = file_node->next;
+        }
+        Paytm_list_item_free(&item_list);
+
+        free_size = Paytm_fs_freesize(LOC_EXTER_MEM);
+        Paytm_TRACE("3. file systemm free_size: %d ", free_size);
+        // formart file system
+        Paytm_fs_format(LOC_EXTER_MEM);
+        free_size = Paytm_fs_freesize(LOC_EXTER_MEM);
+        Paytm_TRACE("4.format file systemm done! free_size: %d ", free_size);
+
+        // check Directory exist
+        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) != 0){
+            Paytm_TRACE("Ext Flash directory %s exist", test_dir);
+        } else {
+            Paytm_TRACE("Ext Flash directory %s not exist", test_dir);
+        }
+        osiThreadSleep(100);
+    }
+    
+    
+
+    return;
+}
 
 void fileSystemDemo(void)
 {

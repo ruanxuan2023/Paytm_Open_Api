@@ -179,7 +179,7 @@
       "format": "raw"
     },
     {
-      "name": "boot33",
+      "name": "boot33_bin",
       "image": "boot33.bin",
       "io": "in",
       "format": "raw"
@@ -209,7 +209,7 @@
       "format": "raw"
     },
     {
-      "name": "updater",
+      "name": "updater_bin",
       "image": "updater.bin",
       "io": "in",
       "format": "raw"
@@ -299,6 +299,22 @@
       }
     },
     {
+      "name": "updater",
+      "image": "updater.bin",
+      "io": "out",
+      "format": "fip",
+      "fip": {
+        "images": [
+          {
+            "id": "UPDATER_IMAGE_ID",
+            "image": "updater_bin"
+          }
+        ],
+        "callBoot2": false,
+        "certOnly": false
+      }
+    },
+    {
       "name": "flasher",
       "image": "flasher.img",
       "io": "out",
@@ -329,6 +345,7 @@
             "id": "DSP_IMAGE_ID",
             "image": "dsp"
           },
+
           {
             "id": "APP_IMAGE_ID",
             "image": "customer_app"
@@ -354,7 +371,7 @@
       "format": "aggr",
       "aggr": [
         {
-          "image": "boot33"
+          "image": "boot33_bin"
         },
         {
           "image": "ntos_pkey"

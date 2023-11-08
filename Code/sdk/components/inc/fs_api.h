@@ -276,6 +276,19 @@ uint32_t fs_closedir(int dirstream);
  *      - -false      fail
  */
 bool fs_mountExt(ExtFsConfig_t *cfg);
+
+/**
+ * @brief format file system
+ *
+ * @param volume_label     format file system "D:/"
+ *
+ * @return
+ *      -  true      success
+ *      - -false      fail
+ */
+bool fs_format(const char *volume_label);
+
+uint32_t fs_extFreeSize(const char *path);
 #ifdef __cplusplus
 }
 #endif

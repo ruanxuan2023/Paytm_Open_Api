@@ -8,9 +8,6 @@
 
 void devInfoDemo(void)
 {
-    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
-    osiThreadSleepMs(6000);
-
     char res[128] = {0};
     Paytm_Time dt = {0};
 

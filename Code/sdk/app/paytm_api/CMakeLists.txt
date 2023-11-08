@@ -39,6 +39,7 @@ target_sources(${target} PUBLIC
 	src/demo/ntp_demo.c
 	src/demo/sim_demo.c
 	src/demo/tasks_demo.c
+	src/demo/timer_demo.c
 	src/mqtt_demo_1.c
 
 	)

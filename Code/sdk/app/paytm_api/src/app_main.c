@@ -26,7 +26,6 @@
 
 static void net_connect(void)
 {
-    
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
     //int32 stat = 0;
     // while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
@@ -152,6 +151,8 @@ extern void fota_download(void* p);
 extern void dfota_download(void* p);
 extern void rtcTimeSet(void);
 extern void setApn(void);
+extern void fileFormatDemo(void);
+extern void runTimer(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -167,6 +168,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         batteryDemo();
         break;
     case WM_SYSTEM_CHECK:
+        net_connect();
         devInfoDemo();
         break;
     case WM_NETWORK_RECONNECT:
@@ -187,7 +189,8 @@ void OpenDemoViaId(TASK_SELECTION id)
         testHttpGet(NULL);
         break;
     case WM_FILE_TEST:
-        fileSystemDemo();
+        // fileSystemDemo();
+        fileFormatDemo();
         break;
     case WM_UNZIP_TEST:
         break;
@@ -288,6 +291,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_SAMPLE_FILE_WRITE:
         break;
     case WM_TIMER_CYCLIC_TEST:
+        runTimer();
         break;
     case WM_MQTT_SUBSCRIBE:
         break;
@@ -461,19 +465,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    char *str = "";
-    char *name = "James";
-    char buf[50] = {0};
-    char data[50] = {0};
-
-    int age = 34;
-
-    Paytm_TRACE("The string %s empty", Paytm_IsEmptyStr(str) ? "is" : "is not");
-
-    Paytm_snprintf(buf, 32, "His name is %s and is %d year old", name, age);
-    snprintf(data, 32, "His name is %s and is %d year old", name, age);
-    Paytm_TRACE("Buf: %s", buf);
-    Paytm_TRACE("Date: %s", data);
+    OpenDemoViaId(WM_TIMER_CYCLIC_TEST);
 
     while (1)
     {

@@ -28,6 +28,8 @@ void Paytm_list_item_free(Paytm_list_item_t *itemslist);
 int32 Paytm_dir_listfiles(Paytm_location_t sl, Paytm_list_item_t *itemslist, const char *dirpath, uint8 read_size);
 
 //-1: filepath is null -2: file already exists -3: file create fial fd: create file handle
+int32 Paytm_fs_format(Paytm_location_t sl);
+uint32 Paytm_fs_freesize(Paytm_location_t sl);
 PFILE Paytm_fcreate(Paytm_location_t sl, const char *filepath, const char *flag);
 PFILE Paytm_fopen(Paytm_location_t sl, const char *filename, const char *flag);
 int32 Paytm_fread(void *ptr, Paytm_size_t size, Paytm_size_t nmemb, PFILE filehandle);
