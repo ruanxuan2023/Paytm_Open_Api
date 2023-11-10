@@ -11,3 +11,5 @@
 [0413/193246.068:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)
 [0413/195811.852:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)
 [0415/150138.333:ERROR:directory_reader_win.cc(43)] FindFirstFile: 系统找不到指定的路径。 (0x3)
+[1110/144633.013:ERROR:zip.cc(179)] Cannot open 'C:\Users\闄堥\AppData\Local\Temp\nw25832_753364391': FILE_ERROR_NOT_FOUND: 系统找不到指定的文件。 (0x2)
+[1110/144633.014:ERROR:registration_protocol_win.cc(107)] CreateFile: 系统找不到指定的文件。 (0x2)

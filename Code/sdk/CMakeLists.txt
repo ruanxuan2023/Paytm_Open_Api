@@ -41,6 +41,7 @@ include_directories(
     components/mbedtls/include
     components/cislvgl/include
     components/net/pahomqtt/inc
+    components/net/json/cJSON
     components/inc/lcd
 )
 function(cpp_only target file)

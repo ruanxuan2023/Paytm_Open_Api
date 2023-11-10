@@ -104,6 +104,4 @@ void pwkDemo(void)
 
 
     task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 1 * 1024);
-
-    Paytm_TRACE("Create task %d", task_id);
 }

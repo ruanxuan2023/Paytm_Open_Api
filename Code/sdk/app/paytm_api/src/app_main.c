@@ -465,7 +465,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
 
-    OpenDemoViaId(WM_TIMER_CYCLIC_TEST);
+    OpenDemoViaId(WM_APP_DOWNLOAD);
 
     while (1)
     {

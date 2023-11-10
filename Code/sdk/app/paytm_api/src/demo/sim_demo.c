@@ -114,7 +114,6 @@ void testSim(void)
     }
 
     task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 1 * 1024);
-    Paytm_TRACE("Create task %d", task_id);
 
     char imsi[33] = {0};
     Paytm_ReadIMSI(imsi);
