@@ -683,7 +683,7 @@ int httpclient_recv(httpclient_t *client, char *buf, int min_len, int max_len, i
             ret = recv(client->socket, buf + readLen, max_len - readLen, 0);
         #endif
         }else{
-            ret = _httpSslRead(client->ssl, buf + readLen, max_len - readLen, 200);
+            ret = _httpSslRead(client->ssl, buf + readLen, max_len - readLen, 2000);
             HTTPC_LOG("\n_httpSslRead ret: %d\n", ret);
         }
 

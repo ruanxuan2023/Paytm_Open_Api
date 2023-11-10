@@ -138,6 +138,7 @@ extern void readPDPInfo(void);
 extern void readAPN(void);
 extern void fileHeapLeakDemo(void* p);
 extern void httpDownload(void* p);
+extern void httpDownload2(void* p);
 extern void ButtonTest(void);
 extern void fileUnzip(void);
 extern void fileLite(void);
@@ -183,7 +184,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case WM_APP_DOWNLOAD:
         net_connect();
-        Paytm_CreateTask("http", httpDownload, NULL, 100, 80 * 1024);
+        Paytm_CreateTask("http", httpDownload2, NULL, 100, 80 * 1024);
         break;
     case WM_HTTP_TEST:
         testHttpGet(NULL);
@@ -465,7 +466,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
     // WM_APP_DOWNLOAD WM_GET_SIM_INFO
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_APP_DOWNLOAD);
 
     while (1)
     {
