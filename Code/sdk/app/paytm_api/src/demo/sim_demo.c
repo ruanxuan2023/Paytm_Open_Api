@@ -129,6 +129,19 @@ void testSim(void)
     int32 gsmstate = 0;
     Paytm_GetGSMState(&gsmstate);
     Paytm_TRACE("gprs state %d", gsmstate);
+
+    while (1)
+    {
+        if(Paytm_GetSimState()){
+            Paytm_TRACE("Sim ready");
+        }else{
+            Paytm_TRACE("Sim not ready");
+        }
+        Paytm_delayMilliSeconds(1000);
+    }
+    
+
+    osiSysPoweroff();
 }
 
 void readSimState(void)

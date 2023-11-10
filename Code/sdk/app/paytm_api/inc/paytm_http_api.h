@@ -111,6 +111,15 @@ typedef struct
 typedef Paytm_http_request_Packet_t http_request_t;
 
 int32 Paytm_HTTP_Request_Clear(http_request_t *http);
+/**
+ * @description: 
+ * @param {Paytm_location_t} lc
+ * @param {http_request_t} *http
+ * @param {char} *url
+ * @param {uint16} port
+ * @param {char} *file
+ * @return {*} Refer to HTTPCLIENT_RESULT
+ */
 int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port, const char *file);
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);

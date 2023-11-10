@@ -464,8 +464,8 @@ void app_main(void)
     sys_initialize();
 
     Paytm_TRACE("************************************************\n");
-
-    OpenDemoViaId(WM_APP_DOWNLOAD);
+    // WM_APP_DOWNLOAD WM_GET_SIM_INFO
+    OpenDemoViaId(WM_GET_SIM_INFO);
 
     while (1)
     {
