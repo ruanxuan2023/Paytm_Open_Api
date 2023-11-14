@@ -466,8 +466,8 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
     // WM_APP_DOWNLOAD WM_GET_SIM_INFO
-    OpenDemoViaId(WM_APP_DOWNLOAD);
-
+    // OpenDemoViaId(WM_PWK_DEMO);
+    ledRun();
     while (1)
     {
         osiThreadSleep(1000);

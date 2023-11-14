@@ -102,6 +102,5 @@ void pwkDemo(void)
     Paytm_Set_PowerKey_LongPress_Time(2000);
     powerkey_action_callback_register(pwkCb);
 
-
     task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 1 * 1024);
 }
