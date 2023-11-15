@@ -249,3 +249,34 @@ void fileLite(void)
     Paytm_TRACE("Read %s", data);
     Paytm_fclose(fd);
 }
+
+void fileCreateFolderDemo(void)
+{
+    Paytm_list_item_t item_list = {0};
+    int cnt = 0, rc = 0;
+    char* searchDir = "data";
+    char* makeDir = "datas/reource/sounds";
+
+    cnt = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, searchDir, 255);
+
+    Paytm_TRACE("read %d item from external directory %s", cnt, searchDir);
+
+    node_t *file_node = item_list.files;
+    while (file_node)
+    {
+        Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
+        file_node = file_node->next;
+    }
+
+    Paytm_list_item_free(&item_list);
+
+    rc = Paytm_dir_delete_all_subdirectories(LOC_EXTER_MEM, makeDir);
+    Paytm_TRACE("Delete all subdirectories result is %d", rc);
+
+    rc = Paytm_dir_create_all_subdirectories(LOC_EXTER_MEM, "datas/reource/sounds");
+    if(rc != 0){
+        Paytm_TRACE("Create all subdirectories fail");
+    }else{
+        Paytm_TRACE("Create all subdirectories success");
+    }
+}

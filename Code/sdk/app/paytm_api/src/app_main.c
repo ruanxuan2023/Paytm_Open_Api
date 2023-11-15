@@ -154,6 +154,7 @@ extern void rtcTimeSet(void);
 extern void setApn(void);
 extern void fileFormatDemo(void);
 extern void runTimer(void);
+extern void fileCreateFolderDemo(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -191,7 +192,8 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case WM_FILE_TEST:
         // fileSystemDemo();
-        fileFormatDemo();
+        // fileFormatDemo();
+        fileCreateFolderDemo();
         break;
     case WM_UNZIP_TEST:
         break;
@@ -465,9 +467,11 @@ void app_main(void)
     sys_initialize();
 
     Paytm_TRACE("************************************************\n");
-    // WM_APP_DOWNLOAD WM_GET_SIM_INFO
-    // OpenDemoViaId(WM_PWK_DEMO);
-    ledRun();
+    // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST
+    Paytm_fs_format(LOC_EXTER_MEM);
+    Paytm_TRACE("Externel falsh format completed");
+    OpenDemoViaId(WM_FILE_TEST);
+    
     while (1)
     {
         osiThreadSleep(1000);
