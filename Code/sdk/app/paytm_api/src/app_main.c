@@ -467,10 +467,8 @@ void app_main(void)
     sys_initialize();
 
     Paytm_TRACE("************************************************\n");
-    // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST
-    Paytm_fs_format(LOC_EXTER_MEM);
-    Paytm_TRACE("Externel falsh format completed");
-    OpenDemoViaId(WM_FILE_TEST);
+    // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE
+    OpenDemoViaId(WM_CERT_READ_WRITE);
     
     while (1)
     {

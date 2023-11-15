@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "typedef.h"
 #include "osi_api.h"
 
 #include "paytm_file_api.h"
 #include "paytm_debug_uart_api.h"
+#include "paytm_dev_api.h"
 #define TEST_FILE_SIZE (128*1024)
 
 void fileFormatDemo(void){
@@ -26,7 +28,7 @@ void fileFormatDemo(void){
         Paytm_TRACE("2.format file systemm done! free_size: %d ", free_size);
 
         // check Directory exist
-        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) == 0){
+        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) != 0){
             Paytm_TRACE("Ext Flash directory %s not exist", test_dir);
             // create Directory
             Paytm_dir_create(LOC_EXTER_MEM, test_dir);
@@ -68,7 +70,7 @@ void fileFormatDemo(void){
         Paytm_TRACE("4.format file systemm done! free_size: %d ", free_size);
 
         // check Directory exist
-        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) != 0){
+        if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) == 0){
             Paytm_TRACE("Ext Flash directory %s exist", test_dir);
         } else {
             Paytm_TRACE("Ext Flash directory %s not exist", test_dir);
@@ -88,7 +90,7 @@ void fileSystemDemo(void)
     char buf[64] = {0};
 
     // check Directory exist
-    if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) == 0){
+    if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) != 0){
         Paytm_TRACE("Ext Flash directory %s not exist", test_dir);
          // create Directory
         Paytm_dir_create(LOC_EXTER_MEM, test_dir);
@@ -136,7 +138,7 @@ void fileSystemDemo(void)
     Paytm_dir_delete_all_subdirectories(LOC_EXTER_MEM, test_dir);
 
     // check Directory exist
-    if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) != 0){
+    if(Paytm_dir_exists(LOC_EXTER_MEM, test_dir) == 0){
         Paytm_TRACE("Ext Flash directory %s exist", test_dir);
     } else {
         Paytm_TRACE("Ext Flash directory %s not exist", test_dir);

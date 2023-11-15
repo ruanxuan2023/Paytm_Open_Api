@@ -31,3 +31,7 @@ arelease.exe -c . -g --fuse-only -p ASR1602_EVB -v ASR1602_OPEN_04MB
 
 ## CZIP tool
 czip.exe ./resource resource.czip
+
+## CUNZIP tool
+cunzip.exe resource.czip ./unzip/
+
