@@ -124,6 +124,40 @@ int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);
 int Paytm_HTTP_Initialise_HEAD(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
+
+/**
+ * @description:                            Read http certs data from flash memory
+ * @param {Paytm_location_t} lc             LOC_INTER_MEM or LOC_EXTER_MEM
+ * @param {char*} http_ca                   Pointer to save http_ca data
+ * @param {char*} http_cert                 Poniter to save http_cert data
+ * @param {char*} http_key                  Poniter to save http_key data
+ * @return {*}
+ */
 int32 Paytm_Read_HTTP_Certs(Paytm_location_t lc, char* http_ca, char* http_cert, char* http_key);
+
+/**
+ * @description: Writer http certs to flash memory
+ * @param {Paytm_location_t} lc
+ * @param {char*} http_ca
+ * @param {int32} ca_len
+ * @param {char*} http_cert
+ * @param {int32} cert_len
+ * @param {char*} http_key
+ * @param {int32} key_len
+ * @return {*}
+ */
 int32 Paytm_Write_HTTP_Certs(Paytm_location_t lc, char* http_ca, int32 ca_len, char* http_cert, int32 cert_len, char* http_key, int32 key_len);
+
+/**
+ * @description: Copy http certs pointer to http module, and the pointer should be global pointer
+ * @return {*}
+ */
+int32 Paytm_SSL_Config_Http(secure_connection_t *ssl);
+
+/**
+ * @description: Clear http certs configuration in http module
+ * @return {*}
+ */
+int32 Paytm_SSL_Clear_Http(void);
+
 #endif  

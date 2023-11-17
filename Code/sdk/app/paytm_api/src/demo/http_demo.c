@@ -468,7 +468,7 @@ void fota_download(void* p)
 {
     int rc = 0;
 
-    char *fota_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/fota_test_file.bin";
+    char *fota_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/india_app.bin";
 
     http_request_t http = {0};
     http.response_buffer = (char*)Paytm_malloc(HTTP_BUF_SIZE);

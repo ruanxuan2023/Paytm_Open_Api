@@ -46,7 +46,4 @@ int32 Paytm_SSL_Certificate_WriteContent(Paytm_certificate_t *cert, const char *
 //write cert data to ssl
 int32 Paytm_SSL_WriteCertificates(secure_connection_t *ssl, const char *_cacert, const char *_clientcert, const char *_clientkey);
 
-//copy ssl data to http global ssl array
-int32 Paytm_SSL_Config_Http(secure_connection_t *ssl);
-
 #endif

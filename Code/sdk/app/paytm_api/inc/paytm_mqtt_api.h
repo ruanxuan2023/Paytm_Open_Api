@@ -68,9 +68,16 @@ int32 Paytm_MQTT_Subscribe(ST_MQTT_topic_info_t *mqtt_topic_info_t, message_hand
 int32 Paytm_MQTT_Publish(Paytm_mqtt_publish_Packet_t*);
 int32 Paytm_MQTT_Close();
 
-//cheak mqtt relevant cert file exists or not,return false or true
+/**
+ * @description: Check mqtt relevant cert file exists or not, return false or true
+ * @return {*}
+ */
 uint8 Paytm_MQTT_Check_Certificates();
-//write _cacert, _clientcert, _clientkey to mqtt global cert array
+
+/**
+ * @description: Copy mqtt certs pointer to mqtt module, and the pointer should be global pointer
+ * @return {*}
+ */
 int32 Paytm_MQTT_WriteCertificates(const char *_cacert, const char *_clientcert, const char *_clientkey);
 
 int32 Paytm_MQTT_IsConnected();
@@ -78,8 +85,33 @@ int32 Paytm_MQTT_Unsubscribe(Paytm_MQTT_topic_info_t*);
 int32 Paytm_MQTT_Disconnect();
 int32 Paytm_Mqtt_Recv_Register(char* topic, void* callback);
 
+/**
+ * @description: Clear mqtt certs configuration in mqtt module
+ * @return {*}
+ */
+int32 Paytm_SSL_Clear_Mqtt(void);
 
+/**
+ * @description:                    Read mqtt certs data from flash memory
+ * @param {Paytm_location_t} lc     LOC_INTER_MEM or LOC_EXTER_MEM
+ * @param {char*} mqtt_ca           Pointer to save mqtt_ca data
+ * @param {char*} mqtt_cert         Poniter to save mqtt_cert data
+ * @param {char*} mqtt_key          Poniter to save mqtt_key data
+ * @return {*}
+ */
 int32 Paytm_Read_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, char* mqtt_cert, char* mqtt_key);
+
+/**
+ * @description: Writer mqtt certs to flash memory                    
+ * @param {Paytm_location_t} lc
+ * @param {char*} mqtt_ca
+ * @param {int32} ca_len
+ * @param {char*} mqtt_cert
+ * @param {int32} cert_len
+ * @param {char*} mqtt_key
+ * @param {int32} key_len
+ * @return {*}
+ */
 int32 Paytm_Write_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, int32 ca_len, char* mqtt_cert, int32 cert_len, char* mqtt_key, int32 key_len);
 
 #endif
