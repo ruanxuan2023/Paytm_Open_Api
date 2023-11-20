@@ -10,24 +10,31 @@
 
 static void topic_handler(void* client, message_data_t* msg)
 {
-    RTI_LOG("topic handler is called...");
+    Paytm_TRACE("topic handler is called...");
 	char *rsp = NULL;
 
 	rsp = (char *)osiMalloc(msg->message->payloadlen+100);
 	if(NULL == rsp)
 	{
-		RTI_LOG("malloc no memory!");
+		Paytm_TRACE("malloc no memory!");
 	}
 
 	memset(rsp, 0, msg->message->payloadlen+100);
 	sprintf(rsp, "MQTT RECV: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
 			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
-	RTI_LOG("%s", rsp);
+	Paytm_TRACE("%s", rsp);
 
 	if(NULL != rsp)
 	{
 		osiFree(rsp);
 	}
+}
+
+static void reconnect_handler(void* client, void* reconnect_date)
+{
+    Paytm_TRACE("Reconnected handler is called...");
+
+    /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
 }
 
 #define DEMO_MQTT_HOST  "a3ri26a4bhtu9s-ats.iot.ap-south-1.amazonaws.com"
@@ -144,6 +151,8 @@ void Mqtt_0(void* p)
     // enable ssl  authentication
     mqtt_packet.enable_ssl = true;
 
+    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
+
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
     {
@@ -159,7 +168,7 @@ void Mqtt_0(void* p)
         Paytm_TRACE("Mqtt socket open fail %d!", rc);
         if(rc == -29)
         {
-            RTI_LOG("Mqtt already opened");
+            Paytm_TRACE("Mqtt already opened");
             Paytm_MQTT_Disconnect();
         }
         return;

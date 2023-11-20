@@ -256,6 +256,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     case TEST_APP_UPDATE_FILE:
         break;
     case TEST_MQTT_LOOP_QA:
+        net_connect();
         Paytm_CreateTask("mqtt", Mqtt_0, NULL, 110, 30 * 1024);
         break;
     case TEST_FS_LOOP_QA:
@@ -468,7 +469,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
     // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA
-    OpenDemoViaId(WM_OTA_TEST_QA);
+    OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)
     {

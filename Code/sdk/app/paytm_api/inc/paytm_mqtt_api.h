@@ -84,7 +84,7 @@ int32 Paytm_MQTT_IsConnected();
 int32 Paytm_MQTT_Unsubscribe(Paytm_MQTT_topic_info_t*);
 int32 Paytm_MQTT_Disconnect();
 int32 Paytm_Mqtt_Recv_Register(char* topic, void* callback);
-
+int32 Paytm_Mqtt_Reconnected_Register(reconnect_handler_t cb);
 /**
  * @description: Clear mqtt certs configuration in mqtt module
  * @return {*}
