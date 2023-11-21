@@ -78,8 +78,8 @@ int32_t Paytm_GetTimezone(void);
 
 /*********************************    TIMER FUNCTIONS    ***********************************/
 
-#define TIMER_COUNT_MAX (10)
-/* The timer_id input limits from 0 to 9 */
+#define TIMER_COUNT_MAX (50)
+/* The timer_id input limits from 0 to TIMER_COUNT_MAX - 1 */
 int32 Paytm_Timer_Register(uint32 timer_id, void* callback_onTimer, void* param);
 int32 Paytm_Timer_RegisterFast(uint32 timer_id, void* callback_onTimer, void* param);
 int32 Paytm_Timer_Start(uint32 timer_id, uint32 interval_msec, uint8 autoRepeat);

@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-02-25 03:36:09
- * @LastEditTime: 2020-05-20 16:24:20
+ * @LastEditTime: 2023-11-21 14:08:44
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -20,7 +20,7 @@
 #endif // !KAWAII_MQTT_MAX_PACKET_ID
 
 #ifndef KAWAII_MQTT_TOPIC_LEN_MAX
-    #define     KAWAII_MQTT_TOPIC_LEN_MAX                  64
+    #define     KAWAII_MQTT_TOPIC_LEN_MAX                  100
 #endif // !KAWAII_MQTT_TOPIC_LEN_MAX
 
 #ifndef KAWAII_MQTT_ACK_HANDLER_NUM_MAX
@@ -28,7 +28,7 @@
 #endif // !KAWAII_MQTT_ACK_HANDLER_NUM_MAX
 
 #ifndef KAWAII_MQTT_DEFAULT_BUF_SIZE
-    #define     KAWAII_MQTT_DEFAULT_BUF_SIZE               1024
+    #define     KAWAII_MQTT_DEFAULT_BUF_SIZE               5000
 #endif // !KAWAII_MQTT_DEFAULT_BUF_SIZE
 
 #ifndef KAWAII_MQTT_DEFAULT_CMD_TIMEOUT
