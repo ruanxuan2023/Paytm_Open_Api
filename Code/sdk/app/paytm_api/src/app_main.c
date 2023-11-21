@@ -8,6 +8,7 @@
 #include "drv_adc.h"
 
 #include "paytm_audio_api.h"
+#include "paytm_battery_api.h"
 #include "paytm_button_api.h"
 #include "paytm_debug_uart_api.h"
 #include "paytm_dev_api.h"
@@ -415,6 +416,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     }
     case WM_PWK_DEMO:
+        Paytm_Battery_Initialise(20);
         pwkDemo();
         break;
     case WM_BUTTON_DEMO:
@@ -469,7 +471,7 @@ void app_main(void)
 
     Paytm_TRACE("************************************************\n");
     // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_PWK_DEMO);
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)
     {
