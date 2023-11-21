@@ -107,13 +107,15 @@ void testSim(void)
 
     Paytm_GetModemFunction(simMonitor);
 
+    task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 1 * 1024);
+    
     while (!Paytm_Net_IsConnected())
     {
         Paytm_TRACE("Networking connecting");
         Paytm_delayMilliSeconds(2000);
     }
 
-    task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 1 * 1024);
+    
 
     char imsi[33] = {0};
     Paytm_ReadIMSI(imsi);

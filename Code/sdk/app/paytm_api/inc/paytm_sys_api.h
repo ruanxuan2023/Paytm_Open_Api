@@ -139,11 +139,29 @@ typedef struct
 void SetTagForTaskID(int32 taskId, const char *label);
 int32 Paytm_GetActiveTaskId(void);
 
-//0-sucess  -1-fail or no msg
+
+/**
+ * @description:    Try get msg data from msg queue, with fixed delay(20ms)
+ * @return {*}      0-sucess  -1-fail or no msg
+ */
 int32 Paytm_GetMessage(int32 taskId, ST_MSG *msg);
+
+/**
+ * @description:    Try get msg data from msg queue, with no delay
+ * @return {*}      0-sucess  -1-fail or no msg
+ */
 int32 Paytm_GetMessage_From_ISR(int32 taskId, ST_MSG *msg);
-//0-success  <0 - fail
+
+/**
+ * @description:    Try send msg data to msg queue, with fixed delay(20ms)
+ * @return {*}      0-success  <0 - fail
+ */
 int32 Paytm_SendMessage(int32 destTaskId, uint32_t message, uint32 param1, uint32 param2);
+
+/**
+ * @description:    Try send msg data to msg queue, with no delay
+ * @return {*}      0-success  <0 - fail
+ */
 int32 Paytm_SendMessage_From_ISR(int32 id, uint32_t message, uint32 param1, uint32 param2);
 
 int64 Paytm_GetTotalAssignedStackSize(const ST_TaskConfig taskConfig[], uint8 count);
