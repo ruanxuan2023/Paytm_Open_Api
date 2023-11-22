@@ -3,6 +3,7 @@
 
 #include "paytm_audio_api.h"
 #include "paytm_button_api.h"
+#include "paytm_dev_api.h"
 
 static int task_id = 0;
 
@@ -90,6 +91,9 @@ static void msgTask(void* p)
         if(Paytm_GetMessage(task_id, &msg) == 0)
         {
             Paytm_TRACE("Recv msg [%d %d %d]", msg.message, msg.param1, msg.param2);
+            if(msg.message == 2){
+                Paytm_Reset(0);
+            }
         }
 
         Paytm_delayMilliSeconds(100);

@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-01-11 19:45:35
- * @LastEditTime: 2020-05-24 17:03:47
+ * @LastEditTime: 2023-11-22 18:11:53
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "nettype_tls.h"
@@ -170,7 +170,7 @@ int nettype_tls_connect(network_t* n)
     if (NULL == nettype_tls_params)
         RETURN_ERROR(KAWAII_MQTT_MEM_NOT_ENOUGH_ERROR);
 
-    
+    n->nettype_tls_params = nettype_tls_params;
     rc = nettype_tls_init(n, nettype_tls_params);
         if (KAWAII_MQTT_SUCCESS_ERROR != rc)
         goto exit;
@@ -195,7 +195,7 @@ int nettype_tls_connect(network_t* n)
     goto exit;
     }
 
-    n->nettype_tls_params = nettype_tls_params;
+
     RETURN_ERROR(KAWAII_MQTT_SUCCESS_ERROR)
 
 exit:

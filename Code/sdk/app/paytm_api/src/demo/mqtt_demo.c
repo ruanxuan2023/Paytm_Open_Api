@@ -28,13 +28,13 @@ static void topic_handler(void* client, message_data_t* msg)
 	rsp = (char *)osiMalloc(msg->message->payloadlen+100);
 	if(NULL == rsp)
 	{
-		RTI_LOG("malloc no memory!");
+		Paytm_TRACE("malloc no memory!");
 	}
 
 	memset(rsp, 0, msg->message->payloadlen+100);
 	sprintf(rsp, "MQTT RECV: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
 			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
-	RTI_LOG("%s", rsp);
+	Paytm_TRACE("%s", rsp);
 
 	if(NULL != rsp)
 	{
@@ -59,6 +59,13 @@ static void topic_handler(void* client, message_data_t* msg)
 #define DEMO_PUB_DATA			"The message demo/001"
 #define DEMO_PUB_DATA_2			"The message demo/002"
 
+static void reconnect_handler(void* client, void* reconnect_date)
+{
+    Paytm_TRACE("Reconnected handler is called...");
+
+    /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
+}
+
 extern const char  mqtt_client_key[1705];
 extern const char  mqtt_client_cert[1173];
 extern const char  mqtt_server_cert[4789];
@@ -70,23 +77,23 @@ void testMqtt(void* p)
     char * username = DEMO_USER_NAME;
     char * password = DEMO_USER_PWD;
 
-    net_connect();
-    
     // config MQTT ca_cert&client_cert&client_privatekey
     Paytm_MQTT_WriteCertificates(mqtt_server_cert, mqtt_client_cert, mqtt_client_key);
 
     Paytm_mqtt_connect_Packet_t mqtt_packet = {0};
     ST_MQTT_topic_info_t topic_list = {0};
     Paytm_mqtt_publish_Packet_t publish = {0};
-    
+
     mqtt_packet.host = host;
     mqtt_packet.port = DEMO_MQTT_PORT;
     mqtt_packet.client_id = client_id;
     mqtt_packet.username = username;
     mqtt_packet.password = password;
+    mqtt_packet.keepalive_sec = 30;
     // enable ssl  authentication
     mqtt_packet.enable_ssl = true;
 
+    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
     {
@@ -100,7 +107,7 @@ void testMqtt(void* p)
         Paytm_TRACE("Mqtt socket open fail %d!", rc);
         if(rc == -29)
         {
-            RTI_LOG("Mqtt already opened");
+            Paytm_TRACE("Mqtt already opened");
             Paytm_MQTT_Disconnect();
         }
         return;
@@ -112,7 +119,6 @@ void testMqtt(void* p)
         Paytm_TRACE("Mqtt socket connect fail %d!", rc);
         return;
     }
-
 
     topic_list.topic[0] = DEMO_SUB_TOPIC;
     topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
