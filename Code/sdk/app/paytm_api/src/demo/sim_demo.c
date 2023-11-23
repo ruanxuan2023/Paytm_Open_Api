@@ -132,12 +132,15 @@ void testSim(void)
     Paytm_GetGSMState(&gsmstate);
     Paytm_TRACE("gprs state %d", gsmstate);
 
+    Paytm_delayMilliSeconds(6000);
+
+    Paytm_GPRS_Disconnect();
     while (1)
     {
         if(Paytm_GetSimState()){
-            Paytm_TRACE("Sim ready");
+            //Paytm_TRACE("Sim ready");
         }else{
-            Paytm_TRACE("Sim not ready");
+            //Paytm_TRACE("Sim not ready");
         }
         Paytm_delayMilliSeconds(1000);
     }
