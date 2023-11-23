@@ -35,3 +35,11 @@ czip.exe ./resource resource.czip
 ## CUNZIP tool
 cunzip.exe resource.czip ./unzip/
 
+## FOTA tool
+cd Tools\adiff
+# kenrel&application need param -a
+.\fota_gen.exe -a ..\aboot\800SGFFRO00G0329_all.zip ..\aboot\800SGFFRO00G0328_all.zip
+# kenrel only no -a
+.\fota_gen.exe ..\aboot\800SGFFRO00G0329_all.zip ..\aboot\800SGFFRO00G0328_all.zip
+# generate SUCCESS
+Generate DFOTA package:  ./fota\800SGFFRO00G0329_all_800SGFFRO00G0328_all.bin
