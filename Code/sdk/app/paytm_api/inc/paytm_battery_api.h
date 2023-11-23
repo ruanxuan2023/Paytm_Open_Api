@@ -10,12 +10,22 @@ typedef enum battery_charging_userstate_t{
 };
 
 int32 Paytm_GetBatteryVoltage(uint16 *voltage);
+
+/**
+ * @description: 
+ * @return {*}      return battery level percentage
+ */
 uint8 Paytm_GetBatteryLevel(void);
+
+/**
+ * @description: 
+ * @return {*}      true:charging, false:not charging
+ */
 uint8 Paytm_GetChargingStatus(void);
 
 /**
  * @description: Please not call this function in paytm application, we will do this in kernel code
- *                  The default sample_interval_sec is 20s
+ *                  The default sample_interval_sec is 10s
  * @return {*}  0-success, 1-already init
  */
 int32 Paytm_Battery_Initialise(uint16 sample_interval_sec);

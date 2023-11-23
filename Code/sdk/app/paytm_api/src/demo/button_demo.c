@@ -63,9 +63,36 @@ void buttoncb(void * p)
         break;
     }
 }
+
+void buttoncb0(void * p)
+{
+    int32_t vol = Paytm_GetVolume(NULL);
+    buttonActMsg_t *msg = (buttonActMsg_t *)p; 
+    RTI_LOG1("This is buttoncb, action is ");
+    switch (msg->id)
+    {
+    case BUTTON_PLUS:
+        Paytm_TRACE("Volume up");
+        break;
+    case BUTTON_MINUS:
+        Paytm_TRACE("Volume down");
+        break;
+    case BUTTON_FUNCTION:
+        if(msg->state == STATE_BUTTON_SINGLE_CLICK){
+            Paytm_TRACE("Fun key single press");
+        }else if(msg->state == STATE_BUTTON_DOUBLE_CLICK){
+            Paytm_TRACE("Fun key double press");
+        }else{
+            Paytm_TRACE("Fun key long press");
+        }
+        break;
+    default:
+        break;
+    }
+}
 void ButtonTest(void)
 {
-    button_action_callback_register(buttoncb);
+    button_action_callback_register(buttoncb0);
 
     Paytm_Button_events(true);
 }
