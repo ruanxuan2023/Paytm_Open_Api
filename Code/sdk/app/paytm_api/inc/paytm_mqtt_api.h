@@ -35,6 +35,7 @@ typedef struct
     int version_num;
     int keepalive_sec;
     int timeout_sec;
+    int reconnect_gap_ms;
     int cleansession;
     int show_recvlen;
     bool enable_ssl;
@@ -114,4 +115,5 @@ int32 Paytm_Read_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, char* mqtt_cert,
  */
 int32 Paytm_Write_MQTT_Certs(Paytm_location_t lc, char* mqtt_ca, int32 ca_len, char* mqtt_cert, int32 cert_len, char* mqtt_key, int32 key_len);
 
+int32 Paytm_Mqttt_Try_Reconnect(void);
 #endif

@@ -18,7 +18,7 @@ bool PaytmGetAPN(char apn[64]);
 int32 Paytm_ReadSubscriberNumber(char subscriber_number[]);
 //TODO--这个类型无定义
 Paytm_network_provider_t Paytm_GetNetworkProvider(uint16 mcc, uint16 mnc);
-
+bool PaytmGetProviderName(char provider[64]);
 /**
  * @description: Unrealized, please not use it
  * @return {*}

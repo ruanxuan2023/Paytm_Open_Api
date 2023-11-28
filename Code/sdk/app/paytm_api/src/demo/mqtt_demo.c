@@ -7,20 +7,6 @@
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
 
-static void net_connect(void)
-{
-    int32 stat = 0;
-
-    Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
-    
-    while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
-    {
-        Paytm_delayMilliSeconds(1000);
-    }
-    
-    Paytm_TRACE("Network connected!");
-}
-
 static void topic_handler(void* client, message_data_t* msg)
 {
 	char *rsp = NULL;
@@ -35,21 +21,22 @@ static void topic_handler(void* client, message_data_t* msg)
 	sprintf(rsp, "MQTT RECV: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
 			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
 	Paytm_TRACE("%s", rsp);
-
+    Paytm_PlayFile(LOC_INTER_MEM, "and.amr", 6);
 	if(NULL != rsp)
 	{
 		osiFree(rsp);
 	}
 }
 
-#define DEMO_MQTT_HOST  "www.chinainfosafe.com"
-#define DEMO_MQTT_PORT			8883
+#define DEMO_MQTT_HOST              "pay.chinainfosafe.com"
+#define DEMO_MQTT_SSL_PORT			8883
+#define DEMO_MQTT_TCP_PORT          6883
 
-#define DEMO_MQTT_PRODUCT_KEY 	"demo3"
+#define DEMO_MQTT_PRODUCT_KEY 	"paytm_0"
 #define DEMO_USER_NAME   		"china"
 #define DEMO_USER_PWD 			"12345611"
 
-#define DEMO_SUB_TOPIC			"publish/1"
+#define DEMO_SUB_TOPIC			"publish/0"
 #define DEMO_SUB_TOPIC_2        "publish/2"
 #define DEMO_SUB_TOPIC_3        "publish/3"
 
@@ -61,14 +48,16 @@ static void topic_handler(void* client, message_data_t* msg)
 
 static void reconnect_handler(void* client, void* reconnect_date)
 {
-    Paytm_TRACE("Reconnected handler is called...");
-
+    Paytm_TRACE("Mqtt disconnected event comes, call reconnected func ...");
+    Paytm_Mqttt_Try_Reconnect();
     /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
 }
 
 extern const char  mqtt_client_key[1705];
 extern const char  mqtt_client_cert[1173];
 extern const char  mqtt_server_cert[4789];
+extern const char  ali_ca_cert[];
+extern char* appIMEIGet(void);
 void testMqtt(void* p)
 {
     int rc = 0;
@@ -85,21 +74,22 @@ void testMqtt(void* p)
     Paytm_mqtt_publish_Packet_t publish = {0};
 
     mqtt_packet.host = host;
-    mqtt_packet.port = DEMO_MQTT_PORT;
+    mqtt_packet.port = DEMO_MQTT_TCP_PORT;
     mqtt_packet.client_id = client_id;
     mqtt_packet.username = username;
     mqtt_packet.password = password;
-    mqtt_packet.keepalive_sec = 30;
+    mqtt_packet.keepalive_sec = 10;
     // enable ssl  authentication
-    mqtt_packet.enable_ssl = true;
+    mqtt_packet.enable_ssl = false;
 
-    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
     {
         Paytm_TRACE("Mqtt init fail %d!", rc);
         return;
     }
+
+    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
 
     rc = Paytm_MQTT_Open();
     if(rc != 0)
@@ -122,16 +112,6 @@ void testMqtt(void* p)
 
     topic_list.topic[0] = DEMO_SUB_TOPIC;
     topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
-    topic_list.count = 1;
-
-    rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
-    }
-
-    topic_list.topic[0] = DEMO_SUB_TOPIC_2;
-    topic_list.qos[0] = Paytm_QOS2_AT_EXACTLY_ONECE;
     topic_list.count = 1;
 
     rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
@@ -166,6 +146,7 @@ void testMqtt(void* p)
         Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
     }
 
+    Paytm_TRACE(">>>>Mqtt start success!");
     while (1)
     {
         /* code */

@@ -115,38 +115,21 @@ void testSim(void)
         Paytm_delayMilliSeconds(2000);
     }
 
-    
 
-    char imsi[33] = {0};
-    Paytm_ReadIMSI(imsi);
-    Paytm_TRACE("IMSI = %s", imsi);
+    // char imsi[33] = {0};
+    // Paytm_ReadIMSI(imsi);
+    // Paytm_TRACE("IMSI = %s", imsi);
 
-    char sim_no[23] = {0};
-    Paytm_ReadSimNumber(sim_no);
-    Paytm_TRACE("CCID: %s", sim_no);
+    // char sim_no[23] = {0};
+    // Paytm_ReadSimNumber(sim_no);
+    // Paytm_TRACE("CCID: %s", sim_no);
 
-    int csq = Paytm_GetSignalStrength();
-    Paytm_TRACE("CSQ: %d", csq);
+    // int csq = Paytm_GetSignalStrength();
+    // Paytm_TRACE("CSQ: %d", csq);
 
-    int32 gsmstate = 0;
-    Paytm_GetGSMState(&gsmstate);
-    Paytm_TRACE("gprs state %d", gsmstate);
-
-    Paytm_delayMilliSeconds(6000);
-
-    Paytm_GPRS_Disconnect();
-    while (1)
-    {
-        if(Paytm_GetSimState()){
-            //Paytm_TRACE("Sim ready");
-        }else{
-            //Paytm_TRACE("Sim not ready");
-        }
-        Paytm_delayMilliSeconds(1000);
-    }
-    
-
-    osiSysPoweroff();
+    // int32 gsmstate = 0;
+    // Paytm_GetGSMState(&gsmstate);
+    // Paytm_TRACE("gprs state %d", gsmstate);
 }
 
 void readSimState(void)
@@ -177,8 +160,8 @@ void readAPN(void)
 
     Paytm_delayMilliSeconds(8000);
 
-    char addr[64] = {0};
-    PaytmGetAPN(addr);
+    char apn[64] = {0};
+    PaytmGetAPN(apn);
     
-    Paytm_TRACE("APN info : %s", addr);
+    Paytm_TRACE("APN info : %s", apn);
 }

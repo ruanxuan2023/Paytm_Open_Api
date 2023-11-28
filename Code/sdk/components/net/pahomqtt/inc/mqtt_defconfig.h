@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2020-02-25 03:36:09
- * @LastEditTime: 2023-11-21 14:08:44
+ * @LastEditTime: 2023-11-27 11:51:49
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -52,7 +52,7 @@
 #endif // !KAWAII_MQTT_VERSION
 
 #ifndef KAWAII_MQTT_RECONNECT_DEFAULT_DURATION
-    #define     KAWAII_MQTT_RECONNECT_DEFAULT_DURATION     1000
+    #define     KAWAII_MQTT_RECONNECT_DEFAULT_DURATION     2000
 #endif // !KAWAII_MQTT_RECONNECT_DEFAULT_DURATION
 
 #ifndef KAWAII_MQTT_THREAD_STACK_SIZE

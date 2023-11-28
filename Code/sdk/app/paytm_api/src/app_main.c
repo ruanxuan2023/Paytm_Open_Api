@@ -257,7 +257,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     case TEST_APP_UPDATE_FILE:
         break;
     case TEST_MQTT_LOOP_QA:
-        net_connect();
+        // net_connect();
         Paytm_CreateTask("mqtt", testMqtt, NULL, 110, 40 * 1024);
         break;
     case TEST_FS_LOOP_QA:
@@ -416,7 +416,6 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     }
     case WM_PWK_DEMO:
-        Paytm_Battery_Initialise(20);
         pwkDemo();
         break;
     case WM_BUTTON_DEMO:
@@ -465,18 +464,33 @@ void print_net_status(void* p)
     }
 }
 
+void MqttDetect(void* p)
+{
+    static bool state = false, pre_state = false;
+    while (1)
+    {
+        Paytm_delayMilliSeconds(3000);
+        if(Paytm_MQTT_IsConnected()){
+            Paytm_TRACE(">>>>Mqtt is conncted!");
+        }else{
+            Paytm_TRACE(">>>>Mqtt is disconncted!");
+        }
+    }
+}
+
 void app_main(void)
 {
     sys_initialize();
 
     Paytm_TRACE("************************************************\n");
-    // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO
+    // // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO TEST_MQTT_LOOP_QA
     OpenDemoViaId(WM_PWK_DEMO);
-    OpenDemoViaId(WM_BUTTON_DEMO);
+    // OpenDemoViaId(WM_BUTTON_DEMO);
+
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)
     {
-        osiThreadSleep(1000);
+        Paytm_delayMilliSeconds(1000);
     }
 
     return;

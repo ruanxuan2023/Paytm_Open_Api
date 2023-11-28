@@ -30,9 +30,14 @@ static void topic_handler(void* client, message_data_t* msg)
 #define ALIS_PK "gd6jlD70qXQ"
 #define ALIS_DN "lock00000001"
 #define ALIS_DS "485cc516b6ccbb61e65b31285144c4bc"
+#define ALIS_MQTT_HOST   "x509.itls.cn-shanghai.aliyuncs.com"
+#define ALIS_MQTT_PORT   1883
 
-#define ALI_MQTT_HOST   "x509.itls.cn-shanghai.aliyuncs.com"
-#define ALI_MQTT_PORT   1883
+#define ALI_PK  "gd6jpDkEpxO"
+#define ALI_DN  "7CDFA161E980"
+#define ALI_DS  "d9fadf7034a94f604a53a2dddda7a6e1"
+#define ALI_MQTT_HOST   "gd6jpDkEpxO.iot-as-mqtt.cn-shanghai.aliyuncs.com"
+#define ALI_MQTT_PORT   443
 
 #define ALI_PUB_1   "/gd6jlD70qXQ/lock00000001/user/update"
 #define ALI_PUB_2   "/gd6jlD70qXQ/lock00000001/user/update/error"
@@ -51,7 +56,8 @@ void AliMqttDemo(void* p)
     int rc = 0;
     char * host = ALI_MQTT_HOST;
 
-    Paytm_TRACE("Ali X.509 test!");
+    // Paytm_TRACE("Ali X.509 test!");
+    Paytm_TRACE("Ali Mqtt Test!");
 
     // config MQTT ca_cert&client_cert&client_privatekey
     Paytm_SSL_Clear_Mqtt();
@@ -62,10 +68,10 @@ void AliMqttDemo(void* p)
     Paytm_mqtt_publish_Packet_t publish = {0};
     
     mqtt_packet.host = host;
-    mqtt_packet.port = ALI_MQTT_PORT;
-    mqtt_packet.client_id = "";
-    mqtt_packet.username = "";
-    mqtt_packet.password = "";
+    mqtt_packet.port = ALI_MQTT_HOST;
+    mqtt_packet.client_id = ALI_PK;
+    mqtt_packet.username = ALI_DN;
+    mqtt_packet.password = ALIS_DS;
     // enable ssl  authentication
     mqtt_packet.enable_ssl = true;
 

@@ -338,4 +338,5 @@ void paho_mqtt_set_state(mqtt_client_t* c, client_state_t state);
 void mqtt_clean_session(mqtt_client_t* c);
 
 uint32_t paho_mqtt_get_msg_addr(uint8_t index);
+int paho_mqtt_try_reconnect(mqtt_client_t* c);
 #endif /* _MQTTCLIENT_H_ */

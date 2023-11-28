@@ -73,9 +73,11 @@ void buttoncb0(void * p)
     {
     case BUTTON_PLUS:
         Paytm_TRACE("Volume up");
+        Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", 9);
         break;
     case BUTTON_MINUS:
         Paytm_TRACE("Volume down");
+        Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", 9);
         break;
     case BUTTON_FUNCTION:
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
@@ -85,6 +87,7 @@ void buttoncb0(void * p)
         }else{
             Paytm_TRACE("Fun key long press");
         }
+        Paytm_PlayFile(LOC_INTER_MEM, "and.amr", 9);
         break;
     default:
         break;

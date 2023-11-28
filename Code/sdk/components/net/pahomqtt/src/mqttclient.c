@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-06-16 17:34:37
+ * @LastEditTime: 2023-11-27 11:57:04
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -606,14 +606,14 @@ static int mqtt_try_do_reconnect(mqtt_client_t* c)
 
 static int mqtt_try_reconnect(mqtt_client_t* c)
 {
-    int rc = KAWAII_MQTT_SUCCESS_ERROR;
+    int rc = KAWAII_MQTT_FAILED_ERROR;
 
     /*before connect, call reconnect handler, it can used to update the mqtt password, eg: onenet platform need*/
     if (NULL != c->mqtt_reconnect_handler) {
         c->mqtt_reconnect_handler(c, c->mqtt_reconnect_data);
     }
 
-    rc = mqtt_try_do_reconnect(c);
+    // rc = mqtt_try_do_reconnect(c);
 
     if(KAWAII_MQTT_SUCCESS_ERROR != rc) {
         /*connect fail must delay reconnect try duration time and let cpu time go out, the lowest priority task can run */
@@ -1663,4 +1663,13 @@ void paho_mqtt_free_topic(void)
 		//RTI_LOG("addr is [0x%X]", msg_addr[i]);
 		platform_memory_free((void *)msg_addr[i]);
 	}
+}
+
+int paho_mqtt_try_reconnect(mqtt_client_t* c)
+{
+    int rc = 0;
+
+    rc = mqtt_try_do_reconnect(c);
+
+    return rc;
 }

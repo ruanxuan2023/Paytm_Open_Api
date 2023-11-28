@@ -67,12 +67,12 @@ void platform_timer_usleep(unsigned long usec)
     }
 
     ms = (ms <= MQTT_RTOS_MS_ONE_TICK ? 1 : (ms / MQTT_RTOS_MS_ONE_TICK));
-    osiThreadSleepMs(ms); /*tick*/
+    osiThreadSleep(ms); /*tick*/
 }
 
 void platform_timer_msleep(uint32_t ms)
 {
     ms = (ms <= MQTT_RTOS_MS_ONE_TICK ? 1 : (ms / MQTT_RTOS_MS_ONE_TICK));
-    osiThreadSleepMs(ms); /*tick*/
+    osiThreadSleep(ms); /*tick*/
 }
 
