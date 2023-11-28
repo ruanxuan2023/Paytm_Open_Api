@@ -492,6 +492,7 @@ void app_main(void)
     {
         Paytm_delayMilliSeconds(1000);
         // Paytm_TRACE("Device %s charging", Paytm_GetChargingStatus() ? "is" : " is not");
+        // Paytm_TRACE("Sim %s ready", Paytm_GetSimState() ? "is" : " is not");
     }
 
     return;
