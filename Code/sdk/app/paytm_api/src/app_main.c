@@ -258,7 +258,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case TEST_MQTT_LOOP_QA:
         // net_connect();
-        Paytm_CreateTask("mqtt", testMqtt, NULL, 110, 40 * 1024);
+        Paytm_CreateTask("mqtt", Mqtt_0, NULL, 110, 40 * 1024);
         break;
     case TEST_FS_LOOP_QA:
         Paytm_CreateTask("mqtt", fileHeapLeakDemo, NULL, 110, 30 * 1024);
@@ -480,16 +480,18 @@ void MqttDetect(void* p)
 
 void app_main(void)
 {
+    char lib_version[16] = {0};
+    Paytm_GetLibraryVersion(lib_version, 16);
     sys_initialize();
-    Paytm_TRACE("************************************************\n");
+    Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
 
     char imei[16] = {0};
     Paytm_GetIMEI(imei);
     Paytm_TRACE("IMEI: %s", (char*)imei);
     // // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO TEST_MQTT_LOOP_QA
     OpenDemoViaId(WM_PWK_DEMO);
-    OpenDemoViaId(WM_BUTTON_DEMO);
-    OpenDemoViaId(WM_AUDIO_PLAY);
+    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // OpenDemoViaId(WM_GET_SIM_INFO);
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)

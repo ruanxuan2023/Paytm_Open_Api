@@ -47,6 +47,13 @@ int32 Paytm_GetOS(char *version, uint32 version_len);
 int32 Paytm_GetBaseFWReleaseDate(Paytm_Time *release);
 int32 Paytm_GetModelVersion(char *version, uint32 version_len);
 int32 Paytm_GetHardwareVersion(char *version, uint32 version_len);
+
+/**
+ * @description:                Return the paytm library version
+ * @param {char} *version       Input version data array
+ * @param {uint32} version_len  Input version len
+ * @return {*}
+ */
 int32 Paytm_GetLibraryVersion(char *version, uint32 version_len);
 int32 Paytm_GetLibraryReleaseDate(Paytm_Time *release);
 int32 Paytm_GetCpuUsage(void);

@@ -18,6 +18,11 @@ int64 Paytm_GetFreeROM(void);
 uint16 Paytm_GetTotalNVRAM(void);
 uint16 Paytm_GetFreeNVRAM(void);
 int64 Paytm_GetTotalHeapSize(void);
+
+/**
+ * @description: Return free ram size of device, uints is byte
+ * @return {*}
+ */
 int64 Paytm_GetFreeHeapSize(void);
 int64 Paytm_GetPhysicalRAM(void);
 int64 Paytm_GetTotalRAM(void);

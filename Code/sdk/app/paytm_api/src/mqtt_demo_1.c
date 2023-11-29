@@ -34,7 +34,6 @@ static void reconnect_handler(void* client, void* reconnect_date)
 {
     Paytm_TRACE("Reconnected handler is called...");
 
-    /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
 }
 
 #define DEMO_MQTT_HOST  "a3ri26a4bhtu9s-ats.iot.ap-south-1.amazonaws.com"
@@ -147,11 +146,9 @@ void Mqtt_0(void* p)
     mqtt_packet.client_id = client_id;
     mqtt_packet.username = username;
     mqtt_packet.password = password;
-    mqtt_packet.keepalive_sec = 30;
+    mqtt_packet.keepalive_sec = 10;
     // enable ssl  authentication
     mqtt_packet.enable_ssl = true;
-
-    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
 
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
@@ -162,6 +159,7 @@ void Mqtt_0(void* p)
         Paytm_TRACE("Mqtt init success %d!", rc);
     }
 
+    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
     rc = Paytm_MQTT_Open();
     if(rc != 0)
     {
@@ -229,6 +227,6 @@ void Mqtt_0(void* p)
     {
         /* code */
         Paytm_delayMilliSeconds(10 * 1000);
-        Paytm_TRACE("Free Heap Info: %d", Paytm_GetFreeHeapSize());
+        // Paytm_TRACE("Free Heap Info: %d", Paytm_GetFreeHeapSize());
     }
 }
