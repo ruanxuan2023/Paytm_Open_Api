@@ -489,7 +489,7 @@ void app_main(void)
     // // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO TEST_MQTT_LOOP_QA
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_BUTTON_DEMO);
-    OpenDemoViaId(WM_BATTERY_CHECK);
+    OpenDemoViaId(WM_AUDIO_PLAY);
     // OpenDemoViaId(WM_GET_SIM_INFO);
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)

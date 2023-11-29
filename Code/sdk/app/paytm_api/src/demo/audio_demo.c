@@ -36,7 +36,7 @@ void audioPlayDemo(void)
 
     playback_state_callback_register(audio_cb);
 
-    Paytm_PlayFile(LOC_EXTER_MEM, "test.wav", 4);
+    Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/test.wav", 4);
 
-    Paytm_PlayFileFromDir(LOC_EXTER_MEM, "D:\\audios\\", "1k_0db.mp3", 8);
+    Paytm_PlayFileFromDir(LOC_EXTER_MEM, "resources/sounds/en", "Received.amr,10000.amr,and.amr,num90.amr", 8);
 }
