@@ -12,8 +12,6 @@ message_callback_t b_cb(void* p)
 
 void batteryDemo(void)
 {
-    Paytm_Battery_Initialise(20);
-
     battery_charging_report_callback_register(b_cb);
 
     Paytm_BatteryLevelMonitoring(true);
@@ -26,9 +24,9 @@ void batteryDemo(void)
         Paytm_GetBatteryVoltage(&voltage);
         Paytm_delayMilliSeconds(5000);
         if(Paytm_GetChargingStatus()){
-            Paytm_TRACE("The battery is charging! Voltage = %d", voltage);
+            Paytm_TRACE("The battery is charging! Voltage = %d, Level = %d", voltage, Paytm_GetBatteryLevel());
         }else{
-            Paytm_TRACE("The battery is not charging! Voltage = %d", voltage);
+            Paytm_TRACE("The battery is not charging! Voltage = %d, Level = %d", voltage, Paytm_GetBatteryLevel());
         }
     }
 }

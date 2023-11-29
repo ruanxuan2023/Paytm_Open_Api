@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-11-27 11:57:04
+ * @LastEditTime: 2023-11-29 11:15:23
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -10,7 +10,7 @@
 #define     KAWAII_MQTT_MIN_PAYLOAD_SIZE   2
 #define     KAWAII_MQTT_MAX_PAYLOAD_SIZE   268435455       // MQTT imposes a maximum payload size of 268435455 bytes.
 #define 	KAWAII_MQTT_SUB_TOPIC_MAX	   50
-
+static bool mqtt_disconnect_flag = false;
 static message_handlers_t *msg_addr[KAWAII_MQTT_SUB_TOPIC_MAX];
 void paho_mqtt_free_topic(void);
 
@@ -609,10 +609,10 @@ static int mqtt_try_reconnect(mqtt_client_t* c)
     int rc = KAWAII_MQTT_FAILED_ERROR;
 
     /*before connect, call reconnect handler, it can used to update the mqtt password, eg: onenet platform need*/
-    if (NULL != c->mqtt_reconnect_handler) {
+    if (NULL != c->mqtt_reconnect_handler && !mqtt_disconnect_flag) {
         c->mqtt_reconnect_handler(c, c->mqtt_reconnect_data);
     }
-
+    mqtt_disconnect_flag = true;
     // rc = mqtt_try_do_reconnect(c);
 
     if(KAWAII_MQTT_SUCCESS_ERROR != rc) {
@@ -928,7 +928,7 @@ static int mqtt_yield(mqtt_client_t* c, int timeout_ms)
             }
             continue;
         }
-
+        mqtt_disconnect_flag = false;
         /* mqtt connected, handle mqtt packet */
         rc = mqtt_packet_handle(c, &timer);
 

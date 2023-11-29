@@ -481,12 +481,16 @@ void MqttDetect(void* p)
 void app_main(void)
 {
     sys_initialize();
-
     Paytm_TRACE("************************************************\n");
+
+    char imei[16] = {0};
+    Paytm_GetIMEI(imei);
+    Paytm_TRACE("IMEI: %s", (char*)imei);
     // // WM_APP_DOWNLOAD WM_GET_SIM_INFO WM_FILE_TEST WM_CERT_READ_WRITE WM_OTA_TEST_QA WM_PWK_DEMO TEST_MQTT_LOOP_QA
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_BUTTON_DEMO);
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_BATTERY_CHECK);
+    // OpenDemoViaId(WM_GET_SIM_INFO);
     // Paytm_TRACE("***************TEST FOTA BIN********************\n");
     while (1)
     {
