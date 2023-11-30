@@ -1,0 +1,4 @@
+2023.11.30	Lib_V1.71
+* Add app version set function for factory check
+* Update log print function address of kernel
+* [Require DFOTA]

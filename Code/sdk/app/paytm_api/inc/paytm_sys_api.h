@@ -100,6 +100,9 @@ int Paytm_Logs_Disable();
 int Paytm_SDKLogs_Enable();
 int Paytm_SDKLogs_Disable();
 
+/*********************************   APP   VERSION set ***********************************/
+int Paytm_AppVersionSet(const char *version);
+
 /*********************************    RANDOM FUNCTIONS    ***********************************/
 
 void Paytm_random_init(void);

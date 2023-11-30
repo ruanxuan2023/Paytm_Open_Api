@@ -481,8 +481,13 @@ void MqttDetect(void* p)
 void app_main(void)
 {
     char lib_version[16] = {0};
+    char app_verion[32] = {0};
     Paytm_GetLibraryVersion(lib_version, 16);
+    snprintf(app_verion, sizeof(app_verion), "APP_V1.0.1_%s", lib_version);
+    // set app version for factory production check 
+    Paytm_AppVersionSet(app_verion);
     sys_initialize();
+
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
 
     OpenDemoViaId(WM_PWK_DEMO);
