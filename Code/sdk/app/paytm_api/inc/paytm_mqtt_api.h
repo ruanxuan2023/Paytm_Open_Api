@@ -87,10 +87,17 @@ int32 Paytm_MQTT_Disconnect();
 int32 Paytm_Mqtt_Recv_Register(char* topic, void* callback);
 
 /**
- * @description: Please call this function after Paytm_MQTT_Initialise
+ * @description: Not recommended, please use Paytm_Mqtt_EventHandler_Register for instead
  * @return {*}
  */
 int32 Paytm_Mqtt_Reconnected_Register(reconnect_handler_t cb);
+
+/**
+ * @description: Please call this function after Paytm_MQTT_Initialise
+ * @return KAWAII_MQTT_NOT_CONNECT_ERROR, KAWAII_MQTT_CONNECT_FAILED_ERROR, CLIENT_STATE_CONNECTED, CLIENT_STATE_DISCONNECTED, CLIENT_STATE_CLEAN_SESSION & etc  
+ *          for event_id details, please refer to 'mqtt_error_t' and 'client_state_t'
+ */
+int32 Paytm_Mqtt_EventHandler_Register(event_handler_t handler);
 /**
  * @description: Clear mqtt certs configuration in mqtt module
  * @return {*}

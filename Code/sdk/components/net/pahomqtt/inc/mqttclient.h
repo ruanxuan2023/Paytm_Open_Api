@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-06-16 16:57:40
+ * @LastEditTime: 2023-11-30 11:22:55
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTTCLIENT_H_
@@ -77,6 +77,7 @@ typedef struct message_data {
 typedef void (*interceptor_handler_t)(void* client, message_data_t* msg);
 typedef void (*message_handler_t)(void* client, message_data_t* msg);
 typedef void (*reconnect_handler_t)(void* client, void* reconnect_date);
+typedef void (*event_handler_t)(void* client, int event_id);
 
 /**
  * @brief               message handle structure.
@@ -152,6 +153,7 @@ typedef struct mqtt_client {
     platform_timer_t            mqtt_last_received;
     reconnect_handler_t         mqtt_reconnect_handler;
     interceptor_handler_t       mqtt_interceptor_handler;
+    event_handler_t             mqtt_event_handler;
 
 	uint8_t 					mqtt_client_index;
 	uint8_t 					mqtt_ssl_enable;
@@ -192,6 +194,7 @@ KAWAII_MQTT_CLIENT_SET_STATEMENT(write_buf_size, uint32_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_try_duration, uint32_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_handler, reconnect_handler_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(interceptor_handler, interceptor_handler_t)
+KAWAII_MQTT_CLIENT_SET_STATEMENT(event_handler, event_handler_t)
 
 /**
  * @brief               sleeps mqtt function with milliseconds .

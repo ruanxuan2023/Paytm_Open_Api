@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-11-29 11:15:23
+ * @LastEditTime: 2023-11-30 11:34:21
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -10,7 +10,7 @@
 #define     KAWAII_MQTT_MIN_PAYLOAD_SIZE   2
 #define     KAWAII_MQTT_MAX_PAYLOAD_SIZE   268435455       // MQTT imposes a maximum payload size of 268435455 bytes.
 #define 	KAWAII_MQTT_SUB_TOPIC_MAX	   50
-static bool mqtt_disconnect_flag = false;
+static int pre_mqtt_state = 0;
 static message_handlers_t *msg_addr[KAWAII_MQTT_SUB_TOPIC_MAX];
 void paho_mqtt_free_topic(void);
 
@@ -609,10 +609,10 @@ static int mqtt_try_reconnect(mqtt_client_t* c)
     int rc = KAWAII_MQTT_FAILED_ERROR;
 
     /*before connect, call reconnect handler, it can used to update the mqtt password, eg: onenet platform need*/
-    if (NULL != c->mqtt_reconnect_handler && !mqtt_disconnect_flag) {
+    if (NULL != c->mqtt_reconnect_handler) {
         c->mqtt_reconnect_handler(c, c->mqtt_reconnect_data);
     }
-    mqtt_disconnect_flag = true;
+
     // rc = mqtt_try_do_reconnect(c);
 
     if(KAWAII_MQTT_SUCCESS_ERROR != rc) {
@@ -917,18 +917,28 @@ static int mqtt_yield(mqtt_client_t* c, int timeout_ms)
 
     while (!platform_timer_is_expired(&timer)) {
         state = mqtt_get_client_state(c);
-        if (CLIENT_STATE_CLEAN_SESSION ==  state) {
+        if (CLIENT_STATE_CLEAN_SESSION == state) {
+            if(c->mqtt_event_handler && state != pre_mqtt_state){
+                c->mqtt_event_handler(c, state);
+                pre_mqtt_state = state;
+            }
             RETURN_ERROR(KAWAII_MQTT_CLEAN_SESSION_ERROR);
         } else if (CLIENT_STATE_CONNECTED != state) {
             /* mqtt not connect, need reconnect */
             rc = mqtt_try_reconnect(c);
+
             if (KAWAII_MQTT_RECONNECT_TIMEOUT_ERROR == rc)
             {
                 RETURN_ERROR(rc);
             }
             continue;
         }
-        mqtt_disconnect_flag = false;
+
+        if(c->mqtt_event_handler && c->mqtt_client_state != pre_mqtt_state){
+            c->mqtt_event_handler(c, c->mqtt_client_state);
+            pre_mqtt_state = c->mqtt_client_state;
+        }
+
         /* mqtt connected, handle mqtt packet */
         rc = mqtt_packet_handle(c, &timer);
 
@@ -952,7 +962,6 @@ static void mqtt_yield_thread(void *arg)
     int rc;
 
     mqtt_client_t *c = (mqtt_client_t *)arg;
-
 
     while (1) {
         rc = mqtt_yield(c, c->mqtt_cmd_timeout);
@@ -1150,6 +1159,7 @@ KAWAII_MQTT_CLIENT_SET_DEFINE(write_buf_size, uint32_t, 0)
 KAWAII_MQTT_CLIENT_SET_DEFINE(reconnect_try_duration, uint32_t, 0)
 KAWAII_MQTT_CLIENT_SET_DEFINE(reconnect_handler, reconnect_handler_t, NULL)
 KAWAII_MQTT_CLIENT_SET_DEFINE(interceptor_handler, interceptor_handler_t, NULL)
+KAWAII_MQTT_CLIENT_SET_DEFINE(event_handler, event_handler_t, NULL)
 
 void mqtt_void(void)
 {
@@ -1168,7 +1178,7 @@ int mqtt_keep_alive(mqtt_client_t* c)
     rc = mqtt_is_connected(c);
     if (KAWAII_MQTT_SUCCESS_ERROR != rc)
         RETURN_ERROR(rc);
-
+    
     if (platform_timer_is_expired(&c->mqtt_last_sent) || platform_timer_is_expired(&c->mqtt_last_received)) {
         if (c->mqtt_ping_outstanding) {
             KAWAII_MQTT_LOG_W("%s:%d %s()... ping outstanding", __FILE__, __LINE__, __FUNCTION__);
@@ -1177,6 +1187,10 @@ int mqtt_keep_alive(mqtt_client_t* c)
 
             mqtt_set_client_state(c, CLIENT_STATE_DISCONNECTED);
             rc = KAWAII_MQTT_NOT_CONNECT_ERROR; /* PINGRESP not received in keepalive interval */
+            if(c->mqtt_event_handler && pre_mqtt_state != rc){
+                c->mqtt_event_handler(c, rc);
+                pre_mqtt_state = rc;
+            }
         } else {
             platform_timer_t timer;
 

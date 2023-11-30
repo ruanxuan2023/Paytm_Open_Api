@@ -30,10 +30,18 @@ static void topic_handler(void* client, message_data_t* msg)
 	}
 }
 
-static void reconnect_handler(void* client, void* reconnect_date)
+static void event_handler(void* client, int event_id)
 {
-    Paytm_TRACE("Reconnected handler is called...");
-
+    Paytm_TRACE(">>>>Event Handler: %d", event_id);
+    switch (event_id)
+    {
+    case 1:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
 }
 
 #define DEMO_MQTT_HOST  "a3ri26a4bhtu9s-ats.iot.ap-south-1.amazonaws.com"
@@ -158,8 +166,8 @@ void Mqtt_0(void* p)
     }else{
         Paytm_TRACE("Mqtt init success %d!", rc);
     }
-
-    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
+    Paytm_Mqtt_EventHandler_Register(event_handler);
+    // Paytm_Mqtt_Reconnected_Register(reconnect_handler);
     rc = Paytm_MQTT_Open();
     if(rc != 0)
     {

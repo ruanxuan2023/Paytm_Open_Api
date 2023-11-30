@@ -6,7 +6,7 @@
 
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
-
+#include "mqtt_error.h"
 static void topic_handler(void* client, message_data_t* msg)
 {
 	char *rsp = NULL;
@@ -53,6 +53,31 @@ static void reconnect_handler(void* client, void* reconnect_date)
     /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
 }
 
+static void event_handler(void* client, int event_id)
+{
+    Paytm_TRACE(">>>>Event Handler: %d", event_id);
+    switch (event_id)
+    {
+    case KAWAII_MQTT_NOT_CONNECT_ERROR:
+        Paytm_TRACE("Mqtt connect error");
+        break;
+    case KAWAII_MQTT_CONNECT_FAILED_ERROR:
+        Paytm_TRACE("Mqtt connect fail");
+        break;
+    case CLIENT_STATE_CONNECTED:
+        Paytm_TRACE("Mqtt connected");
+        break;
+    case CLIENT_STATE_DISCONNECTED:
+        Paytm_TRACE("Mqtt disconnected");
+        break;
+    case CLIENT_STATE_CLEAN_SESSION:
+        Paytm_TRACE("Mqtt clean session");
+        break;
+    default:
+        break;
+    }
+}
+
 extern const char  mqtt_client_key[1705];
 extern const char  mqtt_client_cert[1173];
 extern const char  mqtt_server_cert[4789];
@@ -89,8 +114,8 @@ void testMqtt(void* p)
         return;
     }
 
-    Paytm_Mqtt_Reconnected_Register(reconnect_handler);
-
+    // Paytm_Mqtt_Reconnected_Register(reconnect_handler);
+    Paytm_Mqtt_EventHandler_Register(event_handler);
     rc = Paytm_MQTT_Open();
     if(rc != 0)
     {
