@@ -2,3 +2,7 @@
 * Add app version set function for factory check
 * Update log print function address of kernel
 * [Require DFOTA]
+2023.12.01	Lib_V1.72
+* Add annotations for the timer function
+* Add function Paytm_MQTT_Disconnect_Only which just disconnect from server but not deinit
+* Clear the warning of battery_charging_userstate_t

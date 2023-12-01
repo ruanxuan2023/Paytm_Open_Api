@@ -79,10 +79,35 @@ int32_t Paytm_GetTimezone(void);
 /*********************************    TIMER FUNCTIONS    ***********************************/
 
 #define TIMER_COUNT_MAX (50)
-/* The timer_id input limits from 0 to TIMER_COUNT_MAX - 1 */
+/**
+ * @description: Register a timer callback to a timer handle
+ * @param {uint32} timer_id: The id of the timer handle
+ * @param {void*} callback_onTimer: The callback function
+ * @param {void*} param: This parameter will be send to the callback function, when the callback is triggered, you can get the value from input parameter
+ * @return {*}: -1 - means the timer_id exceesd the limit of TIMER_COUNT_MAX, others - timer_id
+ */
 int32 Paytm_Timer_Register(uint32 timer_id, void* callback_onTimer, void* param);
+
+/**
+ * @description: Undefined function
+ * @return {*}
+ */
 int32 Paytm_Timer_RegisterFast(uint32 timer_id, void* callback_onTimer, void* param);
+
+/**
+ * @description: Start the timer
+ * @param {uint32} timer_id: The id of timer handle
+ * @param {uint32} interval_msec: The time gap of timer
+ * @param {uint8} autoRepeat: if set true, the timer will repeat automatilly; if set false, the timer will runs only once
+ * @return {*}: -1: means the timer_id is not valid, this time you should call Paytm_Timer_Register first; 0: means start successfully
+ */
 int32 Paytm_Timer_Start(uint32 timer_id, uint32 interval_msec, uint8 autoRepeat);
+
+/**
+ * @description: Stop the timer
+ * @param {uint32} timer_id: The id of timer handle
+ * @return {*}: -1: means the timer_id is not valid or it already stopped(autoRepeat is false and timer timeout); 0: stop successfully
+ */
 int32 Paytm_Timer_Stop(uint32 timer_id);
 
 /*********************************    LOGGING FUNCTIONS    ***********************************/

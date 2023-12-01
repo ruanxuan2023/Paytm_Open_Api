@@ -83,6 +83,17 @@ int32 Paytm_MQTT_WriteCertificates(const char *_cacert, const char *_clientcert,
 
 int32 Paytm_MQTT_IsConnected();
 int32 Paytm_MQTT_Unsubscribe(Paytm_MQTT_topic_info_t*);
+
+/**
+ * @description: Disconect from mqtt server
+ * @return {*}
+ */
+int32 Paytm_MQTT_Disconnect_Only();
+
+/**
+ * @description: Disconect from mqtt server and release mqtt memory
+ * @return {*}
+ */
 int32 Paytm_MQTT_Disconnect();
 int32 Paytm_Mqtt_Recv_Register(char* topic, void* callback);
 

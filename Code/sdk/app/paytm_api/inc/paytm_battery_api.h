@@ -4,10 +4,10 @@
 #include "paytm_sys_api.h"
 #include "paytm_typedef.h"
 
-typedef enum battery_charging_userstate_t{
+typedef enum {
     STATE_BATTERY_CHARGER_DISCONNECTED = 0,
     STATE_BATTERY_CHARGER_CONNECTED
-};
+}battery_charging_userstate_t;
 
 int32 Paytm_GetBatteryVoltage(uint16 *voltage);
 
