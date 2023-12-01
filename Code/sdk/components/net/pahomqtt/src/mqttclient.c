@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-11-30 11:34:21
+ * @LastEditTime: 2023-12-01 20:04:17
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -1241,9 +1241,10 @@ int mqtt_release(mqtt_client_t* c)
 
     /* wait for the clean session to complete */
     while ((CLIENT_STATE_INVALID != mqtt_get_client_state(c))) {
-        // platform_timer_usleep(1000);            // 1ms avoid compiler optimization.
+        platform_timer_msleep(100);            // 1ms avoid compiler optimization.
         if (platform_timer_is_expired(&timer)) {
             KAWAII_MQTT_LOG_E("%s:%d %s()... mqtt release failed...", __FILE__, __LINE__, __FUNCTION__);
+            break;
             RETURN_ERROR(KAWAII_MQTT_FAILED_ERROR)
         }
     }

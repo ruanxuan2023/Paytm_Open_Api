@@ -163,8 +163,6 @@ void Mqtt_0(void* p)
     {
         Paytm_TRACE("Mqtt init fail %d!", rc);
         return;
-    }else{
-        Paytm_TRACE("Mqtt init success %d!", rc);
     }
     Paytm_Mqtt_EventHandler_Register(event_handler);
     // Paytm_Mqtt_Reconnected_Register(reconnect_handler);
@@ -178,8 +176,6 @@ void Mqtt_0(void* p)
             Paytm_MQTT_Disconnect();
         }
         return;
-    }else{
-        Paytm_TRACE("Mqtt socket open success %d!", rc);
     }
 
     rc = Paytm_MQTT_Connect();
@@ -187,10 +183,7 @@ void Mqtt_0(void* p)
     {
         Paytm_TRACE("Mqtt socket connect fail %d!", rc);
         return;
-    }else{
-        Paytm_TRACE("Mqtt socket connect success %d!", rc);
     }
-
 
     topic_list.topic[0] = DEMO_SUB_TOPIC;
     topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
@@ -200,8 +193,6 @@ void Mqtt_0(void* p)
     if(rc != 0)
     {
         Paytm_TRACE("Mqtt subscribe 1 fail 0x%x!", rc);
-    }else{
-        Paytm_TRACE("Mqtt subscribe 1 success %d!", rc);
     }
 
     publish.messageId = 58;
@@ -215,8 +206,6 @@ void Mqtt_0(void* p)
     if(rc != 0)
     {
         Paytm_TRACE("Mqtt publish 1 fail 0x%x!", rc);
-    }else{
-        Paytm_TRACE("Mqtt publish 1 success %d!", rc);
     }
 
     topic_list.topic[0] = DEMO_SUB_TOPIC_2;
@@ -227,14 +216,17 @@ void Mqtt_0(void* p)
     if(rc != 0)
     {
         Paytm_TRACE("Mqtt subscribe 2 fail 0x%x!", rc);
-    }else{
-        Paytm_TRACE("Mqtt subscribe 2 success %d!", rc);
     }
 
+    Paytm_TRACE("Mqtt start success .......");
     while (1)
     {
         /* code */
         Paytm_delayMilliSeconds(10 * 1000);
-        // Paytm_TRACE("Free Heap Info: %d", Paytm_GetFreeHeapSize());
+       if(!Paytm_MQTT_IsConnected()){
+            break;
+       }
     }
+    Paytm_TRACE("Mqtt  task exit .......");
+    osiThreadExit();
 }

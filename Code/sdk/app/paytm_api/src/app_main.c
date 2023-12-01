@@ -449,18 +449,33 @@ void OpenDemoViaId(TASK_SELECTION id)
     }
 }  
 
-void print_net_status(void* p)
+void mqtt_loop(void* p)
+{
+    int loop = 0;
+    while (1)
+    {
+        Paytm_delayMilliSeconds(2 * 1000);Paytm_TRACE("Init mqtt ...... ......");
+        OpenDemoViaId(TEST_MQTT_LOOP_QA);
+        Paytm_delayMilliSeconds(5 * 1000);Paytm_TRACE("Deinit mqtt ...... ......");
+        Paytm_MQTT_Disconnect();
+        Paytm_delayMilliSeconds(8 * 1000);
+
+        loop++;Paytm_TRACE("Loop %d ...... ......", loop);
+        if(loop > 0){
+            Paytm_TRACE("...... ......");
+            // assert(NULL);
+            break;
+        }
+    }
+    osiThreadExit();
+}
+
+void print_free_heap(void* p)
 {
     while (1)
     {
-        if(Paytm_Net_IsConnected())
-        {
-            RTI_LOG("Networking connected");
-        }else{
-            RTI_LOG("Networking not connected");
-        }
-        
-        Paytm_delayMilliSeconds(1000);
+        Paytm_TRACE("Free mem: %d ......", Paytm_GetFreeHeapSize());
+        Paytm_delayMilliSeconds(1 * 1000);
     }
 }
 
@@ -477,7 +492,7 @@ void MqttDetect(void* p)
         }
     }
 }
-
+extern void Paytm_Mqtt_checkHandle(void);
 void app_main(void)
 {
     char lib_version[16] = {0};
@@ -489,13 +504,23 @@ void app_main(void)
     sys_initialize();
 
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
-
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_GET_SIM_INFO);
-    OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    Paytm_TRACE("Free heap size 1: %d \r\n", Paytm_GetFreeHeapSize());
+
+    Paytm_CreateTask("Dis", print_free_heap, NULL, 110, 2 * 1024);
+    int t = 0;
     while (1)
     {
-        Paytm_delayMilliSeconds(1000);
+        OpenDemoViaId(TEST_MQTT_LOOP_QA);
+        Paytm_delayMilliSeconds(8 * 1000);Paytm_TRACE("Deinit mqtt ...... ......");
+        Paytm_MQTT_Disconnect();
+        Paytm_delayMilliSeconds(15 * 1000);
+
+        t++;
+        if(t > 4){
+            assert(NULL);
+        }
     }
 
     return;

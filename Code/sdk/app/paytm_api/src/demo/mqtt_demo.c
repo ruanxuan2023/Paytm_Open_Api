@@ -176,5 +176,10 @@ void testMqtt(void* p)
     {
         /* code */
         osiThreadSleep(1000);
+        if(!Paytm_MQTT_IsConnected()){
+            break;
+        }
     }
+    Paytm_TRACE("Mqtt thread exit ... ... \r\n\r\n");
+    osiThreadExit();
 }
