@@ -14,13 +14,13 @@ static void topic_handler(void* client, message_data_t* msg)
 	rsp = (char *)osiMalloc(msg->message->payloadlen+100);
 	if(NULL == rsp)
 	{
-		RTI_LOG("malloc no memory!");
+		Paytm_TRACE("malloc no memory!");
 	}
 
 	memset(rsp, 0, msg->message->payloadlen+100);
 	sprintf(rsp, "MQTT RECV: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
 			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
-	RTI_LOG("%s", rsp);
+	Paytm_TRACE("%s", rsp);
 
 	if(NULL != rsp)
 	{
@@ -88,7 +88,7 @@ void AliMqttDemo(void* p)
         Paytm_TRACE("Mqtt socket open fail %d!", rc);
         if(rc == -29)
         {
-            RTI_LOG("Mqtt already opened");
+            Paytm_TRACE("Mqtt already opened");
             Paytm_MQTT_Disconnect();
         }
         return;

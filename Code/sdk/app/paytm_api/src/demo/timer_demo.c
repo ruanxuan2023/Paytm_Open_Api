@@ -9,7 +9,7 @@ int g_val = 89;
 
 void* timerCb(void * p)
 {
-    RTI_LOG("This is usercb, val = %d", *(int*)p);
+    Paytm_TRACE("This is usercb, val = %d", *(int*)p);
 }
 
 void runTimer(void)
@@ -19,10 +19,10 @@ void runTimer(void)
 
     t_id = Paytm_Timer_Register(0, NULL, NULL);
 
-    RTI_LOG("Timer reg res = %d", t_id);
+    Paytm_TRACE("Timer reg res = %d", t_id);
 
     rc = Paytm_Timer_Start(t_id, 1000, false);
-    RTI_LOG("Timer start rc = %d", rc);
+    Paytm_TRACE("Timer start rc = %d", rc);
 
     Paytm_delayMilliSeconds(5000);
 

@@ -16,3 +16,5 @@
 * Add a function to set log buffer size
 * Increase the application max size to 300kb
 * Need to call download.bat -all to update the configuration
+2023.12.04	Lib_V1.76
+* Clear the library logs

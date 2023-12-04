@@ -31,13 +31,13 @@ static void net_connect(void)
     //int32 stat = 0;
     // while (!(Paytm_GetGPRSState(&stat) == 1 || Paytm_GetGPRSState(&stat) == 5))
     // {
-    //     //RTI_LOG("Networking connecting");
+    //     //Paytm_TRACE("Networking connecting");
     //     Paytm_delayMilliSeconds(1000);
     // }
     
     while (!Paytm_Net_IsConnected())
     {
-        RTI_LOG("Networking connecting");
+        Paytm_TRACE("Networking connecting");
         Paytm_delayMilliSeconds(1000);
     }
     
@@ -506,21 +506,14 @@ void app_main(void)
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_GET_SIM_INFO);
-    Paytm_TRACE("Free heap size 1: %d \r\n", Paytm_GetFreeHeapSize());
+    OpenDemoViaId(WM_HTTP_TEST);
 
-    Paytm_CreateTask("Dis", print_free_heap, NULL, 110, 2 * 1024);
-    int t = 0;
     while (1)
     {
         OpenDemoViaId(TEST_MQTT_LOOP_QA);
         Paytm_delayMilliSeconds(8 * 1000);Paytm_TRACE("Deinit mqtt ...... ......");
         Paytm_MQTT_Disconnect();
         Paytm_delayMilliSeconds(15 * 1000);
-
-        t++;
-        if(t > 4){
-            assert(NULL);
-        }
     }
 
     return;
