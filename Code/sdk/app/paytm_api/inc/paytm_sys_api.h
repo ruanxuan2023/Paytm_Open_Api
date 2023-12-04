@@ -209,4 +209,9 @@ int32 Paytm_GiveMutex(uint32 mutex_id);
 
 int32_t Paytm_CreateTask(const char *name, void* entry, void *argument, uint8_t priority, uint32_t stack_size);
 
+/**
+ * @description: Exit current thread and release memory of the task asynchronous. Please call this at the end of the task function
+ * @return {*}
+ */
+void Paytm_ExitTask(void);
 #endif

@@ -9,3 +9,7 @@
 2023.12.01	Lib_V1.73
 * [Require DFOTA]
 * Fixthe bug when mqtt deinit, cause memory leak
+2023.12.04	Lib_V1.74
+* Add function Paytm_ExitTask for task memory release. When we need to terminate a task, web should call this at the end of the task, otherwise it will cause memory leak.
+2023.12.04	Lib_V1.75
+* Fix the bug that when there are too many subdictories to delete, it causes other tasks get stuck
