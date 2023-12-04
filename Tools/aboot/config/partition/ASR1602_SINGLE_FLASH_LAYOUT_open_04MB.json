@@ -79,7 +79,7 @@
         {
           "name": "customer_app",
           "format": "raw",
-          "size": "256KiB"
+          "size": "300KiB"
         },
         {
           "name": "fota_param",

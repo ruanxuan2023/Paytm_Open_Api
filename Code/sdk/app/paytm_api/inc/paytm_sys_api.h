@@ -125,6 +125,13 @@ int Paytm_Logs_Disable();
 int Paytm_SDKLogs_Enable();
 int Paytm_SDKLogs_Disable();
 
+/**
+ * @description: Set the max buffer size of Paytm_TRACE
+ * @param {uint32_t} size
+ * @return {*}  fail - -1, success - size 
+ */
+int32 Paytm_TRACE_Buffer_Size_Set(uint32_t size);
+
 /*********************************   APP   VERSION set ***********************************/
 int Paytm_AppVersionSet(const char *version);
 

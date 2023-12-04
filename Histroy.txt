@@ -11,5 +11,8 @@
 * Fixthe bug when mqtt deinit, cause memory leak
 2023.12.04	Lib_V1.74
 * Add function Paytm_ExitTask for task memory release. When we need to terminate a task, web should call this at the end of the task, otherwise it will cause memory leak.
-2023.12.04	Lib_V1.75
 * Fix the bug that when there are too many subdictories to delete, it causes other tasks get stuck
+2023.12.04	Lib_V1.75
+* Add a function to set log buffer size
+* Increase the application max size to 300kb
+* Need to call download.bat -all to update the configuration
