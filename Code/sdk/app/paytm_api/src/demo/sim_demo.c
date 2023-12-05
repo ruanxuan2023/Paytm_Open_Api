@@ -111,9 +111,25 @@ void testSim(void)
     
     while (!Paytm_Net_IsConnected())
     {
-        Paytm_TRACE("Networking connecting, sim card status: %s", Paytm_GetSimState() ? "ready" : "not ready");
-        Paytm_delayMilliSeconds(1000);
+        Paytm_TRACE("Networking connecting");
+        Paytm_delayMilliSeconds(2000);
     }
+
+
+    // char imsi[33] = {0};
+    // Paytm_ReadIMSI(imsi);
+    // Paytm_TRACE("IMSI = %s", imsi);
+
+    // char sim_no[23] = {0};
+    // Paytm_ReadSimNumber(sim_no);
+    // Paytm_TRACE("CCID: %s", sim_no);
+
+    // int csq = Paytm_GetSignalStrength();
+    // Paytm_TRACE("CSQ: %d", csq);
+
+    // int32 gsmstate = 0;
+    // Paytm_GetGSMState(&gsmstate);
+    // Paytm_TRACE("gprs state %d", gsmstate);
 }
 
 void readSimState(void)
