@@ -14,7 +14,12 @@
 
 int64 Paytm_GetPhysicalROM(void);
 int64 Paytm_GetTotalROM(void);
-int64 Paytm_GetFreeROM(void);
+
+/**
+ * @description: Return free rom size(internel flash) of device, uints is byte
+ * @return {*}
+ */
+int32 Paytm_GetFreeROM(void);
 uint16 Paytm_GetTotalNVRAM(void);
 uint16 Paytm_GetFreeNVRAM(void);
 int64 Paytm_GetTotalHeapSize(void);

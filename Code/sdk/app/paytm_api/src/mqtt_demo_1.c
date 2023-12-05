@@ -35,10 +35,23 @@ static void event_handler(void* client, int event_id)
     Paytm_TRACE(">>>>Event Handler: %d", event_id);
     switch (event_id)
     {
-    case 1:
-        /* code */
+    case KAWAII_MQTT_NOT_CONNECT_ERROR:
+        Paytm_TRACE("Mqtt connect error");
+        Paytm_Mqttt_Try_Reconnect();
         break;
-    
+    case KAWAII_MQTT_CONNECT_FAILED_ERROR:
+        Paytm_TRACE("Mqtt connect fail");
+        break;
+    case CLIENT_STATE_CONNECTED:
+        Paytm_TRACE("Mqtt connected");
+        break;
+    case CLIENT_STATE_DISCONNECTED:
+        Paytm_TRACE("Mqtt disconnected");
+        Paytm_Mqttt_Try_Reconnect();
+        break;
+    case CLIENT_STATE_CLEAN_SESSION:
+        Paytm_TRACE("Mqtt clean session");
+        break;
     default:
         break;
     }
@@ -157,7 +170,7 @@ void Mqtt_0(void* p)
     mqtt_packet.keepalive_sec = 10;
     // enable ssl  authentication
     mqtt_packet.enable_ssl = true;
-
+    Paytm_TRACE("Free heap before mqtt initialize: %d", Paytm_GetFreeHeapSize());
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
     {
@@ -166,6 +179,7 @@ void Mqtt_0(void* p)
     }
     Paytm_Mqtt_EventHandler_Register(event_handler);
     // Paytm_Mqtt_Reconnected_Register(reconnect_handler);
+    Paytm_TRACE("Free heap before mqtt open: %d", Paytm_GetFreeHeapSize());
     rc = Paytm_MQTT_Open();
     if(rc != 0)
     {
@@ -177,14 +191,14 @@ void Mqtt_0(void* p)
         }
         return;
     }
-
+    Paytm_TRACE("Free heap before mqtt connect: %d", Paytm_GetFreeHeapSize());
     rc = Paytm_MQTT_Connect();
     if(rc != 0)
     {
         Paytm_TRACE("Mqtt socket connect fail %d!", rc);
         return;
     }
-
+    Paytm_TRACE("Free heap after mqtt connect: %d", Paytm_GetFreeHeapSize());
     topic_list.topic[0] = DEMO_SUB_TOPIC;
     topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
     topic_list.count = 1;
@@ -202,11 +216,11 @@ void Mqtt_0(void* p)
     publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
     publish.retain = false;
 
-    rc = Paytm_MQTT_Publish(&publish);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt publish 1 fail 0x%x!", rc);
-    }
+    // rc = Paytm_MQTT_Publish(&publish);
+    // if(rc != 0)
+    // {
+    //     Paytm_TRACE("Mqtt publish 1 fail 0x%x!", rc);
+    // }
 
     topic_list.topic[0] = DEMO_SUB_TOPIC_2;
     topic_list.qos[0] = Paytm_QOS2_AT_EXACTLY_ONECE;
@@ -219,14 +233,12 @@ void Mqtt_0(void* p)
     }
 
     Paytm_TRACE("Mqtt start success .......");
+    Paytm_delayMilliSeconds(4 * 1000);
+    Paytm_MQTT_Disconnect_Only();
     while (1)
     {
-        /* code */
-        Paytm_delayMilliSeconds(10 * 1000);
-       if(!Paytm_MQTT_IsConnected()){
-            break;
-       }
+        Paytm_delayMilliSeconds(1 * 1000);
     }
     Paytm_TRACE("Mqtt  task exit .......");
-    osiThreadExit();
+    Paytm_ExitTask();
 }
