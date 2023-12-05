@@ -20,3 +20,6 @@
 * Clear the library logs
 2023.12.05	Lib_V1.77
 * Fix the bug that when there are many files to unzip, Paytm_Unzip occupied the cpu for a long time
+2023.12.05	Lib_V1.78
+* Fix the bug that when the mqtt disconnects from server, we call Paytm_Mqttt_Try_Reconnect to reconnect but not work
+* [Require DFOTA]

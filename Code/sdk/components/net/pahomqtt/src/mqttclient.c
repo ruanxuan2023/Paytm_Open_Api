@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-12-01 20:04:17
+ * @LastEditTime: 2023-12-05 14:42:16
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -1302,7 +1302,7 @@ int mqtt_disconnect(mqtt_client_t* c)
 
     platform_mutex_unlock(&c->mqtt_write_lock);
 
-    mqtt_set_client_state(c, CLIENT_STATE_CLEAN_SESSION);
+    // mqtt_set_client_state(c, CLIENT_STATE_CLEAN_SESSION);
 
     RETURN_ERROR(rc);
 }
@@ -1675,7 +1675,6 @@ void paho_mqtt_free_topic(void)
 		{
 			continue;
 		}
-		//RTI_LOG("addr is [0x%X]", msg_addr[i]);
 		platform_memory_free((void *)msg_addr[i]);
 	}
 }
