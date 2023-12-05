@@ -18,3 +18,5 @@
 * Need to call download.bat -all to update the configuration
 2023.12.04	Lib_V1.76
 * Clear the library logs
+2023.12.05	Lib_V1.77
+* Fix the bug that when there are many files to unzip, Paytm_Unzip occupied the cpu for a long time
