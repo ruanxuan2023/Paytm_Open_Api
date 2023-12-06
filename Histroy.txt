@@ -23,5 +23,7 @@
 2023.12.05	Lib_V1.78
 * Fix the bug that when the mqtt disconnects from server, we call Paytm_Mqttt_Try_Reconnect to reconnect but not work
 * [Require DFOTA]
-2023.12.05  Lib_V1.79
+2023.12.05  Lib_V1.79-80
 * Add function Paytm_GetFreeROM to get free flash size of device
+2023.12.06	Lib_V1.81
+* Fix the bug that mqtt try to init the second times but failed

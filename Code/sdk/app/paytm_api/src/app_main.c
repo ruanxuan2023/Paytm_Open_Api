@@ -123,7 +123,8 @@ extern void getTaobaoSuggest(void* p);
 extern void testMqtt_india(void* p);
 extern void testMqtt(void* p);
 extern void PaytmHttpSSLPost(void * p);
-extern void Mqtt_0(void* p);
+extern void Mqtt_Connect(void* p);
+extern void Mqtt_ReConnect(void* p);
 extern void ntpDemo(void *p);
 extern void batteryDemo(void);
 extern void audioPlayDemo(void);
@@ -258,7 +259,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case TEST_MQTT_LOOP_QA:
         // net_connect();
-        Paytm_CreateTask("mqtt", testMqtt, NULL, 110, 40 * 1024);
+        Paytm_CreateTask("mqtt", Mqtt_Connect, NULL, 110, 40 * 1024);
         break;
     case TEST_FS_LOOP_QA:
         Paytm_CreateTask("mqtt", fileHeapLeakDemo, NULL, 110, 30 * 1024);
@@ -474,7 +475,7 @@ void print_free_heap(void* p)
 {
     while (1)
     {
-        Paytm_TRACE("Free mem: %d ......", Paytm_GetFreeHeapSize());
+        Paytm_TRACE("Free heap lin loop: %d", Paytm_GetFreeHeapSize());
         Paytm_delayMilliSeconds(1 * 1000);
     }
 }
@@ -504,16 +505,13 @@ void app_main(void)
     sys_initialize();
 
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
+    Paytm_TRACE("Free rom: %ld", Paytm_GetFreeROM());
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_GET_SIM_INFO);
-    OpenDemoViaId(WM_HTTP_TEST);
-
+    OpenDemoViaId(TEST_MQTT_LOOP_QA);
     while (1)
     {
-        OpenDemoViaId(TEST_MQTT_LOOP_QA);
-        Paytm_delayMilliSeconds(8 * 1000);Paytm_TRACE("Deinit mqtt ...... ......");
-        Paytm_MQTT_Disconnect();
-        Paytm_delayMilliSeconds(15 * 1000);
+        Paytm_delayMilliSeconds(4 * 1000);
     }
 
     return;
