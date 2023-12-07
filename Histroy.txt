@@ -27,3 +27,8 @@
 * Add function Paytm_GetFreeROM to get free flash size of device
 2023.12.06	Lib_V1.81
 * Fix the bug that mqtt try to init the second times but failed
+2023.12.07	Lib_V1.82
+* Update kernel to fix dfota bug
+* Update adiff tool , add cp debug bin
+* Make the buffer size of log unchangeable
+* [Require DFOTA]

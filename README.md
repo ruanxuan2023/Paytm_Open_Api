@@ -35,11 +35,13 @@ czip.exe ./resource resource.czip
 ## CUNZIP tool
 cunzip.exe resource.czip ./unzip/
 
-## FOTA tool
-cd Tools\adiff
-# kenrel&application need param -a
-.\fota_gen.exe -a ..\aboot\800SGFFRO00G0329_all.zip ..\aboot\800SGFFRO00G0328_all.zip
-# kenrel only no -a
-.\fota_gen.exe ..\aboot\800SGFFRO00G0329_all.zip ..\aboot\800SGFFRO00G0328_all.zip
-# generate SUCCESS
-Generate DFOTA package:  ./fota\800SGFFRO00G0329_all_800SGFFRO00G0328_all.bin
+## FOTA test step
+1. After build DFOTA demo application，run "download.bat -r"  in cmd.exe generate  "Tools\aboot\800SGFFRO00G0344_all.zip"
+2. copy file "Tools\aboot\800SGFFRO00G0344_all.zip" to folder "Tools\adiff"
+3. rename file "Code\kernel\ZX800SG_SA\cp.bin" for backup purposes 
+4. rename file "Code\kernel\ZX800SG_SA\cp_dbg.bin" to "Code\kernel\ZX800SG_SA\cp.bin"
+5. run "download.bat -r" in cmd.exe generate "Tools\aboot\800SGFFRO00G0344_all.zip" again
+6. rename "Tools\aboot\800SGFFRO00G0344_all.zip" to "Tools\aboot\800SGFFRO00G0344_all_dbg.zip" and copy file "Tools\adiff"
+7. cd to Tools\adiff in cmd.exe, run ".\fota_gen.exe .\800SGFFRO00G0344_all.zip .\800SGFFRO00G0344_all_dbg.zip"
+8. Generate DFOTA package:  ./fota\800SGFFRO00G0344_all_800SGFFRO00G0344_all_dbg.bin
+

@@ -141,11 +141,9 @@
       "disable": true
     },
     {
-      "command": "flash",
-      "name":"nvm",
+      "command": "erase",
       "partition": "nvm",
-      "type": "image",
-      "group": "2"
+      "group": "4"
     },
     {
       "command": "erase",
@@ -211,7 +209,7 @@
       "format": "raw"
     },
     {
-      "name": "updater_bin",
+      "name": "updater",
       "image": "updater.bin",
       "io": "in",
       "format": "raw"
@@ -237,12 +235,6 @@
     {
       "name": "customer_app",
       "image": "customer_app.bin",
-      "io": "in",
-      "format": "raw"
-    },
-    {
-      "name": "nvm",
-      "image": "nvm.bin",
       "io": "in",
       "format": "raw"
     },
