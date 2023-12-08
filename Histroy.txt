@@ -32,3 +32,7 @@
 * Update adiff tool , add cp debug bin
 * Make the buffer size of log unchangeable
 * [Require DFOTA]
+2023.12.08  Lib_V1.83
+* Add function Paytm_TRACE_Str_To_USB to print string debug log via USB
+* Increase application max size to 512kb
+* [Require DFOTA]

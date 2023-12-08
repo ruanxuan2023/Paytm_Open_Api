@@ -7,6 +7,6 @@
 #define CONFIG_RAM_SIZE       (0x0003fffc)
 
 #define CONFIG_BOARD_FLASH_SIZE       (0x400000)
-#define CONFIG_APP_FLASH_ADDRESS       (0x803ab000)
-#define CONFIG_APP_FLASH_SIZE       (0x4b000)
+#define CONFIG_APP_FLASH_ADDRESS       (0x80376000)
+#define CONFIG_APP_FLASH_SIZE       (0x80000)
 #endif

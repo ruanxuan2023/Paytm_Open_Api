@@ -117,6 +117,13 @@ void Paytm_TRACE_TAG_DATA(const char *tag, uint8 *content, Paytm_size_t content_
 void Paytm_TRACE_HEX_BUFFER(const char *tag, const uint8 *content, Paytm_size_t content_len);
 int32 Paytm_TRACE_PREFIXED(const char *format, va_list args, const char *prefix_format, ...);
 int32 Paytm_TRACE(const char *format, ...);
+
+/**
+ * @description: Send string log to usb
+ * @param {char} *buffer
+ * @return {*}
+ */
+void Paytm_TRACE_Str_To_USB(const char *buffer);
 int32 Paytm_TRACE_FUNC(const char *tag, const char *fn, const char *format, ...);
 int32 Paytm_TRACE_DATETIME(const char *level, const char *tag, const char *fn, const char *format, ...);
 int32 Paytm_TRACE_DATETIME_PAYTM(const char *level, const char *datetime, const char *tag, const char *format, ...);

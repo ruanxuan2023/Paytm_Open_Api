@@ -74,12 +74,12 @@
         {
           "name": "nvm",
           "format": "raw",
-          "size": "1280KiB"
+          "size": "1060KiB"
         },
         {
           "name": "customer_app",
           "format": "raw",
-          "size": "300KiB"
+          "size": "512KiB"
         },
         {
           "name": "fota_param",

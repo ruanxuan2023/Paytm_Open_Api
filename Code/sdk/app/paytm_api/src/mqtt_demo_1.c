@@ -8,6 +8,9 @@
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
 
+void Mqtt_Connect(void* p);
+void Mqtt_ReConnect(void* p);
+
 static void topic_handler(void* client, message_data_t* msg)
 {
     Paytm_TRACE("topic handler is called...");
@@ -32,12 +35,14 @@ static void topic_handler(void* client, message_data_t* msg)
 
 static void event_handler(void* client, int event_id)
 {
-    Paytm_TRACE(">>>>Event Handler: %d", event_id);
     switch (event_id)
     {
     case KAWAII_MQTT_NOT_CONNECT_ERROR:
-        Paytm_TRACE("Mqtt connect error");
-        Paytm_Mqttt_Try_Reconnect();
+        Paytm_TRACE("Mqtt event: Connect error");
+        Paytm_MQTT_Disconnect_Only();
+        Paytm_MQTT_Disconnect();
+        Mqtt_ReConnect(NULL);
+        // Paytm_Mqttt_Try_Reconnect();
         break;
     case KAWAII_MQTT_CONNECT_FAILED_ERROR:
         Paytm_TRACE("Mqtt connect fail");
@@ -47,7 +52,6 @@ static void event_handler(void* client, int event_id)
         break;
     case CLIENT_STATE_DISCONNECTED:
         Paytm_TRACE("Mqtt disconnected");
-        Paytm_Mqttt_Try_Reconnect();
         break;
     case CLIENT_STATE_CLEAN_SESSION:
         Paytm_TRACE("Mqtt clean session");
@@ -305,46 +309,58 @@ void Mqtt_ReConnect(void* p)
     }
     Paytm_TRACE("Mqtt start success first time.......");
 
-    Paytm_MQTT_Disconnect();
-    Paytm_delayMilliSeconds(2 * 1000);
+    // Paytm_MQTT_Disconnect();
 
-    /***********************************************/
+    // /***********************************************/
 
-    rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
-    if(rc < 0)
-    {
-        Paytm_TRACE("Mqtt init fail %d!", rc);
-    }
-    Paytm_Mqtt_EventHandler_Register(event_handler);
-    rc = Paytm_MQTT_Open();
+    // rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
+    // if(rc < 0)
+    // {
+    //     Paytm_TRACE("Mqtt init fail %d!", rc);
+    // }
+    // Paytm_Mqtt_EventHandler_Register(event_handler);
+    // rc = Paytm_MQTT_Open();
+    // if(rc != 0)
+    // {
+    //     Paytm_TRACE("Mqtt socket open fail %d!", rc);
+    //     if(rc == -29)
+    //     {
+    //         Paytm_TRACE("Mqtt already opened");
+    //         Paytm_MQTT_Disconnect();
+    //     }
+    //     return;
+    // }
+    // rc = Paytm_MQTT_Connect();
+    // if(rc != 0)
+    // {
+    //     Paytm_TRACE("Mqtt socket connect fail %d!", rc);
+    //     return;
+    // }
+    // topic_list.topic[0] = DEMO_SUB_TOPIC;
+    // topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
+    // topic_list.count = 1;
+
+    // rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
+    // if(rc != 0)
+    // {
+    //     Paytm_TRACE("Mqtt subscribe 1 fail 0x%x!", rc);
+    // }
+
+    // Paytm_TRACE("Mqtt start success the second time.......");
+
+    publish.messageId = 58;
+    publish.topic = DEMO_PUB_TOPIC;
+    publish.message = DEMO_PUB_DATA;
+    publish.message_length = strlen(publish.message);
+    publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
+    publish.retain = false;
+
+    rc = Paytm_MQTT_Publish(&publish);
     if(rc != 0)
     {
-        Paytm_TRACE("Mqtt socket open fail %d!", rc);
-        if(rc == -29)
-        {
-            Paytm_TRACE("Mqtt already opened");
-            Paytm_MQTT_Disconnect();
-        }
-        return;
+        Paytm_TRACE("Mqtt publish 1 fail 0x%x!", rc);
     }
-    rc = Paytm_MQTT_Connect();
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt socket connect fail %d!", rc);
-        return;
-    }
-    topic_list.topic[0] = DEMO_SUB_TOPIC;
-    topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
-    topic_list.count = 1;
-
-    rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt subscribe 1 fail 0x%x!", rc);
-    }
-
-    Paytm_TRACE("Mqtt start success the second time.......");
-
+    Paytm_TRACE("Mqtt start success");
 
     while (1)
     {
@@ -353,4 +369,228 @@ void Mqtt_ReConnect(void* p)
 
     Paytm_TRACE("Mqtt  task exit .......");
     Paytm_ExitTask();
+}
+
+/***************************************************************************************/
+
+Paytm_mqtt_connect_Packet_t *gMqtt_o = NULL;
+char authId[100] = {0};
+uint32_t g_mqtt_task_id = 0;
+uint32_t g_timer_id_1 = 0;
+#define PAYTM_MQTT_OPEN 0
+#define PAYTM_MQTT_CONNECT 1
+#define PAYTM_MQTT_SUBSCRIBE 2
+#define PAYTM_MQTT_PUBLISH 3
+#define PAYTM_MQTT_DISCONNECT 4
+
+void paytmClearMqttConection(void){
+    int resp = Paytm_MQTT_Disconnect();
+    Paytm_TRACE("Paytm_MQTT_Disconnect response : [%d]", resp);
+}
+
+void mqtt_receive_callback(void* client, message_data_t* msg)
+{
+	Paytm_TRACE_TAG_DATA("mqtt data : ", (uint8 *)msg->message->payload, Paytm_strlen(msg->message->payload));
+}
+
+void paytm_MqttEventHandlerCB(void* client, int event_id)
+{
+    Paytm_TRACE("paytm_MqttEventHandlerCB starts : event_id : [%d]", event_id);
+    if(event_id != CLIENT_STATE_DISCONNECTED && event_id != KAWAII_MQTT_NOT_CONNECT_ERROR){
+        return;
+    }
+
+    if(Paytm_MQTT_IsConnected()){
+        return;
+    }
+
+    Paytm_TRACE("EVENT RECEIVED FOR MQTT DISCONNECTION");
+
+    paytmClearMqttConection(); // close mqtt connection
+    SendMessageToMqttFlow(0);
+}
+
+void SendMessageToMqttFlow(int evt)
+{
+	Paytm_Timer_Start(g_timer_id_1, 1000, false); // Chen : timer callback for this is reqMqttConnect after 1 second
+}
+
+int PAYTM_MQTT_Initialise_wrapper(Paytm_mqtt_connect_Packet_t *mqtt)
+{
+    char * host = DEMO_MQTT_HOST;
+    char * client_id = DEMO_MQTT_PRODUCT_KEY;
+
+    mqtt->will_flag = 0;
+    mqtt->will_qos = 1;
+    mqtt->will_retain = 0;
+    mqtt->will_topic = NULL;
+    mqtt->will_message = NULL;
+    mqtt->show_recvlen = 1;
+
+    mqtt->keepalive_sec = 10;
+    mqtt->port = 8883;
+    mqtt->timeout_sec = 10;
+    mqtt->cleansession = 0;
+
+    mqtt->host = host; // Chen : use -> "a3ri26a4bhtu9s-ats.iot.ap-south-1.amazonaws.com"
+
+    mqtt->client_id = client_id; // Chen : use your credentials here , example :: "dev-WAM4GS-868279067775610"
+
+    Paytm_delayMilliSeconds(20);
+
+    mqtt->username = NULL;
+    mqtt->password = NULL;
+
+    mqtt->enable_ssl = true;
+
+    int checkCert = checkMqttCertPresentInDevice();
+
+    int initCheck = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, mqtt);
+    if(initCheck < 0)
+    {
+        Paytm_TRACE("Mqtt init fail with response : [%d]", initCheck);
+        return -1;
+    }else{
+        Paytm_TRACE("Mqtt init success with response : [%d]", initCheck);
+    }
+
+    Paytm_Mqtt_EventHandler_Register(paytm_MqttEventHandlerCB);
+    return 1;
+}
+
+
+extern char gMqtt_rootCa[2048];
+extern char gMqtt_clientCert[2048];
+extern char gMqtt_pvtKey[2048];
+
+int checkMqttCertPresentInDevice(void){
+	int ret = Paytm_MQTT_WriteCertificates(mqtt_cacert_1, mqtt_clientcert_1, mqtt_clientkey_1);
+
+    return 0;
+}
+
+int setupAwsMqtt(void)
+{
+    Paytm_TRACE("setupAwsMqtt");
+    int mqttSetupCheck = PAYTM_MQTT_Initialise_wrapper(gMqtt_o);
+    Paytm_SendMessage_From_ISR(g_mqtt_task_id, PAYTM_MQTT_OPEN, 0, 0);
+    return 0;
+}
+
+void* reqMqttConnect(void* p){
+
+	setupAwsMqtt();
+}
+
+// Chen : please start this task at bootup itself
+void* mqtt_subtask(void* p)
+{
+    Paytm_mqtt_connect_Packet_t mqtt_connection = {0};
+    Paytm_Timer_Register(g_timer_id_1, reqMqttConnect, NULL);
+    gMqtt_o = &mqtt_connection;
+    ST_MSG msg;
+
+    while (true)
+    {
+        Paytm_delayMilliSeconds(100);
+        int getMsgReturn = Paytm_GetMessage(g_mqtt_task_id, &msg);
+        Paytm_TRACE("Paytm_GetMessage response:[%d]", getMsgReturn);
+
+        switch (msg.message)
+        {
+            case PAYTM_MQTT_OPEN:
+            {
+                int32 ret = Paytm_MQTT_Open();
+                Paytm_TRACE("Paytm_MQTT_Open response = [%d]", ret);
+                if (ret == 0)
+                {
+                    Paytm_TRACE("Mqtt Open Success");
+                    Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_CONNECT, 0, 0);
+                }
+				else{
+					Paytm_TRACE("Open Mqtt Failed");
+					paytmClearMqttConection();
+					mqttErrorHandling(ret);
+				}
+            }
+            break;
+            case PAYTM_MQTT_CONNECT:
+            {
+                int32 ret = Paytm_MQTT_Connect();
+                Paytm_TRACE("Paytm_MQTT_Connect response = [%d]", ret);
+                if(ret == 0){
+                    Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_SUBSCRIBE, 0, 0);
+                }
+				else{
+					Paytm_TRACE("Connect Mqtt Failed");
+					paytmClearMqttConection();
+					mqttErrorHandling(ret);
+				}
+            }
+            break;
+            case PAYTM_MQTT_SUBSCRIBE:
+            {
+                handleSubsciption();
+            }
+            case PAYTM_MQTT_PUBLISH:
+            {
+                Paytm_mqtt_publish_Packet_t publish = {0};
+
+                publish.messageId = 58;
+                publish.topic = DEMO_PUB_TOPIC;
+                publish.message = DEMO_PUB_DATA;
+                publish.message_length = strlen(publish.message);
+                publish.qos = Paytm_QOS1_AT_LEASET_ONCE;
+                publish.retain = false;
+
+                Paytm_MQTT_Publish(&publish);
+            }
+            break;
+            case PAYTM_MQTT_DISCONNECT:
+            {
+                Paytm_MQTT_Disconnect();
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+
+void handleSubsciption(){
+
+    ST_MQTT_topic_info_t mqtt_topics;
+    mqtt_topics.count = 1;
+
+    mqtt_topics.topic[0] = DEMO_SUB_TOPIC_2;
+    mqtt_topics.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
+
+    int32 response = Paytm_MQTT_Subscribe(&mqtt_topics, mqtt_receive_callback);
+    Paytm_TRACE("Paytm_MQTT_Subscribe response : [%d]", response);
+	
+    if (response == 0){
+        Paytm_TRACE("Subscribe Mqtt Success");
+    }
+    else{
+        Paytm_TRACE("Subscribe Mqtt Failed");
+        paytmClearMqttConection();
+        mqttErrorHandling(response);
+    }
+}
+
+void mqttErrorHandling(uint32_t response){
+	
+	Paytm_TRACE("MQTT Error code : [%d]", response);
+
+    SendMessageToMqttFlow(0);
+}
+
+void Paytm_Mqtt_MemLeakProcess(void)
+{
+    g_mqtt_task_id = Paytm_CreateTask("mqtt_mem_leak", mqtt_subtask, NULL, 110, 100 * 1024);
+    Paytm_delayMilliSeconds(100);
+    Paytm_TRACE("MemLeak Task id: %d", g_mqtt_task_id);
+    setupAwsMqtt();
+    Paytm_TRACE_Str_To_USB("Hello world");
 }

@@ -259,7 +259,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case TEST_MQTT_LOOP_QA:
         // net_connect();
-        Paytm_CreateTask("mqtt", Mqtt_Connect, NULL, 110, 40 * 1024);
+        Paytm_CreateTask("mqtt", Mqtt_ReConnect, NULL, 110, 80 * 1024);
         break;
     case TEST_FS_LOOP_QA:
         Paytm_CreateTask("mqtt", fileHeapLeakDemo, NULL, 110, 30 * 1024);
@@ -275,7 +275,6 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_CLEAR_QUEUE:
         break;
     case WM_DFOTA_HTTP_DEMO:
-        net_connect();
         Paytm_CreateTask("Dfota", dfota_download, NULL, 100, 60 * 1024);
         break;
     case WM_SSL_DEMO:
@@ -283,7 +282,6 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_MBED_DEMO:
         break;
     case WM_OTA_TEST_QA:
-        net_connect();
         Paytm_CreateTask("fota", fota_download, NULL, 100, 60 * 1024);
         break;
     case WM_ASYNC_INIT:
@@ -494,24 +492,35 @@ void MqttDetect(void* p)
     }
 }
 extern void Paytm_Mqtt_checkHandle(void);
+extern void Paytm_Mqtt_MemLeakProcess(void);
 void app_main(void)
 {
     char lib_version[16] = {0};
     char app_verion[32] = {0};
+    char sdk_version[32] = {0};
+
     Paytm_GetLibraryVersion(lib_version, 16);
+
     snprintf(app_verion, sizeof(app_verion), "APP_V1.0.1_%s", lib_version);
+
     // set app version for factory production check 
     Paytm_AppVersionSet(app_verion);
-    sys_initialize();
 
+    // Paytm_GetCoreVersion(sdk_version, 32);
+    sys_initialize(); osiExceptionDumpEnable(false);
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
     Paytm_TRACE("Free rom: %ld", Paytm_GetFreeROM());
+    Paytm_TRACE("SDK Version: %s, APP Version: %s", (char*)sdk_version, (char*)lib_version);
     OpenDemoViaId(WM_PWK_DEMO);
     OpenDemoViaId(WM_GET_SIM_INFO);
-    OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    Paytm_Mqtt_MemLeakProcess();
+    // OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    uint16 vol = 0;
     while (1)
     {
         Paytm_delayMilliSeconds(4 * 1000);
+        Paytm_TRACE("Free heap lin loop: %d", Paytm_GetFreeHeapSize());
+        // Paytm_TRACE("[%d] Battery Voltage: %d, Level: %d", Paytm_GetChargingStatus(), Paytm_GetBatteryVoltage(&vol), Paytm_GetBatteryLevel());
     }
 
     return;
