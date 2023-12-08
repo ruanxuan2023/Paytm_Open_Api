@@ -20,6 +20,12 @@ int64 Paytm_GetTotalROM(void);
  * @return {*}
  */
 int32 Paytm_GetFreeROM(void);
+
+/**
+ * @description: Return free size of externel flash, uints is byte
+ * @return {*}
+ */
+int32 Paytm_GetFreeExtFlashSize(void);
 uint16 Paytm_GetTotalNVRAM(void);
 uint16 Paytm_GetFreeNVRAM(void);
 int64 Paytm_GetTotalHeapSize(void);
