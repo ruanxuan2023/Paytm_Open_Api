@@ -237,8 +237,8 @@ cd %folder_dw_tool%
 set para_dw_release_all_name=%para_dw_release_name%_all
 set folder_dw_release_all=.\%para_dw_release_all_name%\
 set file_dw_release_all=.\%para_dw_release_all_name%.zip
-echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
-arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
+echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
+arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
 if not "%errorlevel%"=="0" (
     echo Release package error
     goto fail_exit
