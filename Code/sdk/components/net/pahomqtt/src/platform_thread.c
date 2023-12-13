@@ -17,20 +17,16 @@ platform_thread_t *platform_thread_init(char * name,
                                         unsigned int tick)
 {
     platform_thread_t *thread;
-    OSTaskRef TaskRef = NULL;
+    // OSTaskRef TaskRef = NULL;
 
-    thread = platform_memory_alloc(sizeof(platform_thread_t));
-    if(NULL == thread)
-    {
-        return NULL;
-    }
+    // thread = platform_memory_alloc(sizeof(platform_thread_t));
+    // if(NULL == thread)
+    // {
+    //     return NULL;
+    // }
 
 	/* coverity[leaked_storage] */
-	TaskRef = osiThreadCreate(name, entry, param, priority, stack_size);
-	if(NULL != TaskRef)
-	{
-		thread->thread = TaskRef;
-	}
+	thread = (platform_thread_t *)osiThreadCreate(name, entry, param, priority, stack_size);
 
     return thread;
 }

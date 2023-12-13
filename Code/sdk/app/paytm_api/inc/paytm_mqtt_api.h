@@ -67,6 +67,11 @@ int32 Paytm_MQTT_Open();
 int32 Paytm_MQTT_Connect();
 int32 Paytm_MQTT_Subscribe(ST_MQTT_topic_info_t *mqtt_topic_info_t, message_handler_t global_cb);
 int32 Paytm_MQTT_Publish(Paytm_mqtt_publish_Packet_t*);
+
+/**
+ * @description: Disconect from mqtt server and release mqtt memory
+ * @return {*}
+ */
 int32 Paytm_MQTT_Close();
 
 /**
@@ -91,7 +96,7 @@ int32 Paytm_MQTT_Unsubscribe(Paytm_MQTT_topic_info_t*);
 int32 Paytm_MQTT_Disconnect_Only();
 
 /**
- * @description: Disconect from mqtt server and release mqtt memory
+ * @description: Same with function Paytm_MQTT_Disconnect_Only
  * @return {*}
  */
 int32 Paytm_MQTT_Disconnect();

@@ -50,7 +50,7 @@ void mqtt_list_del(mqtt_list_t *entry)
 
 void mqtt_list_del_init(mqtt_list_t *entry)
 {
-    _mqtt_list_del_entry(entry);
+    //_mqtt_list_del_entry(entry);
     mqtt_list_init(entry);
 }
 

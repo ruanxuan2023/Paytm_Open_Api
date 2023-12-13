@@ -11,14 +11,11 @@
 void *platform_memory_alloc(size_t size)
 {
     char *ptr = NULL;
-    ptr = osiMalloc(size);
-    if (ptr)
-	{
+    ptr = malloc(size);
+    if (ptr) {
         memset(ptr, 0, size);
         return (void *)ptr;
-    }
-	else
-	{
+    } else {
         return NULL;
     }
 }
@@ -26,7 +23,7 @@ void *platform_memory_alloc(size_t size)
 void *platform_memory_calloc(size_t num, size_t size)
 {
 	char *ptr = NULL;
-    ptr = osiMalloc(size * num);
+    ptr = malloc(size * num);
     if (ptr)
 	{
         memset(ptr, 0, size);
@@ -40,6 +37,6 @@ void *platform_memory_calloc(size_t num, size_t size)
 
 void platform_memory_free(void *ptr)
 {
-	osiFree(ptr);
+    if (ptr) {free(ptr);}
 }
 

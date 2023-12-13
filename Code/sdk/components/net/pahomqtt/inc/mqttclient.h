@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-11-30 11:22:55
+ * @LastEditTime: 2023-12-06 11:27:09
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _MQTTCLIENT_H_
@@ -46,9 +46,11 @@ typedef enum client_state {
 	CLIENT_STATE_OPENED = 4                 ///<opened
 }client_state_t;
 
-/**
- * @brief               mqtt connack data structure.
- */
+typedef enum mqtt_query_type {
+	MQTT_CLIENT_STATE = 0,
+    MQTT_QUERY_TYPE_END
+}mqtt_query_type_t;
+
 typedef struct mqtt_connack_data {
     uint8_t rc;                             ///<return code
     uint8_t session_present;                ///<present session flag
@@ -158,6 +160,7 @@ typedef struct mqtt_client {
 	uint8_t 					mqtt_client_index;
 	uint8_t 					mqtt_ssl_enable;
 	uint8_t						mqtt_conn_return_code;
+	void                        *mqtt_user_data;
 } mqtt_client_t;
 
 
@@ -194,152 +197,20 @@ KAWAII_MQTT_CLIENT_SET_STATEMENT(write_buf_size, uint32_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_try_duration, uint32_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_handler, reconnect_handler_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(interceptor_handler, interceptor_handler_t)
-KAWAII_MQTT_CLIENT_SET_STATEMENT(event_handler, event_handler_t)
+KAWAII_MQTT_CLIENT_SET_STATEMENT(user_data, void*)
 
-/**
- * @brief               sleeps mqtt function with milliseconds .
- * @param ms            time to push mqtt function into asleep.
- */
 void mqtt_sleep_ms(uint32_t ms);
-
-/**
- * @brief               initalize the mqtt client .
- * @return              handle of client.
- */
 mqtt_client_t *mqtt_lease(void);
-
-/**
- * @brief               release the mqtt client .
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_release(mqtt_client_t* c);
-
-/**
- * @brief               mqtt client connect to server.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_connect(mqtt_client_t* c);
-
-/**
- * @brief               mqtt client disconnect to server.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
-int mqtt_disconnect(mqtt_client_t* c);
-
-/**
- * @brief               keep mqtt client alive.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
+int mqtt_disconnect(mqtt_client_t* c, bool deinit);
 int mqtt_keep_alive(mqtt_client_t* c);
-
-/**
- * @brief               subscribe topic.
- * @param c             handles of client
- * @param topic_filter  topic name
- * @param qos           Quality of Service
- * @param msg_handler   msg handle
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_subscribe(mqtt_client_t* c, const char* topic_filter, mqtt_qos_t qos, message_handler_t msg_handler);
-
-/**
- * @brief               unsubscribe topic.
- * @param c             handles of client
- * @param topic_filter  topic name
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_unsubscribe(mqtt_client_t* c, const char* topic_filter);
-
-/**
- * @brief               publish msg to topic.
- * @param c             handles of client
- * @param topic_filter  topic name
- * @param msg           msg handle
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_publish(mqtt_client_t* c, const char* topic_filter, mqtt_message_t* msg);
-
-/**
- * @brief               lists all topic subscribed into mqtt_msg_handler_list.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_list_subscribe_topic(mqtt_client_t* c);
-
-/**
- * @brief               set will options.
- * @param c             handles of client
- * @param topic         topic name
- * @param qos           Quality of Service
- * @param retained      messages retained
- * @param message       will message to send
- * @return              
- *          - 0         success
- *          - others    failure
- */
 int mqtt_set_will_options(mqtt_client_t* c, char *topic, mqtt_qos_t qos, uint8_t retained, char *message);
+int mqtt_query(mqtt_client_t* c, mqtt_query_type_t query_config, void* query_value);
+int mqtt_try_do_reconnect(mqtt_client_t* c);
 
-/**
- * @brief               open mqtt with results.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
-int mqtt_open_with_results(mqtt_client_t* c);
-
-/**
- * @brief               mqtt connects with results.
- * @param c             handles of client
- * @return              
- *          - 0         success
- *          - others    failure
- */
-int mqtt_conn_with_results(mqtt_client_t* c);
-
-
-/**
- * @brief               get mqtt client status.
- * @param c             handles of client
- * @return              
- *          - state     mqtt client status, elements in client_state_t
- *          - others    failure
- */
-client_state_t paho_mqtt_get_state(mqtt_client_t* c);
-
-/**
- * @brief               set mqtt client status.
- * @param c             handles of client
- * @param state         mqtt client status
- */
-void paho_mqtt_set_state(mqtt_client_t* c, client_state_t state);
-
-/**
- * @brief               clean mqtt session.
- * @param c             handles of client
- */
-void mqtt_clean_session(mqtt_client_t* c);
-
-uint32_t paho_mqtt_get_msg_addr(uint8_t index);
-int paho_mqtt_try_reconnect(mqtt_client_t* c);
 #endif /* _MQTTCLIENT_H_ */

@@ -115,3 +115,13 @@ int network_set_host_port(network_t* n, char *host, char *port)
     RETURN_ERROR(KAWAII_MQTT_SUCCESS_ERROR);
 }
 
+int network_sockerrno(network_t *n)
+{
+    int sockerrno = 0;
+    sockerrno = platform_net_socket_errno(n->socket);
+    if (sockerrno < 0) {
+        RETURN_ERROR(KAWAII_MQTT_CONNECT_FAILED_ERROR);
+    } else {
+        RETURN_ERROR(platform_net_sockerrno_map(sockerrno));
+    }
+}

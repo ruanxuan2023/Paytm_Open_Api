@@ -7,7 +7,6 @@
  */
 
 #include "platform_net_socket.h"
-#include <string.h>
 
 int platform_net_socket_connect(const char *host, const char *port, int proto)
 {
@@ -126,7 +125,18 @@ int platform_net_socket_setsockopt(int fd, int level, int optname, const void *o
     return setsockopt(fd, level, optname, optval, optlen);
 }
 
-int platform_net_socket_shutdown(int fd)
+int platform_net_socket_errno(int fd)
 {
-    return shutdown(fd, SHUT_RDWR);
+    return lwip_getsockerrno(fd);
+}
+int platform_net_sockerrno_map(int errno)
+{
+    switch(errno)
+    {
+        case 0:             return KAWAII_MQTT_SUCCESS_ERROR;
+        case ECONNRESET:
+        case ECONNABORTED:
+        case ENOTCONN:      return KAWAII_MQTT_CONNECT_FAILED_ERROR;
+        default:            return KAWAII_MQTT_SUCCESS_ERROR;
+    }
 }

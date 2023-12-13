@@ -50,6 +50,9 @@ static int nettype_tls_entropy_source(void *data, uint8_t *output, size_t len, s
 
 static int nettype_tls_deinit(network_t *n){
     nettype_tls_params_t *nettype_tls_params = (nettype_tls_params_t *) n->nettype_tls_params;
+    if(nettype_tls_params == NULL){
+        return 0;
+    }
     mbedtls_net_free(&(nettype_tls_params->socket_fd));
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt_free(&(nettype_tls_params->client_cert));
@@ -62,7 +65,9 @@ static int nettype_tls_deinit(network_t *n){
     mbedtls_entropy_free(&(nettype_tls_params->entropy));
 
     platform_memory_free(nettype_tls_params);
+    n->nettype_tls_params = NULL;
     KAWAII_MQTT_LOG_E("##### nettype_tls_disconnect done");
+    return 0;
 }
 
 
@@ -212,6 +217,9 @@ void nettype_tls_disconnect(network_t* n)
         return;
     
     nettype_tls_params_t *nettype_tls_params = (nettype_tls_params_t *) n->nettype_tls_params;
+    if(nettype_tls_params == NULL){
+        return;
+    }
 
     do {
         rc = mbedtls_ssl_close_notify(&(nettype_tls_params->ssl));
@@ -273,7 +281,8 @@ int nettype_tls_read(network_t *n, unsigned char *buf, int len, int timeout)
         } 
     } while((!platform_timer_is_expired(&timer)) && (read_len < len));
 
-    return read_len;
+    return((read_len > 0) ? read_len : rc);
 }
+
 
 #endif /* KAWAII_MQTT_NETWORK_TYPE_TLS */

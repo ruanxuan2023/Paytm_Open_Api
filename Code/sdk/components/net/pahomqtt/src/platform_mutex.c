@@ -9,10 +9,15 @@
 #include "platform_timer.h"
 #include "osi_api.h"
 
-static int sys_sem_new(osiSemaphore_t *sem, uint8_t count)
+
+
+int platform_mutex_init(platform_mutex_t* m)
 {
-	sem = osiSemaphoreCreate(1, count);
-    if (NULL == sem)
+    if(m == NULL){
+        return -1;
+    }
+    m->mutex = osiMutexCreate();
+    if (NULL == m->mutex)
 	{
         return 0;
     }
@@ -22,63 +27,31 @@ static int sys_sem_new(osiSemaphore_t *sem, uint8_t count)
     }
 }
 
-static int sys_sem_free(osiSemaphore_t *sem)
-{
-	osiSemaphoreDelete(sem);
-	sem = MQTT_RTOS_SEM_NULL;
-
-    return 0;
-}
-
-static int sys_sem_signal(osiSemaphore_t *sem)
-{
-	osiSemaphoreRelease(sem);
-
-	return 0;
-}
-
-static int sys_sem_wait(osiSemaphore_t *sem, uint32_t timeout)
-{
-    bool status = true;
-    int count;
-
-    if (timeout == 0)
-	{
-        osiSemaphoreAcquire(sem);
-    }
-	else
-	{
-        count =  (timeout + (MQTT_RTOS_MS_ONE_TICK - 1)) / MQTT_RTOS_MS_ONE_TICK;
-        status = osiSemaphoreTryAcquire(sem, count*5);
-    }
-
-    if (true == status)
-	{
-        return 0;
-    }
-	else
-	{
-		return -1;
-	}
-}
-
-
-int platform_mutex_init(platform_mutex_t* m)
-{
-    return sys_sem_new(m->mutex, 1);
-}
-
 int platform_mutex_lock(platform_mutex_t* m)
 {
-    return sys_sem_wait(m->mutex, 0);
+    if(m == NULL){
+        return -1;
+    }
+
+    osiMutexLock(m->mutex);
+    return 0;
 }
 
 int platform_mutex_unlock(platform_mutex_t* m)
 {
-    return sys_sem_signal(m->mutex);
+    if(m == NULL){
+        return -1;
+    }
+
+    osiMutexUnlock(m->mutex);
+    return 0;
 }
 
 int platform_mutex_destroy(platform_mutex_t* m)
 {
-    return sys_sem_free(m->mutex);
+    if(m == NULL){
+        return -1;
+    }
+    osiMutexDelete(m->mutex);
+    return 0;
 }

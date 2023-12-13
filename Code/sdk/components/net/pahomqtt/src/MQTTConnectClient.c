@@ -18,7 +18,6 @@
 #include "StackTrace.h"
 
 #include <string.h>
-#include "mqtt_log.h"
 
 /**
   * Determines the length of the MQTT connect packet that would be produced using the supplied connect options.
@@ -64,24 +63,20 @@ int MQTTSerialize_connect(unsigned char* buf, int buflen, MQTTPacket_connectData
 	int len = 0;
 	int rc = -1;
 
-	KAWAII_MQTT_LOG_D("buflen = %d", buflen);
 	FUNC_ENTRY;
 	if (MQTTPacket_len(len = MQTTSerialize_connectLength(options)) > buflen)
 	{
 		rc = MQTTPACKET_BUFFER_TOO_SHORT;
 		goto exit;
 	}
-	KAWAII_MQTT_LOG_D("len = %d", len);
 
 	/*Fixed Header*/
 	header.byte = 0;
 	header.bits.type = CONNECT;
 	writeChar(&ptr, header.byte); /* write header */
-	KAWAII_MQTT_LOG_D("header = 0x%x", ptr[0]);
 
 	ptr += MQTTPacket_encode(ptr, len); /* write remaining length */
 
-	KAWAII_MQTT_LOG_D("MQTT Version = %d", options->MQTTVersion);
 	/*Variable Header*/
 	if (options->MQTTVersion == 4)
 	{
@@ -109,25 +104,19 @@ int MQTTSerialize_connect(unsigned char* buf, int buflen, MQTTPacket_connectData
 	if (options->password.cstring || options->password.lenstring.data)
 		flags.bits.password = 1;
 
-	KAWAII_MQTT_LOG_D("flags = 0x%x, 0x%x", flags.all, flags.bits);
 	writeChar(&ptr, flags.all);
 	writeInt(&ptr, options->keepAliveInterval);
 	writeMQTTString(&ptr, options->clientID);
-	KAWAII_MQTT_LOG_D("client ID[%d]: %s", options->clientID.lenstring.len, options->clientID.lenstring.data);
 	if (options->willFlag)
 	{
 		writeMQTTString(&ptr, options->will.topicName);
 		writeMQTTString(&ptr, options->will.message);
-		KAWAII_MQTT_LOG_D("will topicName[%d]: %s", options->will.topicName.lenstring.len, options->will.topicName.lenstring.data);
-		KAWAII_MQTT_LOG_D("will message[%d]: %s", options->will.message.lenstring.len, options->will.message.lenstring.data);
 	}
 	if (flags.bits.username)
 		writeMQTTString(&ptr, options->username);
-	KAWAII_MQTT_LOG_D("will username[%d]: %s", options->username.lenstring.len, options->username.lenstring.data);
 
 	if (flags.bits.password)
 		writeMQTTString(&ptr, options->password);
-	KAWAII_MQTT_LOG_D("will password[%d]: %s", options->password.lenstring.len, options->password.lenstring.data);
 
 	rc = ptr - buf;
 

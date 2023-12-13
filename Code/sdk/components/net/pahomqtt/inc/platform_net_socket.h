@@ -31,5 +31,6 @@ int platform_net_socket_close(int fd);
 int platform_net_socket_set_block(int fd);
 int platform_net_socket_set_nonblock(int fd);
 int platform_net_socket_setsockopt(int fd, int level, int optname, const void *optval, socklen_t optlen);
-int platform_net_socket_shutdown(int fd);
+int platform_net_socket_errno(int fd);
+int platform_net_sockerrno_map(int errno);
 #endif /* _PLATFORM_NET_SOCKET_H_ */

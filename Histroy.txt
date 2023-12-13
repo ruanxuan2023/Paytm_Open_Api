@@ -39,5 +39,14 @@
 2023.12.12	Lib_V1.84
 * When calling Paytm_TRACE, send the log buffer to usb also
 2023.12.12  Lib_V1.86
-* update bin enable secboot
+* Update bin enable secboot
 * [Require DFOTA]
+2023.12.13  Lib_V1.87
+* Update NOR Flash support list
+* Fix the bug that Paytm_GetSignalStrength causes stub in some scenario
+* Fix the bug that MQTT module happens memory leak and causes crash
+* Adjust the usage of two functions:
+	Paytm_MQTT_Disconnect: Change it to be same with Paytm_MQTT_Disconnect_Only, only disconnect from server but not deinit MQTT, and call Paytm_Mqttt_Try_Reconnect to re-connect
+	Paytm_MQTT_Close: Disconnect from MQTT server and release MQTT memory
+* [Require DFOTA]
+	

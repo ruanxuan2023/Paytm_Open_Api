@@ -30,11 +30,7 @@ int nettype_tcp_connect(network_t* n)
 void nettype_tcp_disconnect(network_t* n)
 {
 	if(NULL != n)
-	{
-		platform_net_socket_shutdown(n->socket);
-	}
 
-    if (NULL != n)
         platform_net_socket_close(n->socket);
     n->socket = -1;
 }
