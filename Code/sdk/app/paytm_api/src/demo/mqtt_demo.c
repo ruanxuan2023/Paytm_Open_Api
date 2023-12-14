@@ -7,6 +7,18 @@
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
 #include "mqtt_error.h"
+
+static int task_id = 0;
+
+#define PAYTM_MQTT_INIT 0
+#define PAYTM_MQTT_OPEN 1
+#define PAYTM_MQTT_CONNECT 2
+#define PAYTM_MQTT_SUBSCRIBE 3
+#define PAYTM_MQTT_PUBLISH 4
+#define PAYTM_MQTT_DISCONNECT 5
+#define PAYTM_MQTT_CLOSE 6
+#define PAYTM_MQTT_RECONNECT 7
+
 static void topic_handler(void* client, message_data_t* msg)
 {
 	char *rsp = NULL;
@@ -46,32 +58,28 @@ static void topic_handler(void* client, message_data_t* msg)
 #define DEMO_PUB_DATA			"The message demo/001"
 #define DEMO_PUB_DATA_2			"The message demo/002"
 
-static void reconnect_handler(void* client, void* reconnect_date)
-{
-    Paytm_TRACE("Mqtt disconnected event comes, call reconnected func ...");
-    Paytm_Mqttt_Try_Reconnect();
-    /* no need to call reconnected func, when this cb exit, it will try to reconnected automatically */
-}
-
 static void event_handler(void* client, int event_id)
 {
-    Paytm_TRACE(">>>>Event Handler: %d", event_id);
+    Paytm_TRACE("Event Handler: ");
     switch (event_id)
     {
     case KAWAII_MQTT_NOT_CONNECT_ERROR:
-        Paytm_TRACE("Mqtt connect error");
+        Paytm_TRACE("# Mqtt connect error");
+        Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_RECONNECT, 58, 58);
         break;
     case KAWAII_MQTT_CONNECT_FAILED_ERROR:
-        Paytm_TRACE("Mqtt connect fail");
+        Paytm_TRACE("# Mqtt connect fail");
         break;
     case CLIENT_STATE_CONNECTED:
-        Paytm_TRACE("Mqtt connected");
+        Paytm_TRACE("# Mqtt connected");
         break;
     case CLIENT_STATE_DISCONNECTED:
-        Paytm_TRACE("Mqtt disconnected");
+        Paytm_TRACE("# Mqtt disconnected");
+        // Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_RECONNECT, 58, 58);
+        Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_DISCONNECT, 58, 58);
         break;
     case CLIENT_STATE_CLEAN_SESSION:
-        Paytm_TRACE("Mqtt clean session");
+        Paytm_TRACE("# Mqtt clean session");
         break;
     default:
         break;
@@ -83,7 +91,7 @@ extern const char  mqtt_client_cert[1173];
 extern const char  mqtt_server_cert[4789];
 extern const char  ali_ca_cert[];
 extern char* appIMEIGet(void);
-void testMqtt(void* p)
+void CisMqtt(void* p)
 {
     int rc = 0;
     char * host = DEMO_MQTT_HOST;
@@ -114,7 +122,6 @@ void testMqtt(void* p)
         return;
     }
 
-    // Paytm_Mqtt_Reconnected_Register(reconnect_handler);
     Paytm_Mqtt_EventHandler_Register(event_handler);
     rc = Paytm_MQTT_Open();
     if(rc != 0)
@@ -157,24 +164,50 @@ void testMqtt(void* p)
     {
         Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
     }
+    Paytm_TRACE("Mqtt start success");
+}
 
-    publish.messageId = 59;
-    publish.topic = DEMO_PUB_TOPIC_2;
-    publish.message = DEMO_PUB_DATA_2;
-    publish.message_length = strlen(publish.message);
-    publish.qos = Paytm_QOS0_AT_MOST_ONECE;
-    publish.retain = false;
+void* cis_mqtt_task(void* p)
+{
+    ST_MSG msg = {0};
 
-    rc = Paytm_MQTT_Publish(&publish);
-    if(rc != 0)
-    {
-        Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
-    }
-
-    Paytm_TRACE(">>>>Mqtt start success!");
     while (1)
     {
         /* code */
-        osiThreadSleep(1000);
+        Paytm_GetMessage(task_id, &msg);
+        Paytm_TRACE("Msg comes: %d", msg.message);
+        switch (msg.message)
+        {
+        case PAYTM_MQTT_INIT:
+            CisMqtt(NULL);
+            break;
+        case PAYTM_MQTT_DISCONNECT:
+            Paytm_MQTT_Close();
+            Paytm_delayMilliSeconds(10 * 1000);
+            Paytm_SendMessage(task_id, PAYTM_MQTT_INIT, 0, 0);
+            break;
+        case PAYTM_MQTT_RECONNECT:
+            Paytm_Mqttt_Try_Reconnect();
+            break;
+        case PAYTM_MQTT_CLOSE:
+            break;
+        default:
+            break;
+        }
+
+        Paytm_delayMilliSeconds(100);
     }
+    
+}
+
+void CisMqttDemo(void)
+{
+    task_id = Paytm_CreateTask("cis_mqtt_task", cis_mqtt_task, NULL, 110, 40 * 1024);
+
+    Paytm_delayMilliSeconds(400);
+    Paytm_TRACE("Cis Mqtt Task id: %d", task_id);
+    Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_INIT, 58, 58);
+
+    Paytm_delayMilliSeconds(10000);
+    Paytm_MQTT_Disconnect();
 }

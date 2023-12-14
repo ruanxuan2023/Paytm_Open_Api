@@ -282,3 +282,59 @@ void fileCreateFolderDemo(void)
         Paytm_TRACE("Create all subdirectories success");
     }
 }
+
+void maxFileNumInFolder(void)
+{
+    int cnt = 0, rc = 0;
+    char *folder = "folder";
+    char file_id[16] = {0};
+    char fix_data[20] = {0xfa};
+
+    Paytm_fs_format(LOC_EXTER_MEM);
+
+    if(Paytm_dir_exists(LOC_EXTER_MEM, folder) != 0){
+        rc = Paytm_dir_create(LOC_EXTER_MEM, folder);
+        if(rc != 0){
+            Paytm_TRACE("Create folder failed");
+        }
+    }else{
+        Paytm_TRACE("Folder already exists");
+    }
+
+    while (1 && cnt < 1000)
+    {
+        memset(file_id, 0x00, 16);
+        snprintf(file_id, 16, "folder/%d.txt", cnt);
+        if(Paytm_fexists(LOC_EXTER_MEM, file_id) == 0){
+            Paytm_delayMilliSeconds(50);
+            continue;
+        }
+
+        rc = Paytm_fcreate(LOC_EXTER_MEM, file_id , "wb+");
+        if(rc <= 0){
+            Paytm_TRACE("%s - %d.txt create failed %d",file_id, cnt, rc);
+            break;
+        }
+
+        Paytm_fwrite(fix_data, 1, 20, rc);
+        Paytm_fclose(rc);
+        Paytm_TRACE("folder/%d.txt create succeed, fd = %d, size = %d", cnt, rc, Paytm_filesize(LOC_EXTER_MEM, file_id));
+        Paytm_delayMilliSeconds(10);
+        cnt++;
+    }
+    
+    // list directory
+    Paytm_list_item_t item_list = {0};
+    memset(&item_list, 0, sizeof(item_list));
+    int count = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, folder, 500);
+
+    Paytm_TRACE("read %d item from external directory %s", count, folder);
+    node_t *file_node = item_list.files;
+    while (file_node)
+    {
+        Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
+        file_node = file_node->next;
+        Paytm_delayMilliSeconds(5);
+    }
+    Paytm_list_item_free(&item_list);
+}

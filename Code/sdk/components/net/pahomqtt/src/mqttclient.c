@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-12-06 11:26:41
+ * @LastEditTime: 2023-12-14 09:34:14
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -172,7 +172,7 @@ static int mqtt_read_packet(mqtt_client_t* c, int* packet_type, platform_timer_t
 
     /* 1. read the header byte.  This has the packet type in it */
     rc = network_read(c->mqtt_network, c->mqtt_read_buf, len, platform_timer_remain(timer));
-    if (rc < 0) {
+    if (rc < 0 && (rc != MBEDTLS_ERR_SSL_WANT_WRITE) && (rc != MBEDTLS_ERR_SSL_WANT_READ) && (rc != MBEDTLS_ERR_SSL_TIMEOUT)) {
         RETURN_ERROR(network_sockerrno(c->mqtt_network));
     } else if (rc != len) {
         RETURN_ERROR(KAWAII_MQTT_NOTHING_TO_READ_ERROR);

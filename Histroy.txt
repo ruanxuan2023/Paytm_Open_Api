@@ -49,4 +49,6 @@
 	Paytm_MQTT_Disconnect: Change it to be same with Paytm_MQTT_Disconnect_Only, only disconnect from server but not deinit MQTT, and call Paytm_Mqttt_Try_Reconnect to re-connect
 	Paytm_MQTT_Close: Disconnect from MQTT server and release MQTT memory
 * [Require DFOTA]
+2023.12.14  Lib_V1.88
+* When nettype_tls_read returns MBEDTLS_ERR_SSL_WANT_WRITE/MBEDTLS_ERR_SSL_WANT_READ/MBEDTLS_ERR_SSL_TIMEOUT, no need to deinit mqtt
 	
