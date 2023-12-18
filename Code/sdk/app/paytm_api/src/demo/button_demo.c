@@ -82,12 +82,24 @@ void buttoncb0(void * p)
     switch (msg->id)
     {
     case BUTTON_PLUS:
-        Paytm_TRACE("Volume up");
-        Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", 9);
+        vol++;
+        if(vol >= PAYTM_VOLUME_MAX){
+            vol = PAYTM_VOLUME_MAX;
+            Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", vol);
+        }else{
+            Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", vol);
+        }
+        Paytm_TRACE("Volume up %d", vol);
         break;
     case BUTTON_MINUS:
-        Paytm_TRACE("Volume down");
-        Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", 9);
+        vol--;
+        if(vol <= PAYTM_VOLUME_MIN){
+            vol = PAYTM_VOLUME_MIN;
+            Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", vol);
+        }else{
+            Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", vol);
+        }
+        Paytm_TRACE("Volume down %d", vol);
         break;
     case BUTTON_FUNCTION:
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
@@ -97,15 +109,19 @@ void buttoncb0(void * p)
         }else{
             Paytm_TRACE("Fun key long press");
         }
-        Paytm_PlayFile(LOC_INTER_MEM, "and.amr", 9);
+        Paytm_PlayFile(LOC_INTER_MEM, "and.amr", vol);
         break;
+    case BUTTON_POWER:
+        if(msg->state == STATE_BUTTON_LONG_PRESS){
+            osiSysPoweroff();
+        }
     default:
         break;
     }
 }
 void ButtonTest(void)
 {
-    button_action_callback_register(buttoncb);
+    button_action_callback_register(buttoncb0);
 
     Paytm_Button_events(true);
 }

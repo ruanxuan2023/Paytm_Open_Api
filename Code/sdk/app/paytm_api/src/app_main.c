@@ -223,6 +223,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         break;
     case WM_GET_SIM_INFO:
         testSim();
+        // testNetWorkReconected();
         break;
     case WM_GET_PDP_INFO:
         readPDPInfo();
@@ -511,7 +512,8 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
-    // OpenDemoViaId(WM_BUTTON_DEMO);
+    Paytm_LED_SetColor(LED_BLUE, 0);
+    OpenDemoViaId(WM_BUTTON_DEMO);
     // if(Paytm_fexists(LOC_EXTER_MEM, "test/20.mp3") != 0 || Paytm_fexists(LOC_EXTER_MEM, "test/21.mp3") != 0){
     //     Paytm_fs_format(LOC_EXTER_MEM);
     //     Paytm_TRACE("Can not find mp3 file in ext flash");
@@ -520,7 +522,8 @@ void app_main(void)
     //     OpenDemoViaId(WM_BUTTON_DEMO);
     //     Paytm_TRACE("We find mp3 file in ext flash");
     // }
-    OpenDemoViaId(WM_BT_AUDIO);
+    OpenDemoViaId(WM_GET_SIM_INFO);
+    // Paytm_Mqtt_MemLeakProcess();
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);

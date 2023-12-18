@@ -57,3 +57,8 @@
 * Add BT audio module
 * Change the volume range from 8 to 11
 * [Require DFOTA]
+2023.12.18  Lib_V1.90
+* Fix the bug that blue led off during play audio
+* Adjust volume table
+* Fix the bug that when SIM card ejected, sometimes crash happens
+* [Require DFOTA]

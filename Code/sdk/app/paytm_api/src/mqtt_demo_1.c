@@ -294,8 +294,9 @@ void* mqtt_subtask(void* p)
             case PAYTM_MQTT_SUBSCRIBE:
             {
                 handleSubsciption();
+
+                Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_PUBLISH, 0, 0);
             }
-            osiThreadSleep(1000);
             // Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_DISCONNECT, 0, 0);
             break;
             case PAYTM_MQTT_PUBLISH:
