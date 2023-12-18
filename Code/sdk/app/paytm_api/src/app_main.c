@@ -112,6 +112,7 @@ typedef enum
     WM_POWER_ON_OFF_FLOW       = 78,
 	WM_RTC_TIME_SET            = 79,
     WM_SET_APN                 = 80,
+    WM_BT_AUDIO                = 81,
 
 	WM_DEVICE_CRASH_TEST_A     = 90,
 	WM_DEVICE_CRASH_TEST_B     = 91,
@@ -159,6 +160,7 @@ extern void runTimer(void);
 extern void fileCreateFolderDemo(void);
 extern void Paytm_Mqtt_MemLeakProcess(void);
 extern void CisMqttDemo(void);
+extern void bt_audio_demo(void);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -439,6 +441,9 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_SET_APN:
         setApn();
         break;
+    case WM_BT_AUDIO:
+        bt_audio_demo();
+        break;
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -502,15 +507,20 @@ void app_main(void)
     Paytm_GetLibraryVersion(lib_version, 16);
     snprintf(app_verion, sizeof(app_verion), "APP_V1.0.1_%s", lib_version);
     // set app version for factory production check 
-    Paytm_AppVersionSet(app_verion);
+    Paytm_AppVersionSet(app_verion);osiExceptionDumpEnable(false);
     sys_initialize();
-
+    // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
-    Paytm_TRACE("Free rom: %ld", Paytm_GetFreeROM());
-    OpenDemoViaId(WM_PWK_DEMO);
-    OpenDemoViaId(WM_GET_SIM_INFO);
-    // OpenDemoViaId(TEST_MQTT_LOOP_QA);
-    Paytm_Mqtt_MemLeakProcess();
+    // OpenDemoViaId(WM_BUTTON_DEMO);
+    // if(Paytm_fexists(LOC_EXTER_MEM, "test/20.mp3") != 0 || Paytm_fexists(LOC_EXTER_MEM, "test/21.mp3") != 0){
+    //     Paytm_fs_format(LOC_EXTER_MEM);
+    //     Paytm_TRACE("Can not find mp3 file in ext flash");
+    // }else{
+    //     Paytm_PlayFile(LOC_EXTER_MEM, "test/welc.amr", 8);
+    //     OpenDemoViaId(WM_BUTTON_DEMO);
+    //     Paytm_TRACE("We find mp3 file in ext flash");
+    // }
+    OpenDemoViaId(WM_BT_AUDIO);
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);

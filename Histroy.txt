@@ -51,4 +51,9 @@
 * [Require DFOTA]
 2023.12.14  Lib_V1.88
 * When nettype_tls_read returns MBEDTLS_ERR_SSL_WANT_WRITE/MBEDTLS_ERR_SSL_WANT_READ/MBEDTLS_ERR_SSL_TIMEOUT, no need to deinit mqtt
-	
+2023.12.18  Lib_V1.89
+* Update kernel for IMEI write error
+* Change the pin IO of blue led to 14
+* Add BT audio module
+* Change the volume range from 8 to 11
+* [Require DFOTA]
