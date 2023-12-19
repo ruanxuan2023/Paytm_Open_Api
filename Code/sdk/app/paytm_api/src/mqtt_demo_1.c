@@ -334,7 +334,7 @@ void* mqtt_subtask(void* p)
             case PAYTM_MQTT_CLOSE:
             {
                 Paytm_MQTT_Close();
-                SendMessageToMqttFlow(0);
+                // SendMessageToMqttFlow(0);
                 break;
             }
             default:

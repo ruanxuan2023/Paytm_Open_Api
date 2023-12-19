@@ -512,7 +512,7 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
-    Paytm_LED_SetColor(LED_BLUE, 0);
+    Paytm_LED_SetColor(LED_GREEN, 1);
     OpenDemoViaId(WM_BUTTON_DEMO);
     // if(Paytm_fexists(LOC_EXTER_MEM, "test/20.mp3") != 0 || Paytm_fexists(LOC_EXTER_MEM, "test/21.mp3") != 0){
     //     Paytm_fs_format(LOC_EXTER_MEM);

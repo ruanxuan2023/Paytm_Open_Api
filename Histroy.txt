@@ -62,3 +62,5 @@
 * Adjust volume table
 * Fix the bug that when SIM card ejected, sometimes crash happens
 * [Require DFOTA]
+2023.12.19  Lib_V1.91
+* Fix the bug that SIM card event did not give

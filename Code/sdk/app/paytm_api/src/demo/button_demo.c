@@ -87,7 +87,7 @@ void buttoncb0(void * p)
             vol = PAYTM_VOLUME_MAX;
             Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", vol);
         }else{
-            Paytm_PlayFile(LOC_INTER_MEM, "maxvol.amr", vol);
+            Paytm_PlayFile(LOC_INTER_MEM, "done.amr", vol);
         }
         Paytm_TRACE("Volume up %d", vol);
         break;
@@ -97,7 +97,7 @@ void buttoncb0(void * p)
             vol = PAYTM_VOLUME_MIN;
             Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", vol);
         }else{
-            Paytm_PlayFile(LOC_INTER_MEM, "minvol.amr", vol);
+            Paytm_PlayFile(LOC_INTER_MEM, "done.amr", vol);
         }
         Paytm_TRACE("Volume down %d", vol);
         break;
