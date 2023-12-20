@@ -32,7 +32,9 @@
 #define PAYTM_CHARGE_LED_3_FUN  (MFP_AF0)
 #define PAYTM_BACKLIT_LED_FUN  (MFP_AF0)
 
-#define PAYTM_LED_BLINK_MS      (250)
+#define PAYTM_LED_BLINK_MS         (250)
+#define PAYTM_LED_BLINK_MS_1      (200)
+#define PAYTM_LED_BLINK_MS_2      (500)
 
 typedef enum {
     LED_OFF = 0x00,
@@ -61,8 +63,9 @@ void Paytm_LED_Init(void);
  * @description: 
  * @param {uint8_t} id  0/1/2
  * @param {bool} open   open the led or close
+ * @param {blink_mode}  0: not blink, 1: 200ms, 2: 500ms
  */
-void Paytm_Set_Battery_Led(uint8_t id, bool open, bool blink);
+void Paytm_Set_Battery_Led(uint8_t id, bool open, uint8_t blink_mode);
 /**
  * @description: open or close the background light
  * @param {bool} open

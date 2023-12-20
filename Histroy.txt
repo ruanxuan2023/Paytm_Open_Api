@@ -73,3 +73,6 @@
 * Update kernel to fix DFOTA bug
 * Update tool fota_gen.exe, make sure you use this tool to generate DFOTA.bin
 * [Require DFOTA]
+2023.12.20  Lib_V1.95
+* Change battery led blink to 200/500ms
+* Increase the log buffer to 1024
