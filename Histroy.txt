@@ -69,3 +69,7 @@
 * Token read add crc check
 2023.12.20  Lib_V1.93
 * Add callback to return charging event
+2023.12.20  Lib_V1.94
+* Update kernel to fix DFOTA bug
+* Update tool fota_gen.exe, make sure you use this tool to generate DFOTA.bin
+* [Require DFOTA]
