@@ -38,6 +38,14 @@ int32 Paytm_GetFreeHeapSize(void);
 int64 Paytm_GetPhysicalRAM(void);
 int64 Paytm_GetTotalRAM(void);
 
+/**
+ * @description: token data example
+ *  {   
+ *     "token":"xxxxxxxxxxxxxxx",
+ *     "crc": xxx
+ *  }
+ * @return {*}
+ */
 int32 Paytm_readToken32Byte(char *token, uint32 token_len);
 int32 Paytm_readAuthID(char *authID, uint32 authID_len);
 int32 Paytm_setAuthID(char *authID, uint32 authID_len);
@@ -48,6 +56,12 @@ bool Paytm_SetFOTAFileReady(const char *fw_path);
 bool Paytm_CheckFOTAFileValid(const char *fw_path);
 bool Paytm_SetDFOTAFileReady(const char *path);
 
+/**
+ * @description: Set the device will reboot or not when crash happens
+ * @param {bool} enable true: when crash happens device enter dump mode and stub; false: device reboot immediately
+ * @return {*}
+ */
+void Paytm_Exception_Dump_Enable(bool enable);
 
 typedef enum {
     STATE_POWERKEY_PRESSED = 0,

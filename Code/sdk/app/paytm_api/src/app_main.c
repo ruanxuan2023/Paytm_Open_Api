@@ -279,7 +279,6 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_CLEAR_QUEUE:
         break;
     case WM_DFOTA_HTTP_DEMO:
-        net_connect();
         Paytm_CreateTask("Dfota", dfota_download, NULL, 100, 60 * 1024);
         break;
     case WM_SSL_DEMO:
@@ -338,13 +337,14 @@ void OpenDemoViaId(TASK_SELECTION id)
     {
         char token[32] = {0};
         char auth_id[120 + 1] = {0};
+        int rc = 0;
         // char auth_id_set[120] = {0};
         char *authid = "qa3-iot-int/client/74cbc5e6-355d-4334-b4d1-7702fcbf124b_WAM4GS_864180051437643";
 
         Paytm_readAuthID(auth_id, 120);
-        Paytm_readToken32Byte(token, 32);
+        rc = Paytm_readToken32Byte(token, 32);
         Paytm_TRACE("auth_id: %s", auth_id);
-        Paytm_TRACE("token: %s", token);
+        Paytm_TRACE("Read token rc = %d, and the token is %s", rc, token);
 
         // memset(auth_id_set, 0x41, 120);
         Paytm_setAuthID(authid, strlen(authid));
@@ -508,11 +508,12 @@ void app_main(void)
     Paytm_GetLibraryVersion(lib_version, 16);
     snprintf(app_verion, sizeof(app_verion), "APP_V1.0.1_%s", lib_version);
     // set app version for factory production check 
-    Paytm_AppVersionSet(app_verion);osiExceptionDumpEnable(false);
+    Paytm_AppVersionSet(app_verion);Paytm_Exception_Dump_Enable(false);
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
-    Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
+    Paytm_TRACE("*********************** LinkGo 08 %s  *************************\n", (char*)lib_version);
     Paytm_LED_SetColor(LED_GREEN, 1);
+    Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);
     // if(Paytm_fexists(LOC_EXTER_MEM, "test/20.mp3") != 0 || Paytm_fexists(LOC_EXTER_MEM, "test/21.mp3") != 0){
     //     Paytm_fs_format(LOC_EXTER_MEM);
@@ -522,7 +523,9 @@ void app_main(void)
     //     OpenDemoViaId(WM_BUTTON_DEMO);
     //     Paytm_TRACE("We find mp3 file in ext flash");
     // }
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(WM_SAVE_READ_AUTHID);
+    // OpenDemoViaId(WM_GET_SIM_INFO);
+    // OpenDemoViaId(WM_DFOTA_HTTP_DEMO);
     // Paytm_Mqtt_MemLeakProcess();
     while (1)
     {

@@ -64,3 +64,6 @@
 * [Require DFOTA]
 2023.12.19  Lib_V1.91
 * Fix the bug that SIM card event did not give
+2023.12.20  Lib_V1.92
+* Add function Paytm_Exception_Dump_Enable to enable/disable exception dump
+* Token read add crc check

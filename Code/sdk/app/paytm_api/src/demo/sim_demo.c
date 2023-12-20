@@ -105,13 +105,13 @@ static void msgTask0(void* p)
         if(Paytm_GetMessage(task_id, &msg) == 0)
         {
             if(msg.message == 0){
-                Paytm_TRACE("Try to disconnect");
-                Paytm_GPRS_Disconnect();
+                // Paytm_TRACE("Try to disconnect");
+                // Paytm_GPRS_Disconnect();
                 Paytm_delayMilliSeconds(5 * 1000);
             }else if(msg.message == 1)
             {
-                Paytm_TRACE("Try to connect");
-                Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
+                // Paytm_TRACE("Try to connect");
+                // Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
             }
         }
 

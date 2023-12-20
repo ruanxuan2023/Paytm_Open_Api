@@ -48,23 +48,18 @@ void buttoncb(void * p)
         Paytm_PlayFile(LOC_INTER_MEM, "and.amr", vol);
         break;
     case BUTTON_FUNCTION:
-        Paytm_StopPlay();
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
-            rc = Paytm_PlayFile(LOC_EXTER_MEM, "test/21.mp3", vol);
             Paytm_TRACE("Fun key single press, play rc = %d", rc);
         }else if(msg->state == STATE_BUTTON_DOUBLE_CLICK){
-            rc = Paytm_PlayFile(LOC_EXTER_MEM, "test/21.mp3", vol);
             Paytm_TRACE("Fun key double press, play rc = %d", rc);
         }else{
             Paytm_TRACE("Fun key long press");
         }
-        // Paytm_PlayFile(LOC_EXTER_MEM, "test/292KB.mp3",vol );
-        Paytm_TRACE("Audio test vol %d", vol);
         break;
     case BUTTON_POWER:
         if(msg->state == STATE_BUTTON_LONG_PRESS){
             Paytm_PlayFile(LOC_EXTER_MEM, "resources/sounds/en/DI_powOff.amr",vol);
-            osiSysPoweroff();
+            osiSysReset();
         }
         // Paytm_PlayFile(LOC_EXTER_MEM, "test/BatCrtkl.wav",vol );
         // Paytm_StopPlay();

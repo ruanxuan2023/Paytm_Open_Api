@@ -598,8 +598,8 @@ void dfota_download(void* p)
 {
     int rc = 0;
 
-    char *fota_url_to_dirty = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/DFOTA_2.bin";
-    char *fota_url_to_clean = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/DFOTA_2.bin";
+    char *fota_url_to_dirty = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/DFOTA_3.bin";
+    char *fota_url_to_clean = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/DFOTA_3.bin";
     char *fota_url = NULL;
 
     http_request_t http = {0};
