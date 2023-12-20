@@ -25,10 +25,11 @@ uint8 Paytm_GetChargingStatus(void);
 
 /**
  * @description: Please not call this function in paytm application, we will do this in kernel code
- *                  The default sample_interval_sec is 10s
+ *                  The default sample_interval_sec is 500ms
+ * @param {uint16} gap_num 1 gap = 500ms
  * @return {*}  0-success, 1-already init
  */
-int32 Paytm_Battery_Initialise(uint16 sample_interval_sec);
+int32 Paytm_Battery_Initialise(uint16 gap_num);
 int32 Paytm_BatteryLevelMonitoring(uint8 enable);
 
 //0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING

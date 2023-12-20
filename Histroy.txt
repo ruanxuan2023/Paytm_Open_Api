@@ -67,3 +67,5 @@
 2023.12.20  Lib_V1.92
 * Add function Paytm_Exception_Dump_Enable to enable/disable exception dump
 * Token read add crc check
+2023.12.20  Lib_V1.93
+* Add callback to return charging event

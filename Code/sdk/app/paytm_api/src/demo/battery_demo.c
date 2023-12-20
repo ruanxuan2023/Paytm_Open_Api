@@ -5,9 +5,11 @@
 #include <string.h>
 #include "osi_api.h"
 
-message_callback_t b_cb(void* p)
+void b_cb(void* p)
 {
-    Paytm_TRACE("Cur bat val is %d", *(int*)p);
+    int status =  *(int*)p;
+
+    Paytm_TRACE("Battery %s", status ? "not charging" : "charging");
 }
 
 void batteryDemo(void)
@@ -24,9 +26,9 @@ void batteryDemo(void)
         Paytm_GetBatteryVoltage(&voltage);
         Paytm_delayMilliSeconds(5000);
         if(Paytm_GetChargingStatus()){
-            Paytm_TRACE("The battery is charging! Voltage = %d, Level = %d", voltage, Paytm_GetBatteryLevel());
+            Paytm_TRACE("The battery is charging! ");
         }else{
-            Paytm_TRACE("The battery is not charging! Voltage = %d, Level = %d", voltage, Paytm_GetBatteryLevel());
+            Paytm_TRACE("The battery is not charging!");
         }
     }
 }
