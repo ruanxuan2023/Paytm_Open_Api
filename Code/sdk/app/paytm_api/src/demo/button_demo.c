@@ -124,10 +124,8 @@ void ButtonTest(void)
 void pwkCb(void* p)
 {
     if(*(int*)p == STATE_BUTTON_SINGLE_CLICK){
-        Paytm_TRACE("Pwk single press");
         Paytm_SendMessage_From_ISR(task_id, 1, 55, 129);
     }else if(*(int*)p == STATE_BUTTON_LONG_PRESS){
-        Paytm_TRACE("Pwk long press");
         Paytm_SendMessage_From_ISR(task_id, 2, 47, 266);
     }
 }
@@ -157,5 +155,5 @@ void pwkDemo(void)
     Paytm_Set_PowerKey_LongPress_Time(2000);
     powerkey_action_callback_register(pwkCb);
 
-    task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 1 * 1024);
+    task_id = Paytm_CreateTask("1", msgTask, NULL, 120, 2 * 1024);
 }

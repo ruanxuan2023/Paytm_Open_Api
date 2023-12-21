@@ -515,6 +515,7 @@ void app_main(void)
     Paytm_LED_SetColor(LED_GREEN, 1);
     // Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);
+     pwkDemo();
     // if(Paytm_fexists(LOC_EXTER_MEM, "test/20.mp3") != 0 || Paytm_fexists(LOC_EXTER_MEM, "test/21.mp3") != 0){
     //     Paytm_fs_format(LOC_EXTER_MEM);
     //     Paytm_TRACE("Can not find mp3 file in ext flash");
@@ -526,8 +527,9 @@ void app_main(void)
     // OpenDemoViaId(WM_BATTERY_CHECK);
     // OpenDemoViaId(WM_GET_SIM_INFO);
     // OpenDemoViaId(WM_DFOTA_HTTP_DEMO);
-    ledRun();
+    // ledRun();
     // Paytm_Mqtt_MemLeakProcess();
+    Paytm_AutoSleep_Enable(true);
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);
