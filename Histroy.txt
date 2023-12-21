@@ -76,5 +76,8 @@
 2023.12.20  Lib_V1.95
 * Change battery led blink to 200/500ms
 * Increase the log buffer to 1024
-2023.12.20  Lib_V1.96
+2023.12.21  Lib_V1.96
 * Fix the bug that battery cannot constant glow
+2023.12.21  Lib_V1.97
+* Fix the bug that key event sometimes missing
+* Update the version of cp_dbg.bin
