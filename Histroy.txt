@@ -81,3 +81,7 @@
 2023.12.21  Lib_V1.97
 * Fix the bug that key event sometimes missing
 * Update the version of cp_dbg.bin
+2023.12.22  Lib_V1.98
+* Adjust some file open flag from "rb+" to "rb"
+* Close the CODEC when initialize audio
+* Add PA close logic in AMR play callback

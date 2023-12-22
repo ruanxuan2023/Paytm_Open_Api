@@ -295,7 +295,7 @@ void* mqtt_subtask(void* p)
             {
                 handleSubsciption();
 
-                Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_PUBLISH, 0, 0);
+                // Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_PUBLISH, 0, 0);
             }
             // Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_DISCONNECT, 0, 0);
             break;

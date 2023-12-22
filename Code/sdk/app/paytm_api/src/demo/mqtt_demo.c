@@ -111,7 +111,7 @@ void CisMqtt(void* p)
     mqtt_packet.client_id = client_id;
     mqtt_packet.username = username;
     mqtt_packet.password = password;
-    mqtt_packet.keepalive_sec = 10;
+    mqtt_packet.keepalive_sec = 60;
     // enable ssl  authentication
     mqtt_packet.enable_ssl = false;
 
