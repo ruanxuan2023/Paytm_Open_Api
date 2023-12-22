@@ -529,7 +529,7 @@ void app_main(void)
     OpenDemoViaId(WM_GET_SIM_INFO);
     OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // ledRun();
-    // Paytm_Mqtt_MemLeakProcess();
+    Paytm_Mqtt_MemLeakProcess();
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);

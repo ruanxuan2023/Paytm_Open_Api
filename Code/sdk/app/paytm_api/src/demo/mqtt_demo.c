@@ -209,5 +209,5 @@ void CisMqttDemo(void)
     Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_INIT, 58, 58);
 
     Paytm_delayMilliSeconds(10000);
-    Paytm_MQTT_Disconnect();
+    // Paytm_MQTT_Disconnect();
 }

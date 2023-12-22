@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-12-14 09:34:14
+ * @LastEditTime: 2023-12-22 21:13:02
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -1035,7 +1035,7 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
 
     if (CLIENT_STATE_CONNECTED == mqtt_get_client_state(c))
         RETURN_ERROR(KAWAII_MQTT_SUCCESS_ERROR);
-
+    
 
 #ifdef KAWAII_MQTT_NETWORK_TYPE_TLS
     rc = network_init(c->mqtt_network, c->mqtt_host, c->mqtt_port, c->mqtt_ca, c->mqtt_client_cert, c->mqtt_client_pk);
@@ -1050,7 +1050,7 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
         RETURN_ERROR(rc);
         }
     }
-
+    
     KAWAII_MQTT_LOG_I("%s:%d %s()... mqtt connect success...", __FILE__, __LINE__, __FUNCTION__);
 
     connect_data.keepAliveInterval = c->mqtt_keep_alive_interval;
@@ -1071,18 +1071,18 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
     platform_timer_cutdown(&c->mqtt_last_received, (c->mqtt_keep_alive_interval * 1000));
 
     platform_mutex_lock(&c->mqtt_write_lock);
-
+    
     /* serialize connect packet */
     if ((len = MQTTSerialize_connect(c->mqtt_write_buf, c->mqtt_write_buf_size, &connect_data)) <= 0)
         goto exit;
 
-
+    
     platform_timer_cutdown(&connect_timer, c->mqtt_cmd_timeout);
 
     /* send connect packet */
     if ((rc = mqtt_send_packet(c, len, &connect_timer)) != KAWAII_MQTT_SUCCESS_ERROR)
         goto exit;
-
+    
     if (mqtt_wait_packet(c, CONNACK, &connect_timer) == CONNACK) {
         if (MQTTDeserialize_connack(&connack_data.session_present, &connack_data.rc, c->mqtt_read_buf, c->mqtt_read_buf_size) == 1)
             rc = connack_data.rc;
@@ -1323,9 +1323,16 @@ int mqtt_release(mqtt_client_t* c)
         platform_timer_usleep(1000);            // 1ms avoid compiler optimization.
         if (platform_timer_is_expired(&timer)) {
             KAWAII_MQTT_LOG_E("%s:%d %s()... mqtt release failed...", __FILE__, __LINE__, __FUNCTION__);
-            RETURN_ERROR(KAWAII_MQTT_FAILED_ERROR)
+            if(c->mqtt_thread == NULL){
+                break;
+            }else{
+                RETURN_ERROR(KAWAII_MQTT_FAILED_ERROR)
+            }
         }
     }
+
+    network_disconnect(c->mqtt_network);
+
     if (NULL != c->mqtt_network) {
         platform_memory_free(c->mqtt_network);
         c->mqtt_network = NULL;

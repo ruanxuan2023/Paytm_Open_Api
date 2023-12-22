@@ -118,7 +118,7 @@ uint32_t g_timer_id_1 = 0;
 
 void paytmClearMqttConection(void){
     int resp = Paytm_MQTT_Close();
-    Paytm_TRACE("Paytm_MQTT_Disconnect response : [%d]", resp);
+    Paytm_TRACE("Paytm_MQTT_Close response : [%d]", resp);
 }
 
 void mqtt_receive_callback(void* client, message_data_t* msg)
@@ -202,7 +202,7 @@ int PAYTM_MQTT_Initialise_wrapper(Paytm_mqtt_connect_Packet_t *mqtt)
         Paytm_TRACE("Mqtt init fail with response : [%d]", initCheck);
         return -1;
     }else{
-        Paytm_TRACE("Mqtt init success with response : [%d]", initCheck);
+        // Paytm_TRACE("Mqtt init success with response : [%d]", initCheck);
     }
 
     Paytm_Mqtt_EventHandler_Register(paytm_MqttEventHandlerCB);
@@ -248,7 +248,7 @@ void* mqtt_subtask(void* p)
         int getMsgReturn = Paytm_GetMessage(g_mqtt_task_id, &msg);
         // Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
         // Paytm_TRACE("[%d]Free heap: %ld ", __LINE__,Paytm_GetFreeHeapSize());
-        Paytm_TRACE("Paytm_GetMessage response:[%d] msg: %d", getMsgReturn, msg.message);
+        // Paytm_TRACE("Paytm_GetMessage response:[%d] msg: %d", getMsgReturn, msg.message);
 
         switch (msg.message)
         {
@@ -264,10 +264,10 @@ void* mqtt_subtask(void* p)
             {
                 // Paytm_TRACE("[%d]Free heap: %ld ", __LINE__,Paytm_GetFreeHeapSize());
                 int32 ret = Paytm_MQTT_Open();
-                Paytm_TRACE("Paytm_MQTT_Open response = [%d]", ret);
+                // Paytm_TRACE("Paytm_MQTT_Open response = [%d]", ret);
                 if (ret == 0)
                 {
-                    Paytm_TRACE("Mqtt Open Success");
+                    // Paytm_TRACE("Mqtt Open Success");
                     Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_CONNECT, 0, 0);
                 }
 				else{
@@ -285,7 +285,7 @@ void* mqtt_subtask(void* p)
                     Paytm_SendMessage(g_mqtt_task_id, PAYTM_MQTT_SUBSCRIBE, 0, 0);
                 }
 				else{
-					Paytm_TRACE("Connect Mqtt Failed");
+					// Paytm_TRACE("Connect Mqtt Failed");
 					paytmClearMqttConection();
 					mqttErrorHandling(ret);
 				}
@@ -367,7 +367,7 @@ void handleSubsciption(){
 
 void mqttErrorHandling(uint32_t response){
 	
-	Paytm_TRACE("MQTT Error code : [%d]", response);
+	// Paytm_TRACE("MQTT Error code : [%d]", response);
 
     SendMessageToMqttFlow(0);
 }
