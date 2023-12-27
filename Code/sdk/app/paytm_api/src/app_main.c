@@ -512,7 +512,7 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("*********************** LinkGo 08 %s  *************************\n", (char*)lib_version);
-    // Paytm_LED_SetColor(LED_GREEN, 1);
+    Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);
     OpenDemoViaId(WM_PWK_DEMO);
@@ -526,10 +526,10 @@ void app_main(void)
     //     Paytm_TRACE("We find mp3 file in ext flash");
     // }
     // OpenDemoViaId(WM_BATTERY_CHECK);
-    OpenDemoViaId(WM_GET_SIM_INFO);
-    OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    // OpenDemoViaId(WM_GET_SIM_INFO);
+    // OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // ledRun();
-    Paytm_Mqtt_MemLeakProcess();
+    // Paytm_Mqtt_MemLeakProcess();
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);
