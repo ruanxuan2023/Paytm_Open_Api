@@ -20,7 +20,7 @@ typedef enum {
 #define ANTI_SHAKE_MS (100)
 #define SINGLE_PRESS_MS (180)   /* single press duration*/
 #define DOUBLE_GAP_MS   (600)   /* max time gap between two press */
-#define LONG_PRESS_MS   (1000)  /* minimum time gap to see as long press */
+#define LONG_PRESS_MS   (2000)  /* minimum time gap to see as long press */
 
 typedef struct {
     buttons_enum_t id;

@@ -89,3 +89,6 @@
 * Fix the bug that when Paytm_MQTT_Connect returns fail, memory leak happens
 2023.12.27  Lib_V1.100
 * Change DOUBLE_GAP_MS to 600
+2023.12.27  Lib_V1.103
+* Increase the buffer size in Paytm_readToken32Byte
+* Ignore the long press event from the library
