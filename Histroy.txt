@@ -87,3 +87,5 @@
 * Add PA close logic in AMR play callback
 2023.12.22  Lib_V1.99
 * Fix the bug that when Paytm_MQTT_Connect returns fail, memory leak happens
+2023.12.27  Lib_V1.100
+* Change DOUBLE_GAP_MS to 600
