@@ -46,7 +46,7 @@ int64 Paytm_GetTotalRAM(void);
  *  }
  * @return {*}
  */
-int32 Paytm_readToken32Byte(char *token, uint32 token_len);
+int32 Paytm_readToken32Byte(Paytm_location_t sl,char *token, uint32 token_len);
 int32 Paytm_readAuthID(char *authID, uint32 authID_len);
 int32 Paytm_setAuthID(char *authID, uint32 authID_len);
 uint8 Paytm_ValidateHardwareConfig(void);
@@ -62,6 +62,12 @@ bool Paytm_SetDFOTAFileReady(const char *path);
  * @return {*}
  */
 void Paytm_Exception_Dump_Enable(bool enable);
+
+/**
+ * @description: Set the USB function disable, battery charge only
+ * @return {*}
+ */
+void Paytm_Usb_Function_Disable(void);
 
 typedef enum {
     STATE_POWERKEY_PRESSED = 0,

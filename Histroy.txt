@@ -92,3 +92,7 @@
 2023.12.27  Lib_V1.103
 * Increase the buffer size in Paytm_readToken32Byte
 * Ignore the long press event from the library
+2024.01.02  Lib_V1.105
+* Modify api Paytm_readToken32Byte
+* Add configuration for certs location
+* Add USB disable function

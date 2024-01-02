@@ -16,7 +16,8 @@ typedef int PFILE;
 typedef enum 
 {
     LOC_INTER_MEM = 0,
-    LOC_EXTER_MEM
+    LOC_EXTER_MEM,
+    LOC_NVRAM
 }Paytm_location_t;
 
 typedef enum {
