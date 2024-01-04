@@ -342,7 +342,7 @@ void OpenDemoViaId(TASK_SELECTION id)
         char *authid = "qa3-iot-int/client/74cbc5e6-355d-4334-b4d1-7702fcbf124b_WAM4GS_864180051437643";
 
         Paytm_readAuthID(auth_id, 120);
-        rc = Paytm_readToken32Byte(token, 32);
+        rc = Paytm_readToken32Byte(LOC_EXTER_MEM, token, 32);
         Paytm_TRACE("auth_id: %s", auth_id);
         Paytm_TRACE("Read token rc = %d, and the token is %s", rc, token);
 

@@ -96,3 +96,5 @@
 * Modify api Paytm_readToken32Byte
 * Add configuration for certs location
 * Add USB disable function
+2024.01.04  Lib_V1.106
+* Fix the bug if press two keys in the same time, the button press event returns infinitly
