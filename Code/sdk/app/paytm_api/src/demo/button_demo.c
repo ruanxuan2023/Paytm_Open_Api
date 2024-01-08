@@ -99,12 +99,14 @@ void buttoncb0(void * p)
     case BUTTON_FUNCTION:
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
             Paytm_TRACE("Fun key single press");
+            Paytm_PlayFile(LOC_INTER_MEM, "num1.amr", vol);
         }else if(msg->state == STATE_BUTTON_DOUBLE_CLICK){
             Paytm_TRACE("Fun key double press");
+            Paytm_PlayFile(LOC_INTER_MEM, "num2.amr", vol);
         }else{
             Paytm_TRACE("Fun key long press");
         }
-        Paytm_PlayFile(LOC_INTER_MEM, "and.amr", vol);
+
         break;
     case BUTTON_POWER:
         if(msg->state == STATE_BUTTON_LONG_PRESS){

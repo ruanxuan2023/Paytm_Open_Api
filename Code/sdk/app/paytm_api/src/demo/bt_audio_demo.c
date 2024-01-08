@@ -47,7 +47,7 @@ void bt_pwk_cb(void* p)
         Paytm_SendMessage_From_ISR(task_id, 1, 55, 129);
     }else if(*(int*)p == STATE_BUTTON_LONG_PRESS){
         Paytm_TRACE("Pwk long press");
-
+        Paytm_SendMessage_From_ISR(task_id, 2, 55, 129);
     }
 }
 
@@ -63,8 +63,12 @@ static void msgTask(void* p)
             Paytm_TRACE("Recv msg [%d %d %d]", msg.message, msg.param1, msg.param2);
             if(msg.message == 1){
                 stop_flag = !stop_flag;
-                Paytm_TRACE("Pwk single press, %s play audio", stop_flag ? "stop" : "restart");
-                Paytm_BT_Audio_Set_Cmd(BT_PAUSE_PLAY);
+                // Paytm_TRACE("Pwk single press, %s play audio", stop_flag ? "stop" : "restart");
+                Paytm_BT_Audio_Enable(false);
+                Paytm_PlayFileSync(LOC_INTER_MEM, "welc.mp3", 8 );
+                Paytm_BT_Audio_Enable(true);
+            }else{
+                osiSysReset();
             }
         }
 

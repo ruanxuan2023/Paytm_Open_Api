@@ -188,6 +188,7 @@ set file_dw_logo_bin=%folder_dw_bin%\logo.bin
 set file_dw_updater_bin=%folder_dw_bin%\updater.bin
 set file_dw_boot33_bin=%folder_dw_bin%\boot33.bin
 set file_dw_app_bin=%folder_dw_bin%\customer_app.bin
+set file_dw_capp_tmp_bin=%folder_dw_bin%\capp_tmp.bin
 set file_dw_app_pad_bin=%folder_dw_bin%\customer_app_pad.bin
 
 if not exist %file_dw_cp_bin% (
@@ -237,8 +238,8 @@ cd %folder_dw_tool%
 set para_dw_release_all_name=%para_dw_release_name%_all
 set folder_dw_release_all=.\%para_dw_release_all_name%\
 set file_dw_release_all=.\%para_dw_release_all_name%.zip
-echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
-arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin% %file_dw_release_all%
+echo arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin%,capp_tmp=%file_dw_capp_tmp_bin% %file_dw_release_all%
+arelease.exe -c . -q -g -p %para_dw_platform% -v %para_dw_variants% -i cp=%file_dw_cp_bin%,dsp=%file_dw_dsp_bin%,rfbin=%file_dw_rf_bin%,boot33_bin=%file_dw_boot33_bin%,logo=%file_dw_logo_bin%,updater_bin=%file_dw_updater_bin%,customer_app=%file_dw_app_pad_bin%,capp_tmp=%file_dw_capp_tmp_bin% %file_dw_release_all%
 if not "%errorlevel%"=="0" (
     echo Release package error
     goto fail_exit

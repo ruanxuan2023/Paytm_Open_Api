@@ -130,6 +130,14 @@
       "group": "2"
     },
     {
+      "command": "flash",
+      "name": "capp_tmp",
+      "type": "image",
+      "partition": "capp_tmp",
+      "group": "2",
+      "disable": true
+    },
+    {
       "command": "erase",
       "partition": "fota_param",
       "group": "3"
@@ -235,6 +243,12 @@
     {
       "name": "customer_app",
       "image": "customer_app.bin",
+      "io": "in",
+      "format": "raw"
+    },
+    {
+      "name": "capp_tmp",
+      "image": "capp_tmp.bin",
       "io": "in",
       "format": "raw"
     },
@@ -348,7 +362,7 @@
 
           {
             "id": "APP_IMAGE_ID",
-            "image": "customer_app"
+            "image": "capp_tmp"
           }
         ],
         "callBoot2": false,
