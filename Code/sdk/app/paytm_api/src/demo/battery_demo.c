@@ -9,7 +9,7 @@ void b_cb(void* p)
 {
     int status =  *(int*)p;
 
-    Paytm_TRACE("Battery %s", status ? "not charging" : "charging");
+    Paytm_TRACE("Battery status %d", status );
 }
 
 void batteryDemo(void)
@@ -25,10 +25,17 @@ void batteryDemo(void)
         /* code */
         Paytm_GetBatteryVoltage(&voltage);
         Paytm_delayMilliSeconds(5000);
-        if(Paytm_GetChargingStatus()){
-            Paytm_TRACE("The battery is charging! ");
-        }else{
-            Paytm_TRACE("The battery is not charging!");
-        }
+        // if(Paytm_GetChargingStatus()){
+        //     Paytm_TRACE("The battery is charging! ");
+        // }else{
+        //     Paytm_TRACE("The battery is not charging!");
+        // }
+
+        // if(Paytm_GetChargingFullStatus()){
+        //     Paytm_TRACE("The battery charge full");
+        //     Paytm_Set_Battery_Led(0, 1, 0);
+        // }else{
+        //     Paytm_Set_Battery_Led(0, 1, 1);
+        // }
     }
 }

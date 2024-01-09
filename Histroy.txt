@@ -105,3 +105,5 @@
 2024.01.09  Lib_V1.107
 * Clear some warings; 
 * Add function Paytm_GetChargingFullStatus to check if the battery is fully charged
+2024.01.09  Lib_V1.108
+* battery_charging_report_callback_register support charging full report

@@ -526,12 +526,13 @@ void app_main(void)
     //     Paytm_TRACE("We find mp3 file in ext flash");
     // }
     // OpenDemoViaId(WM_BATTERY_CHECK);
-    OpenDemoViaId(WM_GET_SIM_INFO);
+    // OpenDemoViaId(WM_GET_SIM_INFO);
     // OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // ledRun();
     // Paytm_Mqtt_MemLeakProcess();
     // OpenDemoViaId(WM_SAVE_READ_AUTHID);
     // OpenDemoViaId(WM_BT_AUDIO);
+    OpenDemoViaId(WM_BATTERY_CHECK);
     while (1)
     {
         Paytm_delayMilliSeconds(2 * 1000);
