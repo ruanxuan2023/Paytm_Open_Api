@@ -102,3 +102,6 @@
 * Close the process that app signature check with timestamp 
 * Add function Paytm_PlayFileSync for bt audio module
 * [Require DFOTA]
+2024.01.09  Lib_V1.107
+* Clear some warings; 
+* Add function Paytm_GetChargingFullStatus to check if the battery is fully charged

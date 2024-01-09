@@ -32,6 +32,12 @@ uint8 Paytm_GetChargingStatus(void);
 int32 Paytm_Battery_Initialise(uint16 gap_num);
 int32 Paytm_BatteryLevelMonitoring(uint8 enable);
 
+/**
+ * @description: 
+ * @return {*} true:fully charge; false:not fully charge
+ */
+bool Paytm_GetChargingFullStatus(void);
+
 //0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING
 void battery_charging_report_callback_register(message_callback_t cb);
 
