@@ -17,7 +17,7 @@ int appimg_enter(void *param)
 {
     RTI_LOG("application image enter");
     RTI_LOG("kernelVersion: %s", kernelVersion());
-    RTI_LOG("welcome, %s,%s", __DATE__, __TIME__);
+    // RTI_LOG("welcome, %s,%s", __DATE__, __TIME__);
 
     // jumo to soundBox app 
     osiThreadCreate("app_main", prvMainTask,NULL, 100, 10*1024);
