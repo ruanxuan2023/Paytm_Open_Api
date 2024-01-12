@@ -109,3 +109,5 @@
 * battery_charging_report_callback_register support charging full report
 2024.01.11  Lib_V1.109
 * Delete date info and kernel version print in application enter
+2024.01.12  Liv_V1.110
+* Fix the bug when inserted the SIM card after device init, cannot connect to the server

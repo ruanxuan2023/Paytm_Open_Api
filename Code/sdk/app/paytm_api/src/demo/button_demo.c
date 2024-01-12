@@ -68,7 +68,7 @@ void buttoncb(void * p)
         break;
     }
 }
-
+extern void testSim(void);
 void buttoncb0(void * p)
 {
     int32_t vol = Paytm_GetVolume(NULL);
@@ -106,7 +106,7 @@ void buttoncb0(void * p)
         }else{
             Paytm_TRACE("Fun key long press");
         }
-
+        testSim();
         break;
     case BUTTON_POWER:
         if(msg->state == STATE_BUTTON_LONG_PRESS){
