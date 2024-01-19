@@ -33,7 +33,26 @@ static void topic_handler(void* client, message_data_t* msg)
 	sprintf(rsp, "MQTT RECV: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
 			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
 	Paytm_TRACE("%s", rsp);
-    Paytm_PlayFile(LOC_INTER_MEM, "and.amr", 6);
+	if(NULL != rsp)
+	{
+		osiFree(rsp);
+	}
+}
+
+static void other_msg_handler(void* client, message_data_t* msg)
+{
+    char *rsp = NULL;
+
+	rsp = (char *)osiMalloc(msg->message->payloadlen+100);
+	if(NULL == rsp)
+	{
+		Paytm_TRACE("malloc no memory!");
+	}
+
+	memset(rsp, 0, msg->message->payloadlen+100);
+	sprintf(rsp, "MQTT RECV OTHER: %d,\"%s\",%d,\"%s\"\r\n", msg->message->id,
+			msg->topic_name, msg->message->payloadlen, (char*)msg->message->payload);
+	Paytm_TRACE("%s", rsp);
 	if(NULL != rsp)
 	{
 		osiFree(rsp);
@@ -44,9 +63,9 @@ static void topic_handler(void* client, message_data_t* msg)
 #define DEMO_MQTT_SSL_PORT			8883
 #define DEMO_MQTT_TCP_PORT          6883
 
-#define DEMO_MQTT_PRODUCT_KEY 	"paytm_0"
-#define DEMO_USER_NAME   		"china"
-#define DEMO_USER_PWD 			"12345611"
+#define DEMO_MQTT_PRODUCT_KEY 	"paytm_2"
+#define DEMO_USER_NAME   		"china_2"
+#define DEMO_USER_PWD 			"1234567890AC"
 
 #define DEMO_SUB_TOPIC			"publish/0"
 #define DEMO_SUB_TOPIC_2        "publish/2"
@@ -75,8 +94,8 @@ static void event_handler(void* client, int event_id)
         break;
     case CLIENT_STATE_DISCONNECTED:
         Paytm_TRACE("# Mqtt disconnected");
-        // Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_RECONNECT, 58, 58);
-        Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_DISCONNECT, 58, 58);
+        Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_RECONNECT, 58, 58);
+        // Paytm_SendMessage_From_ISR(task_id, PAYTM_MQTT_DISCONNECT, 58, 58);
         break;
     case CLIENT_STATE_CLEAN_SESSION:
         Paytm_TRACE("# Mqtt clean session");
@@ -99,6 +118,8 @@ void CisMqtt(void* p)
     char * username = DEMO_USER_NAME;
     char * password = DEMO_USER_PWD;
 
+    char * will_topic = DEMO_PUB_TOPIC_3;
+    char * will_msg = "Hello";
     // config MQTT ca_cert&client_cert&client_privatekey
     Paytm_MQTT_WriteCertificates(mqtt_server_cert, mqtt_client_cert, mqtt_client_key);
 
@@ -112,8 +133,16 @@ void CisMqtt(void* p)
     mqtt_packet.username = username;
     mqtt_packet.password = password;
     mqtt_packet.keepalive_sec = 60;
+    mqtt_packet.version_num = 4;    //3 = 3.1 4 = 3.1.1
     // enable ssl  authentication
     mqtt_packet.enable_ssl = false;
+
+    mqtt_packet.will_flag = 0;
+    mqtt_packet.will_qos = 1;
+    mqtt_packet.will_retain = 1;
+    mqtt_packet.will_topic = will_topic;
+    mqtt_packet.will_message = will_msg;
+    mqtt_packet.cleansession = 0;
 
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);
     if(rc < 0)
@@ -123,6 +152,7 @@ void CisMqtt(void* p)
     }
 
     Paytm_Mqtt_EventHandler_Register(event_handler);
+    Paytm_MQTT_Unsubscried_CallBack_Register(other_msg_handler);
     rc = Paytm_MQTT_Open();
     if(rc != 0)
     {
@@ -136,17 +166,24 @@ void CisMqtt(void* p)
     }   
 
     rc = Paytm_MQTT_Connect();
-    if(rc != 0)
+    if(rc < 0)
     {
         Paytm_TRACE("Mqtt socket connect fail %d!", rc);
         return;
+    }else if(rc == 1){
+        Paytm_TRACE("Mqtt session reuse, no need to subscribe again!");
     }
 
     topic_list.topic[0] = DEMO_SUB_TOPIC;
-    topic_list.qos[0] = Paytm_QOS1_AT_LEASET_ONCE;
+    topic_list.qos[0] = Paytm_QOS2_AT_EXACTLY_ONECE;
     topic_list.count = 1;
 
-    rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
+    if(rc == 1){
+        rc = Paytm_MQTT_Add_Subscribe_List_Only(&topic_list, topic_handler);
+    }else{
+        rc = Paytm_MQTT_Subscribe(&topic_list, topic_handler);
+    }
+   
     if(rc != 0)
     {
         Paytm_TRACE("Mqtt subscribe fail 0x%x!", rc);
@@ -164,6 +201,8 @@ void CisMqtt(void* p)
     {
         Paytm_TRACE("Mqtt publish fail 0x%x!", rc);
     }
+
+// exit:
     Paytm_TRACE("Mqtt start success");
 }
 
@@ -183,11 +222,13 @@ void* cis_mqtt_task(void* p)
             break;
         case PAYTM_MQTT_DISCONNECT:
             Paytm_MQTT_Close();
-            Paytm_delayMilliSeconds(10 * 1000);
+            Paytm_delayMilliSeconds(2 * 1000);
             Paytm_SendMessage(task_id, PAYTM_MQTT_INIT, 0, 0);
             break;
         case PAYTM_MQTT_RECONNECT:
-            Paytm_Mqttt_Try_Reconnect();
+            while(Paytm_Mqttt_Try_Reconnect() != 0){
+                Paytm_delayMilliSeconds(3 * 1000);
+            }
             break;
         case PAYTM_MQTT_CLOSE:
             break;

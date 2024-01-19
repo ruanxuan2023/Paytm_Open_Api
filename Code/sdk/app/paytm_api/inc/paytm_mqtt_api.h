@@ -32,7 +32,7 @@ typedef struct{
 typedef struct 
 {
     int connect_id;
-    int version_num;
+    int version_num;        //3 = 3.1 4 = 3.1.1
     int keepalive_sec;
     int timeout_sec;
     int reconnect_gap_ms;
@@ -66,6 +66,7 @@ int32 Paytm_MQTT_Initialise(const char *url, Enum_Certificate_Location location,
 int32 Paytm_MQTT_Open();
 int32 Paytm_MQTT_Connect();
 int32 Paytm_MQTT_Subscribe(ST_MQTT_topic_info_t *mqtt_topic_info_t, message_handler_t global_cb);
+int32 Paytm_MQTT_Add_Subscribe_List_Only(ST_MQTT_topic_info_t *mqtt_topic_info_t, message_handler_t global_cb);
 int32 Paytm_MQTT_Publish(Paytm_mqtt_publish_Packet_t*);
 
 /**
@@ -114,6 +115,8 @@ int32 Paytm_Mqtt_Reconnected_Register(reconnect_handler_t cb);
  *          for event_id details, please refer to 'mqtt_error_t' and 'client_state_t'
  */
 int32 Paytm_Mqtt_EventHandler_Register(event_handler_t handler);
+
+int32 Paytm_MQTT_Unsubscried_CallBack_Register(message_handler_t global_cb);
 /**
  * @description: Clear mqtt certs configuration in mqtt module
  * @return {*}

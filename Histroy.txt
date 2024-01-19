@@ -111,3 +111,5 @@
 * Delete date info and kernel version print in application enter
 2024.01.12  Liv_V1.110
 * Fix the bug when inserted the SIM card after device init, cannot connect to the server
+2024.01.19  Lib_V1.112
+* Support MQTT persistent session

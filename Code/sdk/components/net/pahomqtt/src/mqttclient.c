@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2023-12-22 21:13:02
+ * @LastEditTime: 2024-01-18 17:16:07
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #include "mqttclient.h"
@@ -290,14 +290,14 @@ static message_handlers_t *mqtt_get_msg_handler(mqtt_client_t* c, MQTTString* to
     /* traverse the msg_handler_list to find the matching message handler */
     LIST_FOR_EACH_SAFE(curr, next, &c->mqtt_msg_handler_list) {
         msg_handler = LIST_ENTRY(curr, message_handlers_t, list);
-
+        
         /* judge topic is equal or match, support wildcard, such as '#' '+' */
-        if ((NULL != msg_handler->topic_filter) && ((MQTTPacket_equals(topic_name, (char*)msg_handler->topic_filter)) ||
+                if ((NULL != msg_handler->topic_filter) && ((MQTTPacket_equals(topic_name, (char*)msg_handler->topic_filter)) ||
             (mqtt_topic_is_matched((char*)msg_handler->topic_filter, topic_name)))) {
-                return msg_handler;
+                                return msg_handler;
             }
     }
-    return NULL;
+        return NULL;
 }
 
 static int mqtt_deliver_message(mqtt_client_t* c, MQTTString* topic_name, mqtt_message_t* message)
@@ -784,15 +784,15 @@ static int mqtt_publish_packet_handle(mqtt_client_t *c, platform_timer_t *timer)
     mqtt_message_t msg;
     int qos;
     msg.payloadlen = 0;
-
+    
     rc = mqtt_is_connected(c);
     if (KAWAII_MQTT_SUCCESS_ERROR != rc)
         RETURN_ERROR(rc);
-
+    
     if (MQTTDeserialize_publish(&msg.dup, &qos, &msg.retained, &msg.id, &topic_name,
         (uint8_t**)&msg.payload, (int*)&msg.payloadlen, c->mqtt_read_buf, c->mqtt_read_buf_size) != 1)
         RETURN_ERROR(KAWAII_MQTT_PUBLISH_PACKET_ERROR);
-
+    
     msg.qos = (mqtt_qos_t)qos;
 
     /* for qos1 and qos2, you need to send a ack packet */
@@ -811,24 +811,24 @@ static int mqtt_publish_packet_handle(mqtt_client_t *c, platform_timer_t *timer)
 
         platform_mutex_unlock(&c->mqtt_write_lock);
     }
-
+    
     if (rc < 0)
         RETURN_ERROR(rc);
 
     if (msg.qos != QOS2) {
-        mqtt_deliver_message(c, &topic_name, &msg);
+                mqtt_deliver_message(c, &topic_name, &msg);
     }
     else {
         /* record the received of a qos2 message and only processes it when the qos2 message is received for the first time */
         platform_mutex_lock(&c->mqtt_write_lock);
         rc = mqtt_ack_list_record(c, PUBREL, msg.id, len, NULL);
         platform_mutex_unlock(&c->mqtt_write_lock);
-
+        
         if (rc != KAWAII_MQTT_ACK_NODE_IS_EXIST_ERROR) {
-            mqtt_deliver_message(c, &topic_name, &msg);
+                        mqtt_deliver_message(c, &topic_name, &msg);
         }
     }
-
+    
     RETURN_ERROR(rc);
 }
 
@@ -881,7 +881,7 @@ static int mqtt_packet_handle(mqtt_client_t* c, platform_timer_t* timer)
 
         case SUBACK:
             rc = mqtt_suback_packet_handle(c, timer);
-            break;
+                        break;
 
         case UNSUBACK:
             rc = mqtt_unsuback_packet_handle(c, timer);
@@ -889,12 +889,12 @@ static int mqtt_packet_handle(mqtt_client_t* c, platform_timer_t* timer)
 
         case PUBLISH:
             rc = mqtt_publish_packet_handle(c, timer);
-            break;
+                        break;
 
         case PUBREC:
         case PUBREL:
             rc = mqtt_pubrec_and_pubrel_packet_handle(c, timer);
-            break;
+                        break;
 
         case PINGRESP:
             c->mqtt_ping_outstanding = 0;    /* keep alive ping success */
@@ -1076,7 +1076,7 @@ static int mqtt_connect_with_results(mqtt_client_t* c)
     if ((len = MQTTSerialize_connect(c->mqtt_write_buf, c->mqtt_write_buf_size, &connect_data)) <= 0)
         goto exit;
 
-    
+
     platform_timer_cutdown(&connect_timer, c->mqtt_cmd_timeout);
 
     /* send connect packet */
@@ -1118,6 +1118,9 @@ exit:
 
         c->mqtt_ping_outstanding = 0;        /* reset ping outstanding */
 
+        if(connack_data.session_present == 1){
+            rc = 1;
+        }
     } else {
         mqtt_set_client_state(c, CLIENT_STATE_INITIALIZED); /* connect failed */
 		network_release(c->mqtt_network);
@@ -1428,6 +1431,52 @@ int mqtt_subscribe(mqtt_client_t* c, const char* topic_filter, mqtt_qos_t qos, m
 
 exit:
 
+    platform_mutex_unlock(&c->mqtt_write_lock);
+
+    RETURN_ERROR(rc);
+}
+
+int mqtt_add_subscribe_list_only(mqtt_client_t* c, const char* topic_filter, mqtt_qos_t qos, message_handler_t handler)
+{
+    int rc = KAWAII_MQTT_SUCCESS_ERROR;
+    int len = 0;
+    uint16_t packet_id;
+    platform_timer_t timer;
+    MQTTString topic = MQTTString_initializer;
+    topic.cstring = (char *)topic_filter;
+    message_handlers_t *msg_handler = NULL;
+
+    if (CLIENT_STATE_CONNECTED != mqtt_get_client_state(c))
+        RETURN_ERROR(KAWAII_MQTT_NOT_CONNECT_ERROR);
+
+    packet_id = mqtt_get_next_packet_id(c);
+
+    platform_mutex_lock(&c->mqtt_write_lock);
+
+    /* serialize subscribe packet and send it */
+	/* coverity[overrun-buffer-arg] */
+    len = MQTTSerialize_subscribe(c->mqtt_write_buf, c->mqtt_write_buf_size, 0, packet_id, 1, &topic, (int*)&qos);
+    if (len <= 0)
+        goto exit;
+
+    // if ((rc = mqtt_send_packet(c, len, &timer)) != KAWAII_MQTT_SUCCESS_ERROR)
+    //     goto exit;
+
+    if (NULL == handler)
+        handler = default_msg_handler;  /* if handler is not specified, the default handler is used */
+
+    /* create a message and record it */
+    msg_handler = mqtt_msg_handler_create(topic_filter, qos, handler);
+    if (NULL == msg_handler) {
+        rc = KAWAII_MQTT_MEM_NOT_ENOUGH_ERROR;
+        goto exit;
+    }
+
+    rc = mqtt_ack_list_record(c, SUBACK, packet_id, len, msg_handler);
+    rc = mqtt_ack_list_unrecord(c, SUBACK, packet_id, &msg_handler);
+    rc = mqtt_msg_handlers_install(c, msg_handler);
+
+exit:
     platform_mutex_unlock(&c->mqtt_write_lock);
 
     RETURN_ERROR(rc);

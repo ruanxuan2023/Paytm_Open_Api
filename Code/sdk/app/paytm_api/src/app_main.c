@@ -130,6 +130,7 @@ extern void ntpDemo(void *p);
 extern void batteryDemo(void);
 extern void audioPlayDemo(void);
 extern void AliMqttDemo(void* p);
+extern void AliMqttDemo2(void* p);
 extern void testNetWorkReconected(void);
 extern void testNetWorkDisconected(void);
 extern void testHttpGet(void * p);
@@ -211,7 +212,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_MQTT_INIT:
         break;
     case WM_MQTT_CONNECT:
-        AliMqttDemo(NULL);
+        Paytm_CreateTask("http", AliMqttDemo, NULL, 100, 80 * 1024);
         break;
     case WM_READ_HIGH_RES_TIMER:
         break;
@@ -263,7 +264,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     case TEST_APP_UPDATE_FILE:
         break;
     case TEST_MQTT_LOOP_QA:
-        CisMqttDemo();
+        Paytm_CreateTask("mqtt", CisMqttDemo, NULL, 110, 30 * 1024);
         break;
     case TEST_FS_LOOP_QA:
         Paytm_CreateTask("mqtt", fileHeapLeakDemo, NULL, 110, 30 * 1024);
@@ -511,7 +512,7 @@ void app_main(void)
     Paytm_AppVersionSet(app_verion);Paytm_Exception_Dump_Enable(false);
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
-    Paytm_TRACE("*********************** LinkGo 08 %s  *************************\n", (char*)lib_version);
+    Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
     Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);
@@ -526,8 +527,8 @@ void app_main(void)
     //     Paytm_TRACE("We find mp3 file in ext flash");
     // }
     // OpenDemoViaId(WM_BATTERY_CHECK);
-    // OpenDemoViaId(WM_GET_SIM_INFO);
-    // OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    OpenDemoViaId(WM_GET_SIM_INFO);
+    OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // ledRun();
     // Paytm_Mqtt_MemLeakProcess();
     // OpenDemoViaId(WM_SAVE_READ_AUTHID);
@@ -535,7 +536,7 @@ void app_main(void)
     // OpenDemoViaId(WM_BATTERY_CHECK);
     while (1)
     {
-        Paytm_delayMilliSeconds(2 * 1000);
+        Paytm_delayMilliSeconds(7 * 1000);
         // Paytm_TRACE("Free heap size: %d, csq = %d", Paytm_GetFreeHeapSize(), Paytm_GetSignalStrength());
     }
 
