@@ -141,7 +141,7 @@ void CisMqtt(void* p)
     mqtt_packet.will_qos = 1;
     mqtt_packet.will_retain = 1;
     mqtt_packet.will_topic = will_topic;
-    mqtt_packet.will_message = will_msg;
+    mqtt_packet.will_message = (uint8_t*)will_msg;
     mqtt_packet.cleansession = 0;
 
     rc = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, &mqtt_packet);

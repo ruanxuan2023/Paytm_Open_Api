@@ -124,7 +124,7 @@ void testSim(void)
 {
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
 
-    Paytm_GetModemFunction(simMonitor);
+    Paytm_GetModemFunction((uint8 *)simMonitor);
 
     task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 4 * 1024);
     

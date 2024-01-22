@@ -8,9 +8,10 @@
 
 int task_id = 0;
 
+int32_t Paytm_BT_Audio_Set_Cmd(uint8_t cmd);
+
 void bt_button_cb(void * p)
 {
-    int32_t rc = 0;
     buttonActMsg_t *msg = (buttonActMsg_t *)p; 
 
     switch (msg->id)

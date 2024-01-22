@@ -58,7 +58,7 @@ void fileFormatDemo(void){
         while (file_node)
         {
             Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
-            file_node = file_node->next;
+            file_node = (node_t *)file_node->next;
         }
         Paytm_list_item_free(&item_list);
 
@@ -129,7 +129,7 @@ void fileSystemDemo(void)
     while (file_node)
     {
         Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
-        file_node = file_node->next;
+        file_node = (node_t *)file_node->next;
     }
     Paytm_list_item_free(&item_list);
 
@@ -206,7 +206,7 @@ void fileUnzip(void)
     while (file_node)
     {
         Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
-        file_node = file_node->next;
+        file_node = (node_t *)file_node->next;
     }
     Paytm_list_item_free(&item_list);
 }
@@ -267,7 +267,7 @@ void fileCreateFolderDemo(void)
     while (file_node)
     {
         Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
-        file_node = file_node->next;
+        file_node = (node_t *)file_node->next;
     }
 
     Paytm_list_item_free(&item_list);
@@ -287,7 +287,7 @@ void maxFileNumInFolder(void)
 {
     int cnt = 0, rc = 0;
     char *folder = "folder";
-    char file_id[16] = {0};
+    char file_id[64] = {0};
     char fix_data[20] = {0xfa};
 
     Paytm_fs_format(LOC_EXTER_MEM);
@@ -303,8 +303,8 @@ void maxFileNumInFolder(void)
 
     while (1 && cnt < 1000)
     {
-        memset(file_id, 0x00, 16);
-        snprintf(file_id, 16, "folder/%d.txt", cnt);
+        memset(file_id, 0x00, sizeof(file_id));
+        snprintf(file_id, sizeof(file_id), "folder/%d.txt", cnt);
         if(Paytm_fexists(LOC_EXTER_MEM, file_id) == 0){
             Paytm_delayMilliSeconds(50);
             continue;
@@ -326,14 +326,14 @@ void maxFileNumInFolder(void)
     // list directory
     Paytm_list_item_t item_list = {0};
     memset(&item_list, 0, sizeof(item_list));
-    int count = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, folder, 500);
+    int count = Paytm_dir_listfiles(LOC_EXTER_MEM, &item_list, folder, 0xff);
 
     Paytm_TRACE("read %d item from external directory %s", count, folder);
     node_t *file_node = item_list.files;
     while (file_node)
     {
         Paytm_TRACE("File: %s size: %d", file_node->name, file_node->size);
-        file_node = file_node->next;
+        file_node = (node_t *)file_node->next;
         Paytm_delayMilliSeconds(5);
     }
     Paytm_list_item_free(&item_list);

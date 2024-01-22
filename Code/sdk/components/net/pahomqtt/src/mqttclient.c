@@ -991,9 +991,7 @@ static int mqtt_yield(mqtt_client_t* c, int timeout_ms)
 static void mqtt_yield_thread(void *arg)
 {
     int rc;
-    client_state_t state;
     mqtt_client_t *c = (mqtt_client_t *)arg;
-    platform_thread_t *thread_to_be_destoried = NULL;
 
     while (1) {
         rc = mqtt_yield(c, c->mqtt_cmd_timeout);
@@ -1441,7 +1439,6 @@ int mqtt_add_subscribe_list_only(mqtt_client_t* c, const char* topic_filter, mqt
     int rc = KAWAII_MQTT_SUCCESS_ERROR;
     int len = 0;
     uint16_t packet_id;
-    platform_timer_t timer;
     MQTTString topic = MQTTString_initializer;
     topic.cstring = (char *)topic_filter;
     message_handlers_t *msg_handler = NULL;
@@ -1593,7 +1590,6 @@ exit:
 
 int mqtt_list_subscribe_topic(mqtt_client_t* c)
 {
-    int i = 0;
     mqtt_list_t *curr, *next;
     message_handlers_t *msg_handler;
 

@@ -248,7 +248,7 @@ void OpenDemoViaId(TASK_SELECTION id)
     {
         uint8_t digest[32];
         int ret = 0;
-        ret = Paytm_Cal_File_Hash(LOC_EXTER_MEM, "resources/sounds/en/welc.amr", digest);
+        ret = Paytm_Cal_File_Hash(LOC_EXTER_MEM, "resources/sounds/en/welc.amr", (char*)digest);
         if(ret == 0)
         {
             Paytm_TRACE_HEX_BUFFER("Digest", digest, sizeof(digest));
@@ -490,7 +490,6 @@ void print_free_heap(void* p)
 
 void MqttDetect(void* p)
 {
-    static bool state = false, pre_state = false;
     while (1)
     {
         Paytm_delayMilliSeconds(3000);

@@ -9,6 +9,8 @@
 #include "paytm_http_api.h"
 #include "paytm_net_api.h"
 
+#define CUSTOM_HEADER_LEN  (128)
+
 #define HTTP_GET_URL    "http://www.kuaidi100.com/query?type=shunfeng&postid=SF1420349064432"
 #define HTTP_POST_URL   "http://pay.chinainfosafe.com:6003"
 #define HTTPS_URL       "https://www.chinainfosafe.com:1883"
@@ -19,7 +21,7 @@ extern const char http_client_cert[1173];
 extern const char http_server_cert[4789];
 
 
-static void net_connect(void)
+OSI_UNUSED static void net_connect(void)
 {
     int32 stat = 0;
 
@@ -160,7 +162,6 @@ void testHttpSSLPost(void * p)
 void getTaobaoSuggest(void* p)
 {
     int rc = 0;
-    char *get_url = "https://suggest.taobao.com/sug?q=number";
     char *cis_url = "https://cisfs.oss-cn-shenzhen.aliyuncs.com/600RGBFFD20G_0253_0255.bin_2";
 
     http_request_t http = {0};
@@ -235,7 +236,7 @@ void http_1MB_speed_test(void* p)
         goto exit;
     }
 
-    http.custom_headers = (char*)Paytm_malloc(128);
+    http.custom_headers = (char*)Paytm_malloc(CUSTOM_HEADER_LEN);
     start = sStr - http.content;
     pStr = strstr(sStr, "\n");
     end = pStr - http.content;
@@ -250,7 +251,7 @@ void http_1MB_speed_test(void* p)
     Paytm_TRACE("Content %s, size %d", subStr, file_size);
 
     //start to recv data
-    int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    int get_len_this_time = 0, get_len_sum = 0;
     
     start = 0;
     end = 0;
@@ -280,6 +281,7 @@ void http_1MB_speed_test(void* p)
         start = get_len_sum;
         end = start + get_len_this_time;
 
+        memset(http.custom_headers, 0, CUSTOM_HEADER_LEN);
         sprintf(http.custom_headers,
         "Range: bytes=%d-%d\r\n\r\n", start, end - 1);
 
@@ -340,7 +342,7 @@ void httpDownload2(void* p)
     http.use_ssl = true;
     http.is_chunked = false;
 
-    http.custom_headers = (char*)Paytm_malloc(128);
+    http.custom_headers = (char*)Paytm_malloc(CUSTOM_HEADER_LEN);
     sprintf(http.custom_headers,
         "Range: bytes=%d-%d\r\n\r\n", 0, 128 - 1);
     rc = Paytm_HTTP_Initialise_GET(LOC_EXTER_MEM, &http, cis_url, 0, NULL);
@@ -387,7 +389,7 @@ void httpDownload2(void* p)
     Paytm_TRACE("Prase Content %s, size %d", subStr, file_size);
 
     //start to recv data
-    int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    int get_len_this_time = 0, get_len_sum = 0;
     
     start = 0;
     end = 0;
@@ -417,7 +419,7 @@ void httpDownload2(void* p)
         start = get_len_sum;
         end = start + get_len_this_time;
 
-        memset(http.custom_headers, 0x00, sizeof(http.custom_headers));
+        memset(http.custom_headers, 0x00, CUSTOM_HEADER_LEN);
         sprintf(http.custom_headers,
         "Range: bytes=%d-%d\r\n\r\n", start, end - 1);
 
@@ -496,7 +498,7 @@ void fota_download(void* p)
         goto exit;
     }
 
-    http.custom_headers = (char*)Paytm_malloc(128);
+    http.custom_headers = (char*)Paytm_malloc(CUSTOM_HEADER_LEN);
     start = sStr - http.content;
     pStr = strstr(sStr, "\n");
     end = pStr - http.content;
@@ -511,7 +513,7 @@ void fota_download(void* p)
     Paytm_TRACE("Fota file size =  %d", file_size);
 
     //start to recv data
-    int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    int get_len_this_time = 0, get_len_sum = 0;
     
     start = 0;
     end = 0;
@@ -636,7 +638,7 @@ void dfota_download(void* p)
         goto exit;
     }
 
-    http.custom_headers = (char*)Paytm_malloc(128);
+    http.custom_headers = (char*)Paytm_malloc(CUSTOM_HEADER_LEN);
     start = sStr - http.content;
     pStr = strstr(sStr, "\n");
     end = pStr - http.content;
@@ -651,7 +653,7 @@ void dfota_download(void* p)
     Paytm_TRACE("Fota file size =  %d", file_size);
 
     //start to recv data
-    int get_len_this_time = 0, get_len_sum = 0, real_get_len = 0;
+    int get_len_this_time = 0, get_len_sum = 0;
     
     start = 0;
     end = 0;

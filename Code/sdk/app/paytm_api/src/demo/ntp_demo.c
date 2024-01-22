@@ -9,7 +9,7 @@
 #define NTP_TEST_HOST   "ntp.aliyun.com"
 void ntpDemo(void *p)
 {
-    Paytm_ntp_sync(NTP_TEST_HOST, 60 * 60);
+    Paytm_ntp_sync(NTP_TEST_HOST, 60);
 
     Paytm_delayMilliSeconds(3 * 1000);
 
@@ -21,7 +21,7 @@ void ntpDemo(void *p)
 
 void timeZoneSet(void)
 {
-    Paytm_ntp_sync(NTP_TEST_HOST, 60 * 60);
+    Paytm_ntp_sync(NTP_TEST_HOST, 60);
 
     Paytm_delayMilliSeconds(3 * 1000);
 

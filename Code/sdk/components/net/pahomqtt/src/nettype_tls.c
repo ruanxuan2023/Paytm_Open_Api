@@ -177,11 +177,14 @@ int nettype_tls_connect(network_t* n)
 
     n->nettype_tls_params = nettype_tls_params;
     rc = nettype_tls_init(n, nettype_tls_params);
-        if (KAWAII_MQTT_SUCCESS_ERROR != rc)
-        goto exit;
+        if (KAWAII_MQTT_SUCCESS_ERROR != rc){
+            goto exit;
+        }
     
-    if (0 != (rc = mbedtls_net_connect(&(nettype_tls_params->socket_fd), n->host, n->port, MBEDTLS_NET_PROTO_TCP)))
+    if (0 != (rc = mbedtls_net_connect(&(nettype_tls_params->socket_fd), n->host, n->port, MBEDTLS_NET_PROTO_TCP))){
         goto exit;
+    }
+        
 
         while ((rc = mbedtls_ssl_handshake(&(nettype_tls_params->ssl))) != 0) {
                 if (rc != MBEDTLS_ERR_SSL_WANT_READ && rc != MBEDTLS_ERR_SSL_WANT_WRITE) {

@@ -7,7 +7,7 @@
 
 int g_val = 89;
 
-void* timerCb(void * p)
+void timerCb(void * p)
 {
     Paytm_TRACE("This is usercb, val = %d", *(int*)p);
 }

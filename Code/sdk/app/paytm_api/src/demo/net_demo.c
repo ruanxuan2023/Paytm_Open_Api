@@ -2,6 +2,7 @@
 #include "paytm_net_api.h"
 #include "paytm_sys_api.h"
 #include "paytm_typedef.h"
+#include "paytm_dev_api.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,5 +26,5 @@ void setApn(void)
 
     Paytm_TRACE("After setting apn, we need reboot the device then it will work");
 
-    Paytm_Reset();
+    Paytm_Reset(0);
 }

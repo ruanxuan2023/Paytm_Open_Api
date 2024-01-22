@@ -18,6 +18,7 @@
 #include "platform_memory.h"
 #include "platform_mutex.h"
 #include "platform_thread.h"
+#include "platform_net_socket.h"
 #include "mqtt_defconfig.h"
 #include "network.h"
 #include "random.h"

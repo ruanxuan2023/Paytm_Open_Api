@@ -68,7 +68,7 @@ void AliMqttDemo(void* p)
     Paytm_mqtt_publish_Packet_t publish = {0};
     
     mqtt_packet.host = host;
-    mqtt_packet.port = ALI_MQTT_HOST;
+    mqtt_packet.port = ALI_MQTT_PORT;
     mqtt_packet.client_id = ALI_PK;
     mqtt_packet.username = ALI_DN;
     mqtt_packet.password = ALIS_DS;

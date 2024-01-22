@@ -22,14 +22,12 @@ void * runTask_1(void* p)
 }
 
 void * runTask_2(void* p)
-{   
-    int rc = 0;
-
+{
     while (1)
     {
         Paytm_delayMilliSeconds(5000);
 
-        rc = Paytm_SendMessage(task_1, 0, 26, 155545);
+        Paytm_SendMessage(task_1, 0, 26, 155545);
     }
 }
 static int sum = 0;

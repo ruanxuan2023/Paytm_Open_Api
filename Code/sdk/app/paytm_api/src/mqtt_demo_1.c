@@ -10,6 +10,10 @@
 
 void Mqtt_Connect(void* p);
 void Mqtt_ReConnect(void* p);
+void handleSubsciption(void);
+void SendMessageToMqttFlow(int evt);
+int checkMqttCertPresentInDevice(void);
+void mqttErrorHandling(uint32_t response);
 
 #define DEMO_MQTT_HOST          "a3ri26a4bhtu9s-ats.iot.ap-south-1.amazonaws.com"
 #define DEMO_MQTT_PORT			8883
@@ -128,7 +132,7 @@ void mqtt_receive_callback(void* client, message_data_t* msg)
 
 osiWork_t *del_work = NULL;
 
-static void prvMqttDisconnect(void *param){
+OSI_UNUSED static void prvMqttDisconnect(void *param){
     paytmClearMqttConection(); // close mqtt connection
         // Paytm_TRACE("[%d]Free heap: %ld ", __LINE__,Paytm_GetFreeHeapSize());
         SendMessageToMqttFlow(0);
@@ -194,7 +198,7 @@ int PAYTM_MQTT_Initialise_wrapper(Paytm_mqtt_connect_Packet_t *mqtt)
 
     mqtt->enable_ssl = true;
 
-    int checkCert = checkMqttCertPresentInDevice();
+    // int checkCert = checkMqttCertPresentInDevice();
 
     int initCheck = Paytm_MQTT_Initialise(NULL, CERTIFICATE_NVRAM, mqtt);
     if(initCheck < 0)
@@ -217,7 +221,7 @@ extern char gMqtt_pvtKey[2048];
 int checkMqttCertPresentInDevice(void){
 	int ret = Paytm_MQTT_WriteCertificates(mqtt_cacert_1, mqtt_clientcert_1, mqtt_clientkey_1);
 
-    return 0;
+    return ret;
 }
 
 int setupAwsMqtt(void)
@@ -228,7 +232,7 @@ int setupAwsMqtt(void)
     return 0;
 }
 
-void* reqMqttConnect(void* p){
+void reqMqttConnect(void* p){
     // Paytm_TRACE("[%d]Free heap: %ld ", __LINE__,Paytm_GetFreeHeapSize());
 	setupAwsMqtt();
 }
@@ -241,11 +245,10 @@ void* mqtt_subtask(void* p)
     gMqtt_o = &mqtt_connection;
     ST_MSG msg;
     uint32_t pre_free = Paytm_GetFreeHeapSize();
-    int test_cnt = 20;
     while (true)
     {
         Paytm_delayMilliSeconds(100);
-        int getMsgReturn = Paytm_GetMessage(g_mqtt_task_id, &msg);
+        Paytm_GetMessage(g_mqtt_task_id, &msg);
         // Paytm_TRACE("***********************  %s  *************************\n", (char*)lib_version);
         // Paytm_TRACE("[%d]Free heap: %ld ", __LINE__,Paytm_GetFreeHeapSize());
         // Paytm_TRACE("Paytm_GetMessage response:[%d] msg: %d", getMsgReturn, msg.message);
@@ -344,7 +347,7 @@ void* mqtt_subtask(void* p)
 }
 
 
-void handleSubsciption(){
+void handleSubsciption(void){
 
     ST_MQTT_topic_info_t mqtt_topics;
     mqtt_topics.count = 1;

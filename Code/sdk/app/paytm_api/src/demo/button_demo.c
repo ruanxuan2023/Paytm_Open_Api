@@ -21,7 +21,7 @@ void buttoncb(void * p)
         vol++;
         if(vol >= PAYTM_VOLUME_MAX){
             vol = PAYTM_VOLUME_MAX;
-            sprintf(vol_file, "test/num%d.amr", vol);
+            sprintf(vol_file, "test/num%ld.amr", vol);
             Paytm_SetAudioVolume(vol);
             // Paytm_PlayFile(LOC_EXTER_MEM, (char*)vol_file, vol);
         }else{
@@ -37,7 +37,7 @@ void buttoncb(void * p)
         vol--;
         if(vol <= PAYTM_VOLUME_MIN){
             vol = PAYTM_VOLUME_MIN;
-            sprintf(vol_file, "test/num%d.amr", vol);
+            sprintf(vol_file, "test/num%ld.amr", vol);
             Paytm_SetAudioVolume(vol);
             // Paytm_PlayFile(LOC_EXTER_MEM, (char*)vol_file, vol);
         }else{
