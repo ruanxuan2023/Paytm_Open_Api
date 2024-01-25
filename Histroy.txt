@@ -118,3 +118,6 @@
 2024.01.25  Lib_V1.115
 * Update kernel 800SGFFRO00G0353 to fix the issue that when using some roaming sim card, network cannot connect
 * [Require DFOTA]
+2024.01.25  Lib_V1.116
+* Fix the bug that one kernel partition size exceeds
+* [Require DFOTA]
