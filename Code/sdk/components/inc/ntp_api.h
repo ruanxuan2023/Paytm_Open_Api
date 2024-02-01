@@ -47,7 +47,7 @@ char *ntpGetServer(void);
  *      - false     fail
  */
 bool ntpSyncServer(int timeout);
-
+void ntpInternalSyncCallBackRegisiter(void (*cb)(void));
 #ifdef __cplusplus
 }
 #endif

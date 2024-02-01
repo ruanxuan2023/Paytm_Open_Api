@@ -121,3 +121,6 @@
 2024.01.25  Lib_V1.116
 * Fix the bug that one kernel partition size exceeds
 * [Require DFOTA]
+2024.02.01  Lib_V1.117
+* Add function to register callback for RTC time update
+* [Require DFOTA]

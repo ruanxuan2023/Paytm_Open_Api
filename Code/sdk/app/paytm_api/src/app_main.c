@@ -17,6 +17,7 @@
 #include "paytm_led_api.h"
 #include "paytm_mqtt_api.h"
 #include "paytm_net_api.h"
+#include "paytm_ntp_api.h"
 #include "paytm_sim_api.h"
 
 #include "paytm_sys_api.h"
@@ -500,6 +501,12 @@ void MqttDetect(void* p)
         }
     }
 }
+
+void ntp_cb(void)
+{
+    Paytm_TRACE("NTP Callback");
+}
+
 extern void Paytm_Mqtt_checkHandle(void);
 void app_main(void)
 {
@@ -512,6 +519,7 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
+    Paytm_NTP_InternalSyncCb_Regisiter(ntp_cb);
     Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);
@@ -527,7 +535,7 @@ void app_main(void)
     // }
     // OpenDemoViaId(WM_BATTERY_CHECK);
     OpenDemoViaId(WM_GET_SIM_INFO);
-    OpenDemoViaId(TEST_MQTT_LOOP_QA);
+    // OpenDemoViaId(TEST_MQTT_LOOP_QA);
     // ledRun();
     // Paytm_Mqtt_MemLeakProcess();
     // OpenDemoViaId(WM_SAVE_READ_AUTHID);
@@ -535,7 +543,7 @@ void app_main(void)
     // OpenDemoViaId(WM_BATTERY_CHECK);
     while (1)
     {
-        Paytm_delayMilliSeconds(7 * 1000);
+        Paytm_delayMilliSeconds(1 * 1000);
         // Paytm_TRACE("Free heap size: %d, csq = %d", Paytm_GetFreeHeapSize(), Paytm_GetSignalStrength());
     }
 
