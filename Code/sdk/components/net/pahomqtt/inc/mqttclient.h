@@ -199,6 +199,7 @@ KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_try_duration, uint32_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(reconnect_handler, reconnect_handler_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(interceptor_handler, interceptor_handler_t)
 KAWAII_MQTT_CLIENT_SET_STATEMENT(user_data, void*)
+KAWAII_MQTT_CLIENT_SET_STATEMENT(event_handler, event_handler_t)
 
 void mqtt_sleep_ms(uint32_t ms);
 mqtt_client_t *mqtt_lease(void);

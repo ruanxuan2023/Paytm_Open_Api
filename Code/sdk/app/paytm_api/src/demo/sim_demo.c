@@ -1,6 +1,5 @@
 #include "paytm_dev_info_api.h"
 #include "paytm_net_api.h"
-#include "paytm_ntp_api.h"
 #include "paytm_sim_api.h"
 #include "paytm_typedef.h"
 
@@ -123,24 +122,17 @@ static void msgTask0(void* p)
 
 void testSim(void)
 {
-    Paytm_Time gi = {0x00};
-
     Paytm_GPRS_Connect(Paytm__IPVERSION_IPV4, NULL);
 
     Paytm_GetModemFunction((uint8 *)simMonitor);
 
     task_id = Paytm_CreateTask("1", msgTask0, NULL, 120, 4 * 1024);
-
-
+    
     while (!Paytm_Net_IsConnected())
     {
         // Paytm_TRACE("Networking connecting, sim card status: %s", Paytm_GetSimState() ? "ready" : "not ready");
         Paytm_delayMilliSeconds(1000);
-        Paytm_GetTime(&gi);
-        Paytm_TRACE("%d-%d-%d, %d:%d:%d", gi.year, gi.month, gi.day, gi.hour, gi.minute, gi.second);
     }
-
-
 }
 
 void readSimState(void)
