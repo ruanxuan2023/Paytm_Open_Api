@@ -444,9 +444,11 @@ void OpenDemoViaId(TASK_SELECTION id)
     case WM_SET_APN:
         setApn();
         break;
+    #ifdef BT_EN
     case WM_BT_AUDIO:
         bt_audio_demo();
         break;
+    #endif
     case WM_DEVICE_CRASH_TEST_A:
         break;
     case WM_DEVICE_CRASH_TEST_B:
@@ -519,7 +521,9 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
+    #ifndef BT_EN
     Paytm_NTP_InternalSyncCb_Regisiter(ntp_cb);
+    #endif
     Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
     OpenDemoViaId(WM_BUTTON_DEMO);

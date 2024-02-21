@@ -17,6 +17,8 @@ set para_ab_target=soundbox
 set para_flash_size=4
 set para_module_version=ZX800SG
 
+set BT_EN=n
+
 set folder_ab_build_out=%folder_ab_current%\out
 set file_ab_build_config=%folder_ab_build_out%\bcfg 
 set ctool_exec=%folder_ab_current%\..\Tools\ctools.exe
@@ -28,6 +30,7 @@ if exist %file_ab_build_config% (
         if "%%a"=="target=" set para_ab_target=%%b
         if "%%a"=="flash=" set para_flash_size=%%b
         if "%%a"=="module_version=" set para_module_version=%%b
+        if "%%a"=="bt_enable=" set BT_EN=%%b
     )
 )
 
@@ -44,6 +47,9 @@ if not "%1"=="" (
         shift /0
     ) else if "%1"=="-fs" (
         set para_flash_size=%2
+        shift /0
+    )  else if "%1"=="-bt" (
+        set BT_EN=y
         shift /0
     ) else if "%1"=="-bv" (
         set para_module_version=%2
@@ -78,6 +84,7 @@ if not exist %folder_ab_build_out% (
 echo target='%para_ab_target%'>%file_ab_build_config%
 echo flash='%para_flash_size%'>>%file_ab_build_config%
 echo module_version='%para_module_version%'>>%file_ab_build_config%
+echo bt_enable='%BT_EN%'>>%file_ab_build_config%
 set module_version=%para_module_version%
 if %para_module_version% == ZX600RG (
     if %para_flash_size% == 8 (

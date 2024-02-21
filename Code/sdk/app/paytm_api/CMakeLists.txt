@@ -16,7 +16,11 @@ add_app_libraries($<TARGET_FILE:${target}>)
 add_library(${target} STATIC ${dummy_c_file})
 set_target_properties(${target} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${out_lib_dir})
 
-file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/*.a")
+if(BT_EN)
+file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/BT/*.a")
+else()
+file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/LTE/*.a")
+endif()
 target_link_libraries(${target} PUBLIC ${LIBS_PATH} httpclient json pahomqtt )
 target_link_libraries(${target} PRIVATE ${libc_file_name} ${libm_file_name} ${libgcc_file_name})
 

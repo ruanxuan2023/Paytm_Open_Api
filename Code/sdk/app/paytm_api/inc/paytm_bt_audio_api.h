@@ -8,28 +8,44 @@
 #define BT_RESET_IO     (70)
 
 typedef enum{
-    BT_PREVIOUS_SONG = 0x21,
-    BT_NEXT_SONG = 0x22,
-    BT_VOLUME_UP = 0x23,
-    BT_VOLUME_DOWN = 0x24,
-    BT_PAUSE_PLAY = 0x25,
-    BT_DISCONNECT = 0x26
+    BT_CMD_RESET    = 0x30,   //>
+    BT_CMD_REQUIRE_CONNECT,     //>
+    BT_CMD_REJECT_CONNECT,      //>
+    BT_CMD_CLEAR_PAIRED_MAC,
+    BT_CMD_CLEAR_ALL_PAIRED_MAC,
+    BT_CMD_IS_PAIRED_MAC,
+    BT_CMD_SET_BT_NAME,
+    BT_CMD_SET_TIMEOUT,
+    BT_CMD_QUERY_STATUS,
+    BT_CMD_GET_BT_NAME,
+    BT_CMD_GET_ADDRESS,
+    BT_CMD_PAUSE_PLAY,
+    BT_CMD_DISCONNECT,
+    BT_CMD_PREVIOUS_SONG,
+    BT_CMD_NEXT_SONG,
+    BT_CMD_VOLUME_UP,
+    BT_CMD_VOLUME_DOWN,
+    BT_CMD_STATUS_REPORT,
+    BT_CMD_POWER_DOWN
+
 }Paytm_BT_AUDIO_CMD;
 
 typedef enum{
-    SB_BT_DEVICE_CONNECTION_IDLE = 0x00,            /* BT power on, but no connection/disconnection event */
-    SB_BT_DEVICE_CONNECTION_WAITING,                /* BT power on, but no connnect request comes */
-    SB_BT_DEVICE_CONNECTION_REJECTED,               /* Event after calling Paytm_BT_Reject_Connection */
-    SB_BT_DEVICE_CONNECTION_TIMEOUT_PLAYBACK,       /* timed out for no playback(dont understand this? What playback) */ 
-    SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_ACCEPT,      /* timed out for no call for SB_BT_AcceptConnection (Dose it mean when remote device request to pair, but application not give accept cmd so return this urc?) */
-    SB_BT_DEVICE_CONNECTION_TIMEOUT_IDLE,           /* BT timeout for no connection(What difference with SB_BT_DEVICE_CONNECTION_WAITING?) */
-    SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_BT_STATE,    /* timed out for incomplete connection packet */
-    SB_BT_DEVICE_CONNECTION_DISCONNECTED,           /* connection remotely disconnected */
-    SB_BT_DEVICE_CONNECTION_UNPAIRED,               /* connection upnaired by calling Paytm_BT_Remove_Paired_device */
-    SB_BT_DEVICE_CONNECTION_INITIATING = 0x80,      /* connect urc received for power on(when init BT module, give this event) */
-    SB_BT_DEVICE_CONNECTION_CONNECTED,              /* new unpaired device connected */
-    SB_BT_DEVICE_CONNECTION_PAIRED,                 /* already paired device connected */
-    SB_BT_PLAY_STOP                                 /* media playing or pause */
+    BT_EVENT_NONE = 0x00,
+    BT_EVENT_START,
+    BT_EVENT_INIT_SUCCESS,
+    BT_EVENT_INIT_FAILED,
+    BT_EVENT_IDLE,                                  /* BT power on, but no connection/disconnection event */
+    BT_EVENT_IDLE_TIMEOUT,
+    BT_EVENT_PAIRED_REQUEST,
+    BT_EVENT_CONNECTION_REJECT,                     /* Event after calling Paytm_BT_Reject_Connection */
+    BT_EVENT_CONNECTION_TIMEOUT_NO_ACCEPT,          /* timed out for no call for SB_BT_AcceptConnection (Dose it mean when remote device request to pair, but application not give accept cmd so return this urc?) */
+    BT_EVENT_CONNECTION_ERROR,
+    BT_EVENT_DISCONNECTED,                          /* connection remotely disconnected */
+    BT_EVENT_UNPAIRED,                              /* connection upnaired by calling Paytm_BT_Remove_Paired_device */
+    BT_EVENT_PAIRED,                                /* already paired device connected */
+    BT_EVENT_PLAY_STOP,                             /* media playing or pause */      
+    BT_EVENT_PLAY_RECOVER                       
 }Paytm_BT_Device_State;
 
 /**
@@ -61,12 +77,12 @@ int32_t Paytm_BT_Audio_Cmd_Set(uint8_t cmd);
 
 /**
  * @description: 
- * @param {int32_t} accept_connection_timeout_sec: 
- * @param {int32_t} disconnect_timeout_sec
- * @param {int32_t} paused_timeout_sec
- * @return {*}
+ * @param {uint8_t} accept_connection_timeout_sec: 
+ * @param {uint8_t} disconnect_timeout_sec
+ * @param {uint8_t} paused_timeout_sec
+ * @return {int32_t}
  */
-void Paytm_BT_Set_Timeout(int32_t accept_connection_timeout_sec, int32_t disconnect_timeout_sec, int32_t paused_timeout_sec);
+int32_t Paytm_BT_Set_Timeout(uint8_t accept_connection_timeout_sec, uint8_t disconnect_timeout_sec, uint8_t paused_timeout_sec);
 
 /**
  * @description: 
@@ -93,7 +109,7 @@ int32_t Paytm_BT_Reject_Connection(uint8 *mac_addr);
  * @param {uint8} *mac_addr: mac address of remote device
  * @return {*} 0: success, <0: fail
  */
-int32_t Paytm_BT_Remove_Paired_device(uint8 *mac_addr);
+int32_t Paytm_BT_Remove_Paired_device(const uint8 *mac_addr);
 
 /**
  * @description:  Clears paired remote device list from bluetooth module
@@ -106,7 +122,7 @@ int32_t Paytm_BT_Clear_Paired_Device_List(void);
  * @param {uint8} *mac_addr: mac address of remote device
  * @return {*} 0: success, <0: fail
  */
-bool Paytm_BT_device_Is_paired(uint8 *mac_addr);
+bool Paytm_BT_device_Is_paired(const uint8 *mac_addr);
 
 /* It seems not support to set&get specific volume, because different phone may have different volume level. 
     We can use function Paytm_BT_Audio_Cmd_Set to control volume up&down
@@ -119,7 +135,7 @@ int32_t Paytm_BT_Get_Volume(void);
  * @param {char*} name
  * @return {*}
  */
-int32_t Paytm_BT_Set_Name(char* name);
+int32_t Paytm_BT_Set_Name(const char* name);
 
 /**
  * @description: Get broadcast name for bluetooth connection
@@ -135,6 +151,10 @@ int32_t Paytm_BT_Get_Name(char* name, uint32 *name_len);
  * @param {uint32} mac_len: Input value to save mac address len
  * @return {*}
  */
-int32_t Paytm_BT_Get_Mac_Address(uint8 *mac, uint32 mac_len);
+int32_t Paytm_BT_Get_Mac_Address(uint8 *mac);
 
+int32_t Paytm_BT_Audio_Set_Cmd(uint8_t cmd, uint8_t * data, uint8_t data_len);
+
+void Paytm_BT_Powerup(void);
+void Paytm_BT_Powerdown(void);
 #endif

@@ -29,6 +29,13 @@ elseif($ENV{para_flash_size} MATCHES "4")
     set(flash_ldscript ${SOURCE_TOP_DIR}/ldscripts/app_flashimg_xip.ld)
     add_definitions(-DBOARD_FLASH_SIZE_4M)
 endif()
+
+set(BT_EN OFF)
+if($ENV{BT_EN} MATCHES "y")
+set(BT_EN ON)
+add_definitions(-DBT_EN)
+endif()
+
 include_directories(
     components/inc
     ../kernel/${module_version}/inc
