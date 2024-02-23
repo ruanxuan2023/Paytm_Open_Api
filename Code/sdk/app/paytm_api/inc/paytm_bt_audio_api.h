@@ -4,49 +4,29 @@
 #include "paytm_sys_api.h"
 #include "paytm_typedef.h"
 
-#define BT_SWITCH_IO    (56)
-#define BT_RESET_IO     (70)
+#define MAC_ADDR_LEN   (6)
 
-typedef enum{
-    BT_CMD_RESET    = 0x30,   //>
-    BT_CMD_REQUIRE_CONNECT,     //>
-    BT_CMD_REJECT_CONNECT,      //>
-    BT_CMD_CLEAR_PAIRED_MAC,
-    BT_CMD_CLEAR_ALL_PAIRED_MAC,
-    BT_CMD_IS_PAIRED_MAC,
-    BT_CMD_SET_BT_NAME,
-    BT_CMD_SET_TIMEOUT,
-    BT_CMD_QUERY_STATUS,
-    BT_CMD_GET_BT_NAME,
-    BT_CMD_GET_ADDRESS,
-    BT_CMD_PAUSE_PLAY,
-    BT_CMD_DISCONNECT,
-    BT_CMD_PREVIOUS_SONG,
-    BT_CMD_NEXT_SONG,
-    BT_CMD_VOLUME_UP,
-    BT_CMD_VOLUME_DOWN,
-    BT_CMD_STATUS_REPORT,
-    BT_CMD_POWER_DOWN
+typedef enum {
+    SB_BT_DEVICE_CONNECTION_IDLE = 0x00,         // no connect/disconnect urc received for power on
+    SB_BT_DEVICE_CONNECTION_WAITING,             // no connect urc received for power on
+    SB_BT_DEVICE_CONNECTION_REJECTED,            // connection rejected by calling SB_BT_RejectConnection()
+    SB_BT_DEVICE_CONNECTION_TIMEOUT_PLAYBACK,    // timed out for no playback
+    SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_ACCEPT,   // timed out for no call for SB_BT_AcceptConnection()
+    SB_BT_DEVICE_CONNECTION_TIMEOUT_IDLE,        // timed out for no connection
+    SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_BT_STATE, // timed out for incomplete connection packet
+    SB_BT_DEVICE_CONNECTION_DISCONNECTED,        // connection remotely disconnected
+    SB_BT_DEVICE_CONNECTION_UNPAIRED,            // connection upnaired by calling SB_BT_RemovePairedDevice()
+    SB_BT_DEVICE_CONNECTION_INITIATING = 0x80,   // connect urc received for power on
+    SB_BT_DEVICE_CONNECTION_CONNECTED,           // new unpaired device connected
+    SB_BT_DEVICE_CONNECTION_PAIRED,              // already paired device connected
+    SB_BT_PLAY_STOP,                            // media playing or pause 
+} bluetooth_device_state_t;
 
-}Paytm_BT_AUDIO_CMD;
-
-typedef enum{
-    BT_EVENT_NONE = 0x00,
-    BT_EVENT_START,
-    BT_EVENT_INIT_SUCCESS,
-    BT_EVENT_INIT_FAILED,
-    BT_EVENT_IDLE,                                  /* BT power on, but no connection/disconnection event */
-    BT_EVENT_IDLE_TIMEOUT,
-    BT_EVENT_PAIRED_REQUEST,
-    BT_EVENT_CONNECTION_REJECT,                     /* Event after calling Paytm_BT_Reject_Connection */
-    BT_EVENT_CONNECTION_TIMEOUT_NO_ACCEPT,          /* timed out for no call for SB_BT_AcceptConnection (Dose it mean when remote device request to pair, but application not give accept cmd so return this urc?) */
-    BT_EVENT_CONNECTION_ERROR,
-    BT_EVENT_DISCONNECTED,                          /* connection remotely disconnected */
-    BT_EVENT_UNPAIRED,                              /* connection upnaired by calling Paytm_BT_Remove_Paired_device */
-    BT_EVENT_PAIRED,                                /* already paired device connected */
-    BT_EVENT_PLAY_STOP,                             /* media playing or pause */      
-    BT_EVENT_PLAY_RECOVER                       
-}Paytm_BT_Device_State;
+typedef struct {
+    bluetooth_device_state_t state;
+    uint8 mac[MAC_ADDR_LEN];
+    void *param;
+} bluetooth_device_msg_t;
 
 /**
  * @description: Init BT Audio module
@@ -153,7 +133,27 @@ int32_t Paytm_BT_Get_Name(char* name, uint32 *name_len);
  */
 int32_t Paytm_BT_Get_Mac_Address(uint8 *mac);
 
-int32_t Paytm_BT_Audio_Set_Cmd(uint8_t cmd, uint8_t * data, uint8_t data_len);
+typedef struct _bt_paired_device_t {
+    uint64 last_connected;
+    uint8 mac[MAC_ADDR_LEN];
+    char *name;
+    struct _bt_paired_device_t *next;
+} bt_paired_device_t;
+	
+	
+/// \brief This function return linked list of paired BT devices with bluetooth module
+bt_paired_device_t *Paytm_BT_Get_PairedBT_DeviceList(void);
+
+/// \brief This function frees the allocated memory space to SB_Get_PairedBT_DeviceList
+void Paytm_Free_DeviceList(bt_paired_device_t *deviceList);
+
+/// \brief This function retrieves the firmware version of the bluetooth module.
+/// \param[out] version         buffer for firmware version of the bluetooth module
+/// \param[in] version_len      length of the buffer version
+/// \return QL_RET_OK           success
+///         < 0                 failed
+int32 Paytm_BT_GetSDKVersion(uint8 *version, uint32 version_len);
+
 
 void Paytm_BT_Powerup(void);
 void Paytm_BT_Powerdown(void);

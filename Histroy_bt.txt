@@ -1,3 +1,7 @@
 2023.02.19	BT_Lib_V1.1
 * First commit for the branch BT_Box
 
+2023.02.23	BT_Lib_V1.2
+* ADD API:Paytm_BT_GetSDKVersion Paytm_BT_Set_volume
+* Modify BT event enum and callback parameter
+
