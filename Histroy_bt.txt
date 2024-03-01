@@ -5,3 +5,6 @@
 * ADD API:Paytm_BT_GetSDKVersion Paytm_BT_Set_volume
 * Modify BT event enum and callback parameter
 
+2023.03.01	BT_Lib_V1.3
+* ADD API:Paytm_BT_Get_PairedBT_DeviceList Paytm_Free_DeviceList
+* Modify BT Audio demo, Bluetooth pairing requires confirmation using API Paytm_BT_Accept_Connection

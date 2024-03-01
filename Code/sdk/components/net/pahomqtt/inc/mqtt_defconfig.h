@@ -60,7 +60,7 @@
 #endif // !KAWAII_MQTT_THREAD_STACK_SIZE
 
 #ifndef KAWAII_MQTT_THREAD_PRIO
-    #define     KAWAII_MQTT_THREAD_PRIO                    210
+    #define     KAWAII_MQTT_THREAD_PRIO                    100
 #endif // !KAWAII_MQTT_THREAD_PRIO
 
 #ifndef KAWAII_MQTT_THREAD_TICK

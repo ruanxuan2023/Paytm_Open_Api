@@ -6,8 +6,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <osi_api.h>
 
-#ifdef BT_EN
 int task_id = 0;
 
 static char volume = 16;
@@ -15,7 +15,6 @@ static char volume = 16;
 void bt_button_cb(void * p)
 {
     static bool switch_0 = false;
-    // int32_t rc = 0;
     buttonActMsg_t *msg = (buttonActMsg_t *)p; 
 
     switch (msg->id)
@@ -112,11 +111,25 @@ static void PWKMsgTask(void* p)
 
 static void prvBtEventCB(void *param){
     bluetooth_device_msg_t *msg = (bluetooth_device_msg_t *)param;
+    uint8_t *mac_addr = msg->mac;
     Paytm_TRACE("State: %d", msg->state);
+    switch (msg->state)
+    {
+    case SB_BT_DEVICE_CONNECTION_CONNECTED:
+        // accepte device connect
+        Paytm_BT_Accept_Connection(mac_addr);
+        break;
+    case SB_BT_DEVICE_CONNECTION_PAIRED:
+        break;
+    default:
+        break;
+    }
 }
 void bt_audio_demo(void)
 {
+    uint8_t mac[MAC_ADDR_LEN] = {0};
     uint8 bt_sw_version[32+1] = {0};
+    
     Paytm_BT_Callback_Register(prvBtEventCB);
     if(Paytm_BT_Audio_Init() != 0)
     {
@@ -124,13 +137,20 @@ void bt_audio_demo(void)
         return;
     }
 
-    Paytm_BT_GetSDKVersion(bt_sw_version, sizeof(bt_sw_version)-1);
-    Paytm_TRACE("BT module software version: %s", bt_sw_version);
+    Paytm_BT_Powerup();
+    Paytm_TRACE("BT audio POWER up");
+    Paytm_delayMilliSeconds(1000);
+    while (Paytm_BT_GetSDKVersion(bt_sw_version, sizeof(bt_sw_version)) != 0)
+    {
+        Paytm_delayMilliSeconds(500);
+    }
+    
     
     // Paytm_BT_Accept_Connection(NULL);
     char bt_name[32] = {0x00};
     char bt_read_name[32] = {0x00};
-    uint8_t bt_imei[32] = {0x00};
+    char bt_imei[32] = {0x00};
+    
     int ret = 0;
     uint32 get_len = 0;
 
@@ -145,7 +165,7 @@ void bt_audio_demo(void)
 
     Paytm_TRACE("BT audio init success!");
     
-    Paytm_GetIMEI((char *)bt_imei);        
+    Paytm_GetIMEI(bt_imei);        
     sprintf(bt_name, "Paytm_SoundBox_%d%d%d%d", bt_imei[11] - '0', bt_imei[12] - '0', bt_imei[13] - '0', bt_imei[14] - '0');
     bt_name[19] = '\0';
     ret = Paytm_BT_Get_Name(bt_read_name, &get_len);  Paytm_TRACE("Paytm_BT_Get_Name ret: %d, name_len = %d", ret, get_len);
@@ -153,15 +173,43 @@ void bt_audio_demo(void)
     if(Paytm_strncmp(bt_name, bt_read_name, Paytm_strlen((char*)bt_name)) != 0){
         ret = Paytm_BT_Set_Name(bt_name); Paytm_TRACE("Paytm_BT_Set_Name ret: %d", ret);
     }
-    // Paytm_BT_Get_PairedBT_DeviceList();
+
+    Paytm_BT_Set_volume(Paytm_BT_Get_Volume());
+    ret = Paytm_BT_Get_Mac_Address(mac);
+
+    if (ret != 0)
+    {
+        Paytm_TRACE("Read mac address ERROR");
+    } else {
+        Paytm_TRACE_HEX_BUFFER("BT Mac address:", mac, MAC_ADDR_LEN);
+    }
+    
     Paytm_delayMilliSeconds(2000);
     // Paytm_BT_Powerdown();
 
+    bt_paired_device_t *plist = NULL;
     while (1)
     {
+
+
+        plist = Paytm_BT_Get_PairedBT_DeviceList();
+        
+        if(plist){
+            bt_paired_device_t *pcur = plist;
+            while (pcur)
+            {
+                Paytm_TRACE("name: %s lastconnect: %ld", pcur->name, pcur->last_connected);
+                Paytm_TRACE_HEX_BUFFER("List mac:", pcur->mac, 6);
+                pcur = pcur->next;
+            }
+            free(plist); 
+        }else{
+            RTI_LOG("Get paired list ERROR!!!!!!!");
+        }
+            
+
         Paytm_delayMilliSeconds(2000);
     }
     
     Paytm_ExitTask();
 }   
-#endif

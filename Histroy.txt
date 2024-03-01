@@ -124,3 +124,5 @@
 2024.02.01  Lib_V1.117
 * Add function to register callback for RTC time update
 * [Require DFOTA]
+2024.03.01  Lib_V1.117
+* Modify mqtt thread priority to 100
