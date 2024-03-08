@@ -18,6 +18,7 @@ set para_flash_size=4
 set para_module_version=ZX800SG
 
 set BT_EN=n
+set HARDWARE=LIT4GCN
 
 set folder_ab_build_out=%folder_ab_current%\out
 set file_ab_build_config=%folder_ab_build_out%\bcfg 
@@ -50,6 +51,10 @@ if not "%1"=="" (
         shift /0
     )  else if "%1"=="-bt" (
         set BT_EN=y
+        set HARDWARE=LIT4GCNB
+        shift /0
+    ) else if "%1"=="-pkt" (
+        set HARDWARE=LIT4GPKT
         shift /0
     ) else if "%1"=="-bv" (
         set para_module_version=%2
@@ -67,6 +72,7 @@ echo ****************************************
 echo cmd=%para_ab_cmd%
 echo target=%para_ab_target%
 echo module version=%para_module_version%
+echo HARDWARE=%HARDWARE%
 echo ****************************************
 
 ::check module version
