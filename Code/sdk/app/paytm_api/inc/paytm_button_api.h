@@ -14,7 +14,10 @@ typedef enum {
     BUTTON_MINUS,
     BUTTON_FUNCTION,
     BUTTON_POWER,
-    BUTTON_COUNT
+    BUTTON_COUNT,
+    #ifdef BT_EN
+    BUTTON_PLUS_MINUS
+    #endif
 } buttons_enum_t;
 
 #define ANTI_SHAKE_MS (100)
