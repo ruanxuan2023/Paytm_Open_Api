@@ -24,16 +24,24 @@ void bt_button_cb(void * p)
     switch (msg->id)
     {
     case BUTTON_PLUS:
-        Paytm_TRACE("BT volume up");
-        // Paytm_BT_Audio_Set_Cmd(BT_CMD_VOLUME_UP, NULL, 0);
-        volume++;
-        if(volume > 32){
-            volume = 32;
-        }
-        if(bt_power_state == 0){
-            break;
-        }
-        Paytm_BT_Set_volume(volume);
+        Paytm_TRACE("Button plus");
+        int32_t vol = Paytm_GetVolume(NULL);
+        Paytm_TRACE("Volume is %d", vol);
+        Paytm_TRACE("BT volume is %d",Paytm_BT_Get_Volume());
+        vol = Paytm_BT_Set_volume(16);
+        Paytm_TRACE("BT volume set %d",vol);
+
+        Paytm_BT_Audio_Enable(false);
+        int ret = Paytm_PlayFileFromDir(LOC_EXTER_MEM, "data/resources/sounds/hi/","welc.amr", 8);
+        Paytm_TRACE("Play file ret %d", ret);
+        // audio asynchronous playback delay waiting for playback to complete
+        Paytm_delayMilliSeconds(3000);
+        Paytm_BT_Audio_Enable(true);
+        vol = Paytm_GetVolume(NULL);
+        Paytm_TRACE("Volume is %d", vol);
+        Paytm_TRACE("BT volume is %d",Paytm_BT_Get_Volume());
+        vol = Paytm_BT_Set_volume(16);
+        Paytm_TRACE("BT volume set 16", vol);
         break;
     case BUTTON_MINUS:
         Paytm_TRACE("BT volume down");
@@ -220,4 +228,6 @@ void bt_audio_demo(void)
     {
         Paytm_TRACE("BT audio init fail!");
     }
+
+    bt_audio_power_up();
 }   

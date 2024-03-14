@@ -28,6 +28,16 @@ typedef struct {
     void *param;
 } bluetooth_device_msg_t;
 
+typedef enum {
+    OAK_BT_SUCCESS,
+    OAK_BT_TURNED_OFF_ERR,    // BT is turned off
+    OAK_BT_NO_REQ_PNDING_ERR,  // no request pending
+    OAK_BT_MAC_MISMTCH_ERR,  // mac address mismatch
+    OAK_BT_LMT_RCHED_ERR,   // 25 Devices already paired
+    OAK_BT_AL_REJECTED_ERR,   //Connection was already REJECTED / UNPAIRED
+    OAK_BT_AL_PAIRED_ERR, // Connection was already PAIRED
+}BtErrCode_e;
+
 /**
  * @description: Init BT Audio module
  * @return {*}  0: init success, -1: init fail

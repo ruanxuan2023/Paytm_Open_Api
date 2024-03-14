@@ -11,3 +11,7 @@
 2023.03.11	BT_Lib_V1.4
 * ADD multi key(+/-) event
 * Modify BT Audio demo for multi key process 
+
+2023.03.14	BT_Lib_V1.5
+* Modify BT audio demo plus key function
+* Modify BT Audio api error code return  

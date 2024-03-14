@@ -525,7 +525,7 @@ void app_main(void)
     Paytm_NTP_InternalSyncCb_Regisiter(ntp_cb);
     #endif
     Paytm_LED_SetColor(LED_GREEN, 1);
-    Paytm_PlayFile(LOC_INTER_MEM, "welc.mp3", 8);
+    Paytm_PlayFileFromDir(LOC_EXTER_MEM,  "data/resources/sounds/hi/","welc.amr", 8);
     // OpenDemoViaId(WM_BUTTON_DEMO);
     // OpenDemoViaId(WM_PWK_DEMO);
     // Paytm_AutoSleep_Enable(true);
