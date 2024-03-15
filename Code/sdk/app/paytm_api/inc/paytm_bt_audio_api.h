@@ -165,6 +165,6 @@ void Paytm_Free_DeviceList(bt_paired_device_t *deviceList);
 int32 Paytm_BT_GetSDKVersion(uint8 *version, uint32 version_len);
 
 
-void Paytm_BT_Powerup(void);
-void Paytm_BT_Powerdown(void);
+int32_t Paytm_BT_Powerup(void);
+int32_t Paytm_BT_Powerdown(void);
 #endif

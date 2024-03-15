@@ -14,7 +14,6 @@ static char volume = 16;
 
 static void bt_audio_power_up(void);
 static void bt_audio_power_down(void);
-static uint8_t bt_power_state = 0;
 
 
 void bt_button_cb(void * p)
@@ -50,16 +49,18 @@ void bt_button_cb(void * p)
         if(volume < 0){
             volume = 0;
         }
-        if(bt_power_state == 0){
+        if(Paytm_BT_Get_State() == 0){
             break;
         }
         Paytm_BT_Set_volume(volume);
         break;
     case BUTTON_PLUS_MINUS:
         Paytm_TRACE("BT SWITCH");
-        if(bt_power_state){
+        if(Paytm_BT_Get_State() == 1){
+            Paytm_TRACE("BT current state is ON, turn off BT");
             bt_audio_power_down();
         }else{
+            Paytm_TRACE("BT current state is OFF, turn on BT");
             bt_audio_power_up();
         }
         break;
@@ -137,16 +138,18 @@ static void prvBtEventCB(void *param){
 static void bt_audio_power_up(void){
     uint8_t mac[MAC_ADDR_LEN] = {0};
     uint8 bt_sw_version[32+1] = {0};
+    int32_t ret = -1;
 
     Paytm_TRACE("BT audio POWER up");
 
-    if(bt_power_state == 1){
+    if(Paytm_BT_Get_State() == 1){
         return;
     }
 
     Paytm_BT_Callback_Register(prvBtEventCB);
 
-    Paytm_BT_Powerup();
+    ret = Paytm_BT_Powerup();
+    Paytm_TRACE("Paytm_BT_Powerup ret: %d", ret);
     
     Paytm_delayMilliSeconds(1000);
     Paytm_BT_GetSDKVersion(bt_sw_version, sizeof(bt_sw_version));
@@ -156,8 +159,7 @@ static void bt_audio_power_up(void){
     char bt_name[32] = {0x00};
     char bt_read_name[32] = {0x00};
     char bt_imei[32] = {0x00};
-    
-    int ret = 0;
+
     uint32 get_len = 0;
 
     ret = Paytm_BT_Set_Timeout(10, 60, 0); Paytm_TRACE("Paytm_BT_Set_Timeout ret: %d", ret);
@@ -183,7 +185,7 @@ static void bt_audio_power_up(void){
     } else {
         Paytm_TRACE_HEX_BUFFER("BT Mac address:", mac, MAC_ADDR_LEN);
     }
-    bt_power_state = 1;
+
     Paytm_delayMilliSeconds(2000);
     // Paytm_BT_Powerdown();
 
@@ -209,12 +211,13 @@ static void bt_audio_power_up(void){
 
 static void bt_audio_power_down(void){
     Paytm_TRACE("BT audio POWER down");
-    if(bt_power_state ==  0){
+    int32_t ret = -1;
+    if(Paytm_BT_Get_State() ==  0){
         return;
     }
     Paytm_BT_Callback_Register(NULL);
-    Paytm_BT_Powerdown();
-    bt_power_state = 0;
+    ret = Paytm_BT_Powerdown();
+    Paytm_TRACE("BT audio POWER down ret: %d", ret);
 }
 
 void bt_audio_demo(void)
@@ -229,5 +232,4 @@ void bt_audio_demo(void)
         Paytm_TRACE("BT audio init fail!");
     }
 
-    bt_audio_power_up();
 }   
