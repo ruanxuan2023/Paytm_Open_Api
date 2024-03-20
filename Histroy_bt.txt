@@ -20,3 +20,8 @@
 * Modify return code for Paytm_BT_Powerdown api
 * Print debug charge log every 5s
 * Modify Paytm_BT_Get_State demo
+
+2023.03.20	BT_Lib_V1.7
+* Modify the device pairing and connection process
+* Add device name param on pairing and connect callback
+* Add BT audio play start event

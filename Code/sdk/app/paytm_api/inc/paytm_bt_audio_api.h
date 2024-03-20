@@ -5,6 +5,7 @@
 #include "paytm_typedef.h"
 
 #define MAC_ADDR_LEN   (6)
+#define DEV_NAME_MAX_LEN   (64)
 
 typedef enum {
     SB_BT_DEVICE_CONNECTION_IDLE = 0x00,         // no connect/disconnect urc received for power on
@@ -19,12 +20,14 @@ typedef enum {
     SB_BT_DEVICE_CONNECTION_INITIATING = 0x80,   // connect urc received for power on
     SB_BT_DEVICE_CONNECTION_CONNECTED,           // new unpaired device connected
     SB_BT_DEVICE_CONNECTION_PAIRED,              // already paired device connected
-    SB_BT_PLAY_STOP,                            // media playing or pause 
+    SB_BT_PLAY_STOP,                            // media playing stop or pause 
+    SB_BT_PLAY_START,                            // media playing start
 } bluetooth_device_state_t;
 
 typedef struct {
     bluetooth_device_state_t state;
     uint8 mac[MAC_ADDR_LEN];
+    uint8 name[DEV_NAME_MAX_LEN];
     void *param;
 } bluetooth_device_msg_t;
 
@@ -36,6 +39,7 @@ typedef enum {
     OAK_BT_LMT_RCHED_ERR,   // 25 Devices already paired
     OAK_BT_AL_REJECTED_ERR,   //Connection was already REJECTED / UNPAIRED
     OAK_BT_AL_PAIRED_ERR, // Connection was already PAIRED
+    OAK_BT_TIMEOUT_ERR, // Connection was already PAIRED
 }BtErrCode_e;
 
 /**

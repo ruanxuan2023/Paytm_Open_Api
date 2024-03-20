@@ -508,7 +508,7 @@ void ntp_cb(void)
 {
     Paytm_TRACE("NTP Callback");
 }
-
+#include "fs_api.h"
 extern void Paytm_Mqtt_checkHandle(void);
 void app_main(void)
 {

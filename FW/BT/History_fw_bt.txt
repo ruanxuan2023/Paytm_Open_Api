@@ -1,0 +1,4 @@
+* BT_V013 2024-03-20
+1. Modify the device pairing and connection process
+2. Add the return value of accept connect API
+3. Fixed the issue where the connection was not disconnected after removed current device.
