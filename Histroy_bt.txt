@@ -25,3 +25,7 @@
 * Modify the device pairing and connection process
 * Add device name param on pairing and connect callback
 * Add BT audio play start event
+
+2023.03.21	BT_Lib_V1.8
+* Modify the device pairing and connection demo
+* Add connect/music play timeout demo

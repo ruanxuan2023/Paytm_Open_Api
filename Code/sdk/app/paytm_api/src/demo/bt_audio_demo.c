@@ -13,6 +13,7 @@
 int task_id = 0;
 
 static char volume = 16;
+static uint8 mac_paire[MAC_ADDR_LEN] = {0};
 
 static void bt_audio_power_up(void);
 static void bt_audio_power_down(void);
@@ -117,6 +118,12 @@ void bt_button_cb(void * p)
         break;
     case BUTTON_FUNCTION:
         if(msg->state == STATE_BUTTON_SINGLE_CLICK){
+            if(mac_paire[0]){
+                BtErrCode_e ret = Paytm_BT_Accept_Connection(mac_paire);
+                Paytm_TRACE("Paytm_BT_Accept_Connection ret: %d", ret);
+                memset(mac_paire, 0, MAC_ADDR_LEN);
+                break;
+            }
             Paytm_TRACE("clean paried device");
 
             ret = Paytm_BT_Clear_Paired_Device_List();
@@ -195,11 +202,26 @@ static void prvBtEventCB(void *param){
     case SB_BT_DEVICE_CONNECTION_CONNECTED:
         // accepte device connect
         Paytm_TRACE("Try connect unpaired device name: %s", msg->name);
-        BtErrCode_e ret = Paytm_BT_Accept_Connection(mac_addr);
-        Paytm_TRACE("Paytm_BT_Accept_Connection ret: %d", ret);
+        Paytm_TRACE("Press FUN key accept connect");
+        memcpy(mac_paire, mac_addr, MAC_ADDR_LEN);
+        // BtErrCode_e ret = Paytm_BT_Accept_Connection(mac_paire);
+        // Paytm_TRACE("Paytm_BT_Accept_Connection ret: %d", ret);
         break;
     case SB_BT_DEVICE_CONNECTION_PAIRED:
         Paytm_TRACE("Connected paired device name: %s", msg->name);
+        Paytm_LED_SetColor(LED_BLUE, 0);
+        break;
+    case SB_BT_DEVICE_CONNECTION_DISCONNECTED:
+        Paytm_LED_SetColor(LED_BLUE, 1);
+        break;
+    case SB_BT_DEVICE_CONNECTION_TIMEOUT_IDLE:
+        Paytm_TRACE("Idle connect timeout %s", msg->name);
+        break;
+    case SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_ACCEPT:
+        Paytm_TRACE("Accept connect timeout %s", msg->name);
+        break;
+    case SB_BT_DEVICE_CONNECTION_TIMEOUT_PLAYBACK:
+        Paytm_TRACE("Playback timeout");
         break;
     default:
         break;
@@ -209,7 +231,12 @@ static void prvBtEventCB(void *param){
 static void bt_audio_power_up(void){
     uint8_t mac[MAC_ADDR_LEN] = {0};
     uint8 bt_sw_version[32+1] = {0};
+    char bt_name[32] = {0x00};
+    char bt_read_name[32] = {0x00};
+    char bt_imei[32] = {0x00};
+    
     int ret = 0;
+    uint32 get_len = 0;
 
     Paytm_TRACE("BT audio POWER up");
 
@@ -218,25 +245,21 @@ static void bt_audio_power_up(void){
         return;
     }
 
+    Paytm_LED_SetColor(LED_BLUE, 1);
     Paytm_BT_Callback_Register(prvBtEventCB);
 
-    ret = Paytm_BT_Powerup();
-    Paytm_TRACE("Paytm_BT_Powerup ret: %d", ret);
+
+    Paytm_BT_Powerup();
     
     Paytm_delayMilliSeconds(1000);
-    
-    // Paytm_BT_Accept_Connection(NULL);
-    char bt_name[32] = {0x00};
-    char bt_read_name[32] = {0x00};
-    char bt_imei[32] = {0x00};
 
-    uint32 get_len = 0;
 
     ret = Paytm_BT_GetSDKVersion(bt_sw_version, sizeof(bt_sw_version));
     Paytm_TRACE("BT firmware version ret: %d : %s",ret, bt_sw_version);
 
-    ret = Paytm_BT_Set_Timeout(10, 60, 0); Paytm_TRACE("Paytm_BT_Set_Timeout ret: %d", ret);
-    Paytm_LED_SetColor(LED_GREEN, 1);
+    ret = Paytm_BT_Set_Timeout(10, 10, 10); 
+    Paytm_TRACE("Paytm_BT_Set_Timeout ret: %d", ret);
+    
 
     Paytm_TRACE("BT audio init success!");
     
@@ -280,13 +303,13 @@ static void bt_audio_power_up(void){
 
 
 static void bt_audio_power_down(void){
-    int ret = 0;
     Paytm_TRACE("BT audio POWER down");
     if(Paytm_BT_Get_State() ==  0){
         return;
     }
-    ret = Paytm_BT_Powerdown();
-    Paytm_TRACE("BT audio POWER down ret: %d", ret);
+    Paytm_BT_Callback_Register(NULL);
+    Paytm_BT_Powerdown();
+    Paytm_LED_SetColor(LED_GREEN, 1);
 }
 
 void bt_audio_demo(void)
