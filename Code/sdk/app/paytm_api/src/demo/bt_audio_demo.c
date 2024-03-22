@@ -257,7 +257,7 @@ static void bt_audio_power_up(void){
     ret = Paytm_BT_GetSDKVersion(bt_sw_version, sizeof(bt_sw_version));
     Paytm_TRACE("BT firmware version ret: %d : %s",ret, bt_sw_version);
 
-    ret = Paytm_BT_Set_Timeout(10, 10, 10); 
+    ret = Paytm_BT_Set_Timeout(60, 10, 10); 
     Paytm_TRACE("Paytm_BT_Set_Timeout ret: %d", ret);
     
 

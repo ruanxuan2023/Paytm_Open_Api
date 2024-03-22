@@ -5,3 +5,6 @@
 
 * BT_V014 2024-03-21
 1. Modify the device pairing and connection process
+
+* BT_V015 2024-03-22
+1. Modify the device pairing/connection/music play process
