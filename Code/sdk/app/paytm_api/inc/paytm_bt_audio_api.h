@@ -76,7 +76,7 @@ int32_t Paytm_BT_Audio_Cmd_Set(uint8_t cmd);
  * @param {uint8_t} paused_timeout_sec
  * @return {int32_t}
  */
-int32_t Paytm_BT_Set_Timeout(uint8_t accept_connection_timeout_sec, uint8_t disconnect_timeout_sec, uint8_t paused_timeout_sec);
+int32_t Paytm_BT_Set_Timeout(uint32_t accept_connection_timeout_sec, uint32_t disconnect_timeout_sec, uint32_t paused_timeout_sec);
 
 /**
  * @description: 
@@ -114,7 +114,7 @@ int32_t Paytm_BT_Clear_Paired_Device_List(void);
 /**
  * @description:  Checks if remote device mac address is already paired
  * @param {uint8} *mac_addr: mac address of remote device
- * @return {*} 0: success, <0: fail
+ * @return {*} true: success, <false: fail
  */
 bool Paytm_BT_device_Is_paired(const uint8 *mac_addr);
 

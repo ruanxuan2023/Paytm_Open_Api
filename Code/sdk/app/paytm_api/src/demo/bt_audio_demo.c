@@ -14,26 +14,30 @@ int task_id = 0;
 
 static char volume = 16;
 static uint8 mac_paire[MAC_ADDR_LEN] = {0};
+static uint8_t connect_mac[MAC_ADDR_LEN] = {0};
 
 static void bt_audio_power_up(void);
 static void bt_audio_power_down(void);
-
 
 void bt_button_cb(void * p)
 {
     uint8_t mac[MAC_ADDR_LEN] = {0};
     uint64_t last_connect = 0;
-    buttonActMsg_t *msg = (buttonActMsg_t *)p; 
+    buttonActMsg_t *msg = (buttonActMsg_t *)p;
+    
+    uint8_t test_mac[MAC_ADDR_LEN] = {0};
 
     switch (msg->id)
     {
     case BUTTON_PLUS:
         Paytm_TRACE("Button plus");
-        int32_t vol = Paytm_GetVolume(NULL);
-        Paytm_TRACE("Volume is %d", vol);
-        Paytm_TRACE("BT volume is %d",Paytm_BT_Get_Volume());
-        vol = Paytm_BT_Set_volume(16);
-        Paytm_TRACE("BT volume set %d",vol);
+        bool is_paired = Paytm_BT_device_Is_paired(connect_mac);
+        Paytm_TRACE_HEX_BUFFER("Connect mac", connect_mac, MAC_ADDR_LEN);
+        Paytm_TRACE("call Paytm_BT_device_Is_paired check connect_mac  is %d", is_paired);
+        test_mac[3] = 0;
+        is_paired = Paytm_BT_device_Is_paired(test_mac);
+        Paytm_TRACE("call Paytm_BT_device_Is_paired check test_mac  is %d", is_paired);
+
 
         Paytm_BT_Audio_Enable(false);
         int ret = Paytm_PlayFileFromDir(LOC_EXTER_MEM, "data/resources/sounds/hi/","welc.amr", 8);
@@ -41,11 +45,6 @@ void bt_button_cb(void * p)
         // audio asynchronous playback delay waiting for playback to complete
         Paytm_delayMilliSeconds(3000);
         Paytm_BT_Audio_Enable(true);
-        vol = Paytm_GetVolume(NULL);
-        Paytm_TRACE("Volume is %d", vol);
-        Paytm_TRACE("BT volume is %d",Paytm_BT_Get_Volume());
-        vol = Paytm_BT_Set_volume(16);
-        Paytm_TRACE("BT volume set 16", vol);
         break;
     case BUTTON_MINUS:
         Paytm_TRACE("BT volume down");
@@ -196,7 +195,7 @@ static void PWKMsgTask(void* p)
 static void prvBtEventCB(void *param){
     bluetooth_device_msg_t *msg = (bluetooth_device_msg_t *)param;
     uint8_t *mac_addr = msg->mac;
-    Paytm_TRACE("State: %d", msg->state);
+    Paytm_TRACE("State: %d name: %s", msg->state, msg->name);
     switch (msg->state)
     {
     case SB_BT_DEVICE_CONNECTION_CONNECTED:
@@ -209,6 +208,7 @@ static void prvBtEventCB(void *param){
         break;
     case SB_BT_DEVICE_CONNECTION_PAIRED:
         Paytm_TRACE("Connected paired device name: %s", msg->name);
+        memcpy(connect_mac, mac_addr, MAC_ADDR_LEN);
         Paytm_LED_SetColor(LED_BLUE, 0);
         break;
     case SB_BT_DEVICE_CONNECTION_DISCONNECTED:

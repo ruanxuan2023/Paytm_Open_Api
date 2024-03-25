@@ -32,3 +32,7 @@
 
 2023.03.22	BT_Lib_V1.9
 * Modify the device pairing/connection/music play process
+
+2023.03.25	BT_Lib_V1.10
+* Add device mac address and name to event params 
+* Modify the device pairing/connection/music play process

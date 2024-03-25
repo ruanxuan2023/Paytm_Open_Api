@@ -8,3 +8,8 @@
 
 * BT_V015 2024-03-22
 1. Modify the device pairing/connection/music play process
+
+* BT_V016 2024-03-22
+1. Modify BLE name format(PO_XXXX)
+2. Modify the device pairing  process
+3. Modify device list manager 
