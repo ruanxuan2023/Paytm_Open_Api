@@ -13,3 +13,6 @@
 1. Modify BLE name format(PO_XXXX)
 2. Modify the device pairing  process
 3. Modify device list manager 
+
+* BT_V017 2024-03-26
+1. Add BLE enable 

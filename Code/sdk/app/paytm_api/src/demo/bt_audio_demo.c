@@ -262,6 +262,8 @@ static void bt_audio_power_up(void){
     
 
     Paytm_TRACE("BT audio init success!");
+    // disable BLE
+    Paytm_BT_BLE_Enable(false);
     
     Paytm_GetIMEI(bt_imei);        
     sprintf(bt_name, "Paytm_SoundBox_%d%d%d%d", bt_imei[11] - '0', bt_imei[12] - '0', bt_imei[13] - '0', bt_imei[14] - '0');
@@ -283,7 +285,6 @@ static void bt_audio_power_up(void){
 
     Paytm_delayMilliSeconds(2000);
     // Paytm_BT_Powerdown();
-
     bt_paired_device_t *plist = NULL;
     if(plist){
         bt_paired_device_t *pcur = plist;

@@ -169,6 +169,14 @@ void Paytm_Free_DeviceList(bt_paired_device_t *deviceList);
 int32 Paytm_BT_GetSDKVersion(uint8 *version, uint32 version_len);
 
 
+
+/// \brief This function set BLE enable/disable.
+/// \param[in] en      true: BLE ENABLE false: BLE DISABLE
+/// \return QL_RET_OK           success
+///         other                 failed
+int32_t Paytm_BT_BLE_Enable(bool en);
+
+
 int32_t Paytm_BT_Powerup(void);
 int32_t Paytm_BT_Powerdown(void);
 #endif
