@@ -16,3 +16,6 @@
 
 * BT_V017 2024-03-26
 1. Add BLE enable 
+
+* BT_V018 2024-03-28
+1. Modify BLE default disable
