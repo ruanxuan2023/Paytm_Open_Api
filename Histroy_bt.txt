@@ -48,3 +48,6 @@
 
 2023.03.29	BT_Lib_V1.14
 * Add multimedia control pause or play API
+
+2023.03.29	BT_Lib_V1.15
+* remove event callback when accept connect timeout or reject connect
