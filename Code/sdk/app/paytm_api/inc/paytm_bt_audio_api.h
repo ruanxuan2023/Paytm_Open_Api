@@ -186,6 +186,11 @@ int32_t Paytm_BT_Multimedia_Next(void);
 ///         other                 failed
 int32_t Paytm_BT_Multimedia_Previous(void);
 
+/// \brief This function send Multimedia play or pause cmd to BT.
+/// \return QL_RET_OK           success
+///         other                 failed
+int32_t Paytm_BT_Multimedia_Play_Pause(void);
+
 
 int32_t Paytm_BT_Powerup(void);
 int32_t Paytm_BT_Powerdown(void);
