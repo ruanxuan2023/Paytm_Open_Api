@@ -42,3 +42,6 @@
 
 2023.03.27	BT_Lib_V1.12
 * Fix Paytm_BT_Accept_Connection not check mac address
+
+2023.03.29	BT_Lib_V1.13
+* Add multimedia control nexe and previous API
