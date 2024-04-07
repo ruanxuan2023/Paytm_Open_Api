@@ -59,3 +59,6 @@
 2023.04.03	BT_Lib_V1.17
 * Fix UART reveive issur in Sleep mode
 * filt playback timeout if a sound is played for less than 5 sec
+
+2023.04.07	BT_Lib_V1.18
+* ADD SB_BT_DEVICE_CONNECTION_REJECTED event

@@ -47,6 +47,14 @@ void bt_button_cb(void * p)
         Paytm_BT_Audio_Enable(true);
         break;
     case BUTTON_MINUS:
+        if(Paytm_BT_Get_State() == 1){
+            if(mac_paire[0]){
+                BtErrCode_e ret = Paytm_BT_Reject_Connection(mac_paire);
+                Paytm_TRACE("Paytm_BT_Reject_Connection ret: %d", ret);
+                memset(mac_paire, 0, MAC_ADDR_LEN);
+                break;
+            }
+        }
         Paytm_TRACE("BT volume down");
         // Paytm_BT_Audio_Set_Cmd(BT_CMD_VOLUME_DOWN, NULL, 0);
         volume--;
@@ -192,6 +200,13 @@ static void PWKMsgTask(void* p)
     }
 }
 
+static void prvAuidoPlayInBtMode(Paytm_location_t sl, const char *path, const char *filename, uint8 volume){
+    Paytm_BT_Audio_Enable(false);
+    Paytm_PlayFileFromDir(sl,  path,filename, volume);
+    Paytm_delayMilliSeconds(3000);
+    Paytm_BT_Audio_Enable(true);
+}
+
 static void prvBtEventCB(void *param){
     bluetooth_device_msg_t *msg = (bluetooth_device_msg_t *)param;
     uint8_t *mac_addr = msg->mac;
@@ -200,18 +215,18 @@ static void prvBtEventCB(void *param){
     {
     case SB_BT_DEVICE_CONNECTION_CONNECTED:
         // accepte device connect
-        Paytm_TRACE("Try connect unpaired device name: %s", msg->name);
+        prvAuidoPlayInBtMode(LOC_EXTER_MEM,  "data/resources/sounds/hi/","num1000.amr,num29.amr", 3);
         Paytm_TRACE("Press FUN key accept connect");
         memcpy(mac_paire, mac_addr, MAC_ADDR_LEN);
-        // BtErrCode_e ret = Paytm_BT_Accept_Connection(mac_paire);
-        // Paytm_TRACE("Paytm_BT_Accept_Connection ret: %d", ret);
         break;
     case SB_BT_DEVICE_CONNECTION_PAIRED:
+        prvAuidoPlayInBtMode(LOC_EXTER_MEM,  "data/resources/sounds/hi/","num1000.amr,num30.amr", 3);
         Paytm_TRACE("Connected paired device name: %s", msg->name);
         memcpy(connect_mac, mac_addr, MAC_ADDR_LEN);
         Paytm_LED_SetColor(LED_BLUE, 0);
         break;
     case SB_BT_DEVICE_CONNECTION_DISCONNECTED:
+        prvAuidoPlayInBtMode(LOC_EXTER_MEM,  "data/resources/sounds/hi/","num7.amr", 3);
         Paytm_LED_SetColor(LED_BLUE, 1);
         break;
     case SB_BT_DEVICE_CONNECTION_TIMEOUT_IDLE:
@@ -222,6 +237,11 @@ static void prvBtEventCB(void *param){
         break;
     case SB_BT_DEVICE_CONNECTION_TIMEOUT_PLAYBACK:
         Paytm_TRACE("Playback timeout");
+        break;
+    case SB_BT_DEVICE_CONNECTION_INITIATING:
+        break;
+    case SB_BT_DEVICE_CONNECTION_REJECTED:
+        prvAuidoPlayInBtMode(LOC_EXTER_MEM,  "data/resources/sounds/hi/","num2.amr", 3);
         break;
     default:
         break;
