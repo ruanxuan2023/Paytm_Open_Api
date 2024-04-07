@@ -521,9 +521,7 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
-    #ifndef BT_EN
     Paytm_NTP_InternalSyncCb_Regisiter(ntp_cb);
-    #endif
     Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFileFromDir(LOC_EXTER_MEM,  "data/resources/sounds/hi/","welc.amr", 8);
     // OpenDemoViaId(WM_BUTTON_DEMO);

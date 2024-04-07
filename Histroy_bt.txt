@@ -55,3 +55,7 @@
 2023.04.03	BT_Lib_V1.16
 * Random behaviour : Device bluetooth not able to automatically connect with previously paired phone after reboot
 * Even if we call reject via Paytm_BT_Reject_Connection then also we are getting SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_ACCEPT event. As it is rejected so we must not receive timeout event
+
+2023.04.03	BT_Lib_V1.17
+* Fix UART reveive issur in Sleep mode
+* filt playback timeout if a sound is played for less than 5 sec
