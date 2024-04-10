@@ -22,3 +22,7 @@
 
 * BT_V019 2024-04-03
 1. Random behaviour : Device bluetooth not able to automatically connect with previously paired phone after reboot
+
+* BT_V020 2024-04-10
+1. Random behaviour get response as Paytm_BT_Get_Name : [-1]
+2. getting random failure for the apis which are ought not to give failure response.

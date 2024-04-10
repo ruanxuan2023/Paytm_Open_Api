@@ -66,3 +66,7 @@
 2024.04.10	BT_Lib_V1.19
 * ADD sync time callback register function
 * remove device from paired list enable in BT off
+
+2024.04.10	BT_Lib_V1.20
+* fix after remove the device with Paytm_BT_Remove_Paired_device API, can't connect until restart the BT module
+* if BT is off, remove API be able to remove the device
