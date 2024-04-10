@@ -504,11 +504,12 @@ void MqttDetect(void* p)
     }
 }
 
-void ntp_cb(void)
+void time_sync_cb(uint8 type, Paytm_Time *ptime)
 {
-    Paytm_TRACE("NTP Callback");
+    Paytm_TRACE("%s Time SYNC Callback: %04d-%02d-%02d %02d:%02d:%02d timezone: %d", 
+        type?"NTP":"NITZ", ptime->year, ptime->month,ptime->day, ptime->hour, ptime->minute,ptime->second, ptime->timezone);
 }
-#include "fs_api.h"
+
 extern void Paytm_Mqtt_checkHandle(void);
 void app_main(void)
 {
@@ -521,7 +522,8 @@ void app_main(void)
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
     Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
-    Paytm_NTP_InternalSyncCb_Regisiter(ntp_cb);
+
+    Paytm_NTP_InternalSyncCb_Regisiter(time_sync_cb);
     Paytm_LED_SetColor(LED_GREEN, 1);
     Paytm_PlayFileFromDir(LOC_EXTER_MEM,  "data/resources/sounds/hi/","welc.amr", 8);
     // OpenDemoViaId(WM_BUTTON_DEMO);

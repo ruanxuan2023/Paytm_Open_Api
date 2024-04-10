@@ -1,64 +1,68 @@
-2023.02.19	BT_Lib_V1.1
+2024.02.19	BT_Lib_V1.1
 * First commit for the branch BT_Box
 
-2023.02.23	BT_Lib_V1.2
+2024.02.23	BT_Lib_V1.2
 * ADD API:Paytm_BT_GetSDKVersion Paytm_BT_Set_volume
 * Modify BT event enum and callback parameter
 
-2023.03.01	BT_Lib_V1.3
+2024.03.01	BT_Lib_V1.3
 * ADD API:Paytm_BT_Get_PairedBT_DeviceList Paytm_Free_DeviceList
 * Modify BT Audio demo, Bluetooth pairing requires confirmation using API Paytm_BT_Accept_Connection
-2023.03.11	BT_Lib_V1.4
+2024.03.11	BT_Lib_V1.4
 * ADD multi key(+/-) event
 * Modify BT Audio demo for multi key process 
 
-2023.03.14	BT_Lib_V1.5
+2024.03.14	BT_Lib_V1.5
 * Modify BT audio demo plus key function
 * Modify BT Audio api error code return  
 
-2023.03.15	BT_Lib_V1.6
+2024.03.15	BT_Lib_V1.6
 * Modify return code for Paytm_BT_Powerdown api
 * Print debug charge log every 5s
 * Modify Paytm_BT_Get_State demo
 
-2023.03.20	BT_Lib_V1.7
+2024.03.20	BT_Lib_V1.7
 * Modify the device pairing and connection process
 * Add device name param on pairing and connect callback
 * Add BT audio play start event
 
-2023.03.21	BT_Lib_V1.8
+2024.03.21	BT_Lib_V1.8
 * Modify the device pairing and connection demo
 * Add connect/music play timeout demo
 
-2023.03.22	BT_Lib_V1.9
+2024.03.22	BT_Lib_V1.9
 * Modify the device pairing/connection/music play process
 
-2023.03.25	BT_Lib_V1.10
+2024.03.25	BT_Lib_V1.10
 * Add device mac address and name to event params 
 * Modify the device pairing/connection/music play process
 
-2023.03.26	BT_Lib_V1.11
+2024.03.26	BT_Lib_V1.11
 * Add BLE enable api
 
-2023.03.27	BT_Lib_V1.12
+2024.03.27	BT_Lib_V1.12
 * Fix Paytm_BT_Accept_Connection not check mac address
 
-2023.03.29	BT_Lib_V1.13
+2024.03.29	BT_Lib_V1.13
 * Add multimedia control nexe and previous API
 
-2023.03.29	BT_Lib_V1.14
+2024.03.29	BT_Lib_V1.14
 * Add multimedia control pause or play API
 
-2023.03.29	BT_Lib_V1.15
+2024.03.29	BT_Lib_V1.15
 * remove event callback when accept connect timeout or reject connect
 
-2023.04.03	BT_Lib_V1.16
+2024.04.03	BT_Lib_V1.16
 * Random behaviour : Device bluetooth not able to automatically connect with previously paired phone after reboot
 * Even if we call reject via Paytm_BT_Reject_Connection then also we are getting SB_BT_DEVICE_CONNECTION_TIMEOUT_NO_ACCEPT event. As it is rejected so we must not receive timeout event
 
-2023.04.03	BT_Lib_V1.17
+2024.04.03	BT_Lib_V1.17
 * Fix UART reveive issur in Sleep mode
 * filt playback timeout if a sound is played for less than 5 sec
 
-2023.04.07	BT_Lib_V1.18
+2024.04.07	BT_Lib_V1.18
 * ADD SB_BT_DEVICE_CONNECTION_REJECTED event
+
+2024.04.10	BT_Lib_V1.19
+* ADD sync time callback register function
+* remove device from paired list enable in BT off
