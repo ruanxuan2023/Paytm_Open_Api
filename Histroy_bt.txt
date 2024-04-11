@@ -70,3 +70,8 @@
 2024.04.10	BT_Lib_V1.20
 * fix after remove the device with Paytm_BT_Remove_Paired_device API, can't connect until restart the BT module
 * if BT is off, remove API be able to remove the device
+
+2024.04.11	BT_Lib_V1.21
+*fix Paytm_GetBatteryLevel api return incorrect value
+* fix normal audio is playing through SB and we switch BT on, 
+then Paytm_BT_Powerup api is causing to stop the current playing sound
