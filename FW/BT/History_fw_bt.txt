@@ -29,3 +29,9 @@
 
 * BT_V021 2024-04-17
 1. Fix reveive stop event delayed when multimedia playback stop
+
+* BT_V022 2024-04-19
+1. NONE
+
+* BT_V023 2024-04-19
+1. Fixed the synchronization issue between the phone media player pause and the pause command sent over 4G
