@@ -31,9 +31,15 @@ elseif($ENV{para_flash_size} MATCHES "4")
 endif()
 
 set(BT_EN OFF)
+set(PKT_EN OFF)
 if($ENV{BT_EN} MATCHES "y")
 set(BT_EN ON)
 add_definitions(-DBT_EN)
+endif()
+
+if($ENV{PKT_EN} MATCHES "y")
+set(PKT_EN ON)
+add_definitions(-DPKT_EN)
 endif()
 
 include_directories(

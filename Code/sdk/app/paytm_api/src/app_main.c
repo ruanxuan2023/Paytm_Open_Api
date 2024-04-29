@@ -543,11 +543,16 @@ void app_main(void)
     // ledRun();
     // Paytm_Mqtt_MemLeakProcess();
     // OpenDemoViaId(WM_SAVE_READ_AUTHID);
+    #ifdef BT_EN
     OpenDemoViaId(WM_BT_AUDIO);
+    #endif
     // OpenDemoViaId(WM_BATTERY_CHECK);
     while (1)
     {
-        Paytm_delayMilliSeconds(1 * 1000);
+        #ifdef PKT_EN
+        Paytm_TRACE("Current batter temerature: %d C", Paytm_GetBatteryTemperature(), 0xb0);
+        #endif
+        Paytm_delayMilliSeconds(10 * 1000);
         // Paytm_TRACE("Free heap size: %d, csq = %d", Paytm_GetFreeHeapSize(), Paytm_GetSignalStrength());
     }
 

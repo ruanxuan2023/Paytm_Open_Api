@@ -18,6 +18,8 @@ set_target_properties(${target} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${out_lib_di
 
 if(BT_EN)
 file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/BT/*.a")
+elseif(PKT_EN)
+file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/PKT/*.a")
 else()
 file(GLOB LIBS_PATH "${PROJECT_SOURCE_DIR}/app/paytm_api/lib/LTE/*.a")
 endif()
@@ -32,7 +34,6 @@ target_sources(${target} PUBLIC
 	src/demo/ali_mqtt_demo.c
 	src/demo/audio_demo.c
 	src/demo/battery_demo.c
-	src/demo/bt_audio_demo.c
 	src/demo/button_demo.c
 	src/demo/devSys_demo.c
 	src/demo/filesystem_demo.c
@@ -46,5 +47,10 @@ target_sources(${target} PUBLIC
 	src/demo/tasks_demo.c
 	src/demo/timer_demo.c
 	src/mqtt_demo_1.c
-
 	)
+
+if(BT_EN)
+target_sources(${target} PUBLIC
+	src/demo/bt_audio_demo.c
+	)
+endif()

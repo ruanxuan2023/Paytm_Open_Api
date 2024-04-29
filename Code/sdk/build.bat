@@ -18,6 +18,7 @@ set para_flash_size=4
 set para_module_version=ZX800SG
 
 set BT_EN=n
+set PKT_EN=n
 set HARDWARE=LIT4GCN
 
 set folder_ab_build_out=%folder_ab_current%\out
@@ -54,6 +55,7 @@ if not "%1"=="" (
         set HARDWARE=LIT4GCNB
         shift /0
     ) else if "%1"=="-pkt" (
+    	set PKT_EN=y
         set HARDWARE=LIT4GPKT
         shift /0
     ) else if "%1"=="-bv" (
