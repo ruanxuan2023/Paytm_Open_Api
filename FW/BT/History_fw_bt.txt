@@ -35,3 +35,7 @@
 
 * BT_V023 2024-04-19
 1. Fixed the synchronization issue between the phone media player pause and the pause command sent over 4G
+
+* BT_V024 2024-05-06
+1. Disable bluetooth CALL/SMS profile
+2. Optimize reconnection
