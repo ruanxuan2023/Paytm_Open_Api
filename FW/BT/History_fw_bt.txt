@@ -39,3 +39,6 @@
 * BT_V024 2024-05-06
 1. Disable bluetooth CALL/SMS profile
 2. Optimize reconnection
+
+* BT_V025 2024-05-07
+1. config reconnection duration
