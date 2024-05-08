@@ -78,3 +78,6 @@ then Paytm_BT_Powerup api is causing to stop the current playing sound
 
 2024.04.17	BT_Lib_V1.22
 * Fix reveive stop event delayed when multimedia playback stop
+
+2024.05.08	BT_Lib_V1.23
+* Modify BT fw version get during BT module power off
