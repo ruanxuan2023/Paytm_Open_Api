@@ -163,6 +163,7 @@ extern void fileCreateFolderDemo(void);
 extern void Paytm_Mqtt_MemLeakProcess(void);
 extern void CisMqttDemo(void);
 extern void bt_audio_demo(void);
+extern void testHttpPostExt(void * p);
 void OpenDemoViaId(TASK_SELECTION id)
 {
     switch (id)
@@ -196,7 +197,9 @@ void OpenDemoViaId(TASK_SELECTION id)
         Paytm_CreateTask("http", httpDownload2, NULL, 100, 80 * 1024);
         break;
     case WM_HTTP_TEST:
-        testHttpGet(NULL);
+        net_connect();
+        Paytm_CreateTask("http", testHttpPostExt, NULL, 100, 80 * 1024);
+        // testHttpGet(NULL);
         break;
     case WM_FILE_TEST:
         // fileSystemDemo();
@@ -547,6 +550,7 @@ void app_main(void)
     OpenDemoViaId(WM_BT_AUDIO);
     #endif
     // OpenDemoViaId(WM_BATTERY_CHECK);
+    // OpenDemoViaId(WM_HTTP_TEST);
     while (1)
     {
         #ifdef PKT_EN

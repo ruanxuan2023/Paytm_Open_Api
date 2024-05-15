@@ -110,6 +110,7 @@ typedef struct
 
 typedef Paytm_http_request_Packet_t http_request_t;
 
+typedef  int (*Paytm_http_post_cb)(uint32 pos, char *content, uint32 contetn_len);
 int32 Paytm_HTTP_Request_Clear(http_request_t *http);
 /**
  * @description: 
@@ -124,6 +125,7 @@ int32 Paytm_HTTP_Initialise_GET(Paytm_location_t lc, http_request_t *http, const
 int32 Paytm_HTTP_Initialise_POST(http_request_t *http, const char *url, char *signature, char *content, uint8 enable_ssl);
 int32 Paytm_HTTP_Initialise_PUT(http_request_t *http, const char *url, char *content, Paytm_http_content_type_t content_type);
 int Paytm_HTTP_Initialise_HEAD(Paytm_location_t lc, http_request_t *http, const char *url, uint16 port);
+int32 Paytm_HTTP_Initialise_POST_EXT(http_request_t *http, const char *url, char *signature, uint32 content_len, Paytm_http_post_cb cb, uint8 enable_ssl);
 
 /**
  * @description:                            Read http certs data from flash memory

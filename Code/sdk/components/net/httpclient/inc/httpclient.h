@@ -123,6 +123,7 @@ typedef struct {
 } httpclient_ssl_t;
 #endif
 
+typedef int (*http_post_segment_cb)(int pos, char *content, int contetn_len);
 /** @defgroup httpclient_struct Struct
   * @{
   */
@@ -163,6 +164,8 @@ typedef struct {
     char *post_buf;              /**< User data to be posted. */
     char *response_buf;          /**< Buffer to store the response body data. */
     char *header_buf;            /**< Buffer to store the response head data. */
+    http_post_segment_cb post_data_cb;
+    int seg_content_len;
 } httpclient_data_t;
 
 /**

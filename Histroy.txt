@@ -126,3 +126,7 @@
 * [Require DFOTA]
 2024.03.01  Lib_V1.117
 * Modify mqtt thread priority to 100
+
+2024.05.15  Lib_V1.118
+* add api Paytm_HTTP_Initialise_POST_EXT
+* modify api Paytm_NTP_InternalSyncCb_Regisiter

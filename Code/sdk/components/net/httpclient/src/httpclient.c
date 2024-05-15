@@ -599,7 +599,11 @@ int httpclient_send_header(httpclient_t *client, char *url, int method, httpclie
     }
 
     if ( client_data->post_buf != NULL ) {
-        snprintf(buf, sizeof(buf), "Content-Length: %d\r\n", client_data->post_buf_len);
+        if(client_data->post_data_cb){
+            snprintf(buf, sizeof(buf), "Content-Length: %d\r\n", client_data->seg_content_len);
+        } else {
+            snprintf(buf, sizeof(buf), "Content-Length: %d\r\n", client_data->post_buf_len);
+        }
         httpclient_get_info(client, send_buf, &len, buf, strlen(buf));
 
         if (client_data->post_content_type != NULL)  {
@@ -637,7 +641,30 @@ int httpclient_send_userdata(httpclient_t *client, httpclient_data_t *client_dat
 
     if (client_data->post_buf && client_data->post_buf_len) {
         HTTPC_LOG("\nclient_data->post_buf:%s\n", client_data->post_buf);
-        {
+        if(client_data->post_data_cb){
+            int remain_size = client_data->seg_content_len;
+            while (remain_size > 0)
+            {
+                int r_size = client_data->post_data_cb(client_data->seg_content_len-remain_size, client_data->post_buf, MIN(client_data->post_buf_len, remain_size));
+                if(r_size <= 0 || r_size > MIN(client_data->post_buf_len, remain_size)){
+                    return HTTPCLIENT_ERROR;
+                }
+                if(client->is_http){
+                    ret = httpclient_tcp_send_all(client->socket, client_data->post_buf, r_size);
+                }else{
+                    ret = _httpSslWrite(client->ssl, client_data->post_buf, r_size, 10000);
+                }
+                if (ret > 0) {
+                    remain_size -= ret;
+                } else if ( ret == 0 ) {
+                    HTTPC_LOG("\nret == 0,Connection was closed by server\n");
+                    return HTTPCLIENT_CLOSED; /* Connection was closed by server */
+                } else {
+                    HTTPC_LOG("\nConnection error (send returned %d)\n", ret);
+                    return HTTPCLIENT_ERROR_CONN;
+                }
+            }
+        } else {
             if(client->is_http){
                 ret = httpclient_tcp_send_all(client->socket, client_data->post_buf, client_data->post_buf_len);
             }else{
