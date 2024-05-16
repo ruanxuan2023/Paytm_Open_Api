@@ -130,3 +130,6 @@
 2024.05.15  Lib_V1.118
 * add api Paytm_HTTP_Initialise_POST_EXT
 * modify api Paytm_NTP_InternalSyncCb_Regisiter
+
+2024.05.16  Lib_V1.119
+* implement api Paytm_GetPowerOnReason

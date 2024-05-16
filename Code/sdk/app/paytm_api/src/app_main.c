@@ -524,7 +524,7 @@ void app_main(void)
     Paytm_AppVersionSet(app_verion);Paytm_Exception_Dump_Enable(false);
     sys_initialize();
     // Paytm_fs_format(LOC_EXTER_MEM);
-    Paytm_TRACE("*********************** LinkGo 06 %s  *************************\n", (char*)lib_version);
+    Paytm_TRACE("*********************** Poweron Reason: %d  %s   *************************\n",Paytm_GetPowerOnReason(), (char*)lib_version);
 
     Paytm_NTP_InternalSyncCb_Regisiter(time_sync_cb);
     Paytm_LED_SetColor(LED_GREEN, 1);
