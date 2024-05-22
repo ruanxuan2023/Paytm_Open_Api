@@ -133,3 +133,6 @@
 
 2024.05.16  Lib_V1.119
 * implement api Paytm_GetPowerOnReason
+
+2024.05.22  Lib_V1.120
+* api Paytm_PlayFileFromDir support play first MP3 file
