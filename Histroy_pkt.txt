@@ -6,3 +6,6 @@
 * add api Paytm_HTTP_Initialise_POST_EXT
 * api Paytm_PlayFileFromDir support play first MP3 file
 * implement api Paytm_GetPowerOnReason
+
+2024.05.30	PKT_Lib_V1.03
+* Added OTA RESET and SOFT reset to api Paytm_GetPowerOnReason return value

@@ -136,3 +136,6 @@
 
 2024.05.22  Lib_V1.120
 * api Paytm_PlayFileFromDir support play first MP3 file
+
+2024.05.30  Lib_V1.121
+* Added OTA RESET and SOFT reset to api Paytm_GetPowerOnReason return value 

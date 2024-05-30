@@ -79,6 +79,8 @@ typedef enum{
     Paytm_POWERUP_UNKNOWN = 0, 
     Paytm_POWERUP_PWRKEY, 
     Paytm_POWERUP_PIN_RESET, 
+    Paytm_POWERUP_OTA_RESET, 
+    Paytm_POWERUP_SOFT_RESET ,
     Paytm_POWERUP_ALARM, 
     Paytm_POWERUP_CHARGE, 
     Paytm_POWERUP_WDG, 

@@ -86,3 +86,6 @@ then Paytm_BT_Powerup api is causing to stop the current playing sound
 * add api Paytm_HTTP_Initialise_POST_EXT
 * api Paytm_PlayFileFromDir support play first MP3 file
 * implement api Paytm_GetPowerOnReason
+
+2024.05.30	BT_Lib_V1.25
+* Added OTA RESET and SOFT reset to api Paytm_GetPowerOnReason return value
