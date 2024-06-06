@@ -518,6 +518,7 @@ void app_main(void)
 {
     char lib_version[16] = {0};
     char app_verion[32] = {0};
+    uint8 count = 0;
     Paytm_GetLibraryVersion(lib_version, 16);
     snprintf(app_verion, sizeof(app_verion), "APP_V1.0.1_%s", lib_version);
     // set app version for factory production check 
@@ -558,6 +559,11 @@ void app_main(void)
         #endif
         Paytm_delayMilliSeconds(10 * 1000);
         // Paytm_TRACE("Free heap size: %d, csq = %d", Paytm_GetFreeHeapSize(), Paytm_GetSignalStrength());
+
+        if(Paytm_WasLastSwitchOffDueToBatteryCheck(&count) == 1){
+            Paytm_TRACE("Lower power down count: %d", count);
+        }
+        
     }
 
     return;

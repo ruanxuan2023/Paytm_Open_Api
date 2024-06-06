@@ -9,3 +9,6 @@
 
 2024.05.30	PKT_Lib_V1.03
 * Added OTA RESET and SOFT reset to api Paytm_GetPowerOnReason return value
+
+2024.06.06	PKT_Lib_V1.04
+* Added api Paytm_WasLastSwitchOffDueToBatteryCheck

@@ -69,6 +69,12 @@ void Paytm_Exception_Dump_Enable(bool enable);
  */
 void Paytm_Usb_Function_Disable(void);
 
+/// \brief  This function checks if device was turned off due to critical battery level
+    /// \param[out] count           count for device turned off due to critical battery level
+    /// \return 1       Powered off due to critical battery level
+    ///         0       otherwise
+uint8 Paytm_WasLastSwitchOffDueToBatteryCheck(uint8 *count);
+
 typedef enum {
     STATE_POWERKEY_PRESSED = 0,
     STATE_POWERKEY_RELEASED,
