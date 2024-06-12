@@ -12,3 +12,6 @@
 
 2024.06.06	PKT_Lib_V1.04
 * Added api Paytm_WasLastSwitchOffDueToBatteryCheck
+
+2024.06.12	PKT_Lib_V1.05
+* Optimize low power detetction
