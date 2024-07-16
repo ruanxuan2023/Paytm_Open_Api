@@ -41,10 +41,16 @@ bool Paytm_GetChargingFullStatus(void);
 //0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING
 void battery_charging_report_callback_register(message_callback_t cb);
 
+
 /**
- * @description: Get battery temperation. UNIT:Celsius range: -10: 70
- * @return {*}      temperation
+ * @description: Used to test the battery voltage before, during and after audio playback.
+ * 
+ * @param {int} sl disk on which files are stored
+ * @param {char *} path audio file road strength
+ * @param {char *} filename audio name
+ * @param {uint8_t} volume audio playback volume
+ * @return {*}  0-success, 1-already init
  */
-int32 Paytm_GetBatteryTemperature(void);
+int Paytm_audvol_test(int sl, const char *path, const char *filename, uint8_t volume);
 
 #endif

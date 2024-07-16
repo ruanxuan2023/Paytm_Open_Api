@@ -95,3 +95,6 @@ then Paytm_BT_Powerup api is causing to stop the current playing sound
 
 2024.06.06	BT_Lib_V1.27
 * optimize low power detected
+
+2024.07.16 BT_Lib_V1.27_BAT_TEST
+* add Battery test api Paytm_audvol_test
