@@ -142,3 +142,9 @@
 
 2024.06.06  Lib_V1.122
 * Added api Paytm_WasLastSwitchOffDueToBatteryCheck
+
+2024.06.11  Lib_V1.122
+* Added api Paytm_WasLastSwitchOffDueToBatteryCheck
+
+2024.07.17  Lib_V1.123
+* fix remove director crash, increase sleep time after remove one file

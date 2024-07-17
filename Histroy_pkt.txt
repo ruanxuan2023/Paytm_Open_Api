@@ -15,3 +15,6 @@
 
 2024.06.12	PKT_Lib_V1.05
 * Optimize low power detetction
+
+2024.07.17	PKT_Lib_V1.06
+* fix remove director crash, increase sleep time after remove one file

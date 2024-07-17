@@ -41,6 +41,11 @@ bool Paytm_GetChargingFullStatus(void);
 //0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING
 void battery_charging_report_callback_register(message_callback_t cb);
 
+/**
+ * @description: Get battery temperation. UNIT:℃ range: -10: 70
+ * @return {*}      temperation
+ */
+int32 Paytm_GetBatteryTemperature(void);
 
 /**
  * @description: Used to test the battery voltage before, during and after audio playback.
