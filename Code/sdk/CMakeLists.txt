@@ -32,9 +32,15 @@ endif()
 
 set(BT_EN OFF)
 set(PKT_EN OFF)
+set(LCD_EN OFF)
 if($ENV{BT_EN} MATCHES "y")
 set(BT_EN ON)
 add_definitions(-DBT_EN)
+endif()
+
+if($ENV{LCD_EN} MATCHES "y")
+set(LCD_EN ON)
+add_definitions(-DLCD_EN)
 endif()
 
 if($ENV{PKT_EN} MATCHES "y")

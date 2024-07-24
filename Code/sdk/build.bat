@@ -19,6 +19,7 @@ set para_module_version=ZX800SG
 
 set BT_EN=n
 set PKT_EN=n
+set LCD_EN=n
 set HARDWARE=LIT4GCN
 
 set folder_ab_build_out=%folder_ab_current%\out
@@ -57,6 +58,10 @@ if not "%1"=="" (
     ) else if "%1"=="-pkt" (
     	set PKT_EN=y
         set HARDWARE=LIT4GPKT
+        shift /0
+    ) else if "%1"=="-lcd" (
+    	set LCD_EN=y
+        set HARDWARE=LIT4GLCD
         shift /0
     ) else if "%1"=="-bv" (
         set para_module_version=%2

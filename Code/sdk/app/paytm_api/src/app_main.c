@@ -25,6 +25,10 @@
 #include "paytm_led_api.h"
 #include "paytm_tls_verify.h"
 
+#ifdef LCD_EN
+#include "paytm_lcd_api.h"
+#endif
+
 
 static void net_connect(void)
 {
@@ -551,7 +555,25 @@ void app_main(void)
     OpenDemoViaId(WM_BT_AUDIO);
     #endif
     // OpenDemoViaId(WM_BATTERY_CHECK);
-    // OpenDemoViaId(WM_HTTP_TEST);
+    // OpenDemoViaId(WM_APP_DOWNLOAD);
+	#ifdef LCD_EN
+    Paytm_lcd_config_t lcd_cfg = {
+        .lcd_bt_cfg = true,
+        .lcd_fm_cfg = true,
+        .lcd_rs_cfg = true,
+        .lcd_count_cfg = true,
+        .lcd_paytm_cfg = true,
+        .lcd_power_cfg = 3,
+        .lcd_signal_cfg = 2,
+        .lcd_wifi_cfg = 3,
+        .lcd_vol_cfg = 1,
+        .lcd_amount_cfg = 123,
+        .lcd_num_cfg = 12
+    };
+    Paytm_Lcd_Config(lcd_cfg);
+    
+    Paytm_Lcd_Enable();
+    #endif
     while (1)
     {
         #ifdef PKT_EN
