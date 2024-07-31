@@ -9,6 +9,12 @@ typedef enum {
     STATE_BATTERY_CHARGER_CONNECTED
 }battery_charging_userstate_t;
 
+typedef enum {
+    STATE_BATTERY_CHARGER_TYPE_USB = 0,
+    STATE_BATTERY_CHARGER_TYPE_SOLAR,
+    STATE_BATTERY_CHARGER_TYPE_UNKNOWN
+}battery_charging_type_e;
+
 int32 Paytm_GetBatteryVoltage(uint16 *voltage);
 
 /**
@@ -22,6 +28,12 @@ uint8 Paytm_GetBatteryLevel(void);
  * @return {*}      true:charging, false:not charging
  */
 uint8 Paytm_GetChargingStatus(void);
+
+/**
+ * @description: 
+ * @return {*}      battery_charging_type_e enum
+ */
+battery_charging_type_e Paytm_GetChargingType(void);
 
 /**
  * @description: Please not call this function in paytm application, we will do this in kernel code
