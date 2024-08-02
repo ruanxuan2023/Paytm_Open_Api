@@ -66,8 +66,10 @@ int32 Paytm_GetBatteryTemperature(void);
  * @param {char *} path audio file road strength
  * @param {char *} filename audio name
  * @param {uint8_t} volume audio playback volume
- * @return {*}  0-success, 1-already init
+ * @return {int*}  integer pointer, the first bit (arry[0]) is the value before broadcast,
+ *                 the second bit (arry[1]) is the value during broadcast, 
+ *                 and the third bit (arry[2]) is the value after broadcast
  */
-int Paytm_audvol_test(int sl, const char *path, const char *filename, uint8_t volume);
+int* Paytm_audvol_test(int sl, const char *path, const char *filename, uint8_t volume);
 
 #endif
