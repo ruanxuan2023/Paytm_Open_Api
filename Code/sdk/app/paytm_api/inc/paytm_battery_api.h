@@ -63,13 +63,11 @@ int32 Paytm_GetBatteryTemperature(void);
  * @description: Used to test the battery voltage before, during and after audio playback.
  * 
  * @param {int} sl disk on which files are stored
- * @param {char *} path audio file road strength
- * @param {char *} filename audio name
- * @param {uint8_t} volume audio playback volume
+ * @param {char *} path audio file road strength and filename audio name
  * @return {int*}  integer pointer, the first bit (arry[0]) is the value before broadcast,
- *                 the second bit (arry[1]) is the value during broadcast, 
- *                 and the third bit (arry[2]) is the value after broadcast
+ *                 the second bit (arry[1]) is the value after broadcast, 
+ *                 and the third bit (arry[2])is the voltage before the broadcast minus the voltage after the broadcast
  */
-int* Paytm_audvol_test(int sl, const char *path, const char *filename, uint8_t volume);
+int* Paytm_BatteryCheck(Paytm_location_t sl, const char *audio_file_path);
 
 #endif

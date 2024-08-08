@@ -61,6 +61,7 @@
 /* mbed TLS modules */
 #define MBEDTLS_AES_C
 #define MBEDTLS_ASN1_PARSE_C
+#define MBEDTLS_SSL_SERVER_NAME_INDICATION
 //#define MBEDTLS_ASN1_WRITE_C // closed for reduce code size
 #define MBEDTLS_BASE64_C
 #define MBEDTLS_BIGNUM_C

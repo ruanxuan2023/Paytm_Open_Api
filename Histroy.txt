@@ -151,3 +151,6 @@
 
 2024.08.02  Lib_V1.124
 * Added response of api Paytm_audvol_test() 
+
+2024.08.08  Lib_V1.125
+* Use api Paytm_BatteryCheck() instead of api Paytm_audvol_test() 
