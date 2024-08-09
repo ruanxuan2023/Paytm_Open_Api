@@ -110,18 +110,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "spi",
-      "format": "flash",
-      "vstart": "0x90000000",
-      "partitions": [
-       {
-          "name": "nor_bin",
-          "format": "raw",
-          "size": "8192KiB"          
-       }
-     ]
-    }     
+    }
   ]
 }
