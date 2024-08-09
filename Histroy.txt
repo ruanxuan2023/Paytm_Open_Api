@@ -154,3 +154,6 @@
 
 2024.08.08  Lib_V1.125
 * Use api Paytm_BatteryCheck() instead of api Paytm_audvol_test() 
+
+2024.08.09  Lib_V1.126
+* Adapt to some mp3 files which can't be played
