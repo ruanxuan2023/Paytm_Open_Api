@@ -50,7 +50,7 @@ int32 Paytm_BatteryLevelMonitoring(uint8 enable);
  */
 bool Paytm_GetChargingFullStatus(void);
 
-//0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING
+//0-PLUGOUT  1-CHARGING  2-FULL  3-OVERHEATING  4-SOLAR_CHARGING
 void battery_charging_report_callback_register(message_callback_t cb);
 
 /**
