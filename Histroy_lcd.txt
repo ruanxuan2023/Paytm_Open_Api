@@ -1,0 +1,26 @@
+2024.04.29	PKT_Lib_V1.01
+* First commit for the branch pocket
+* add api Paytm_GetBatteryTemperature
+
+2024.05.29	PKT_Lib_V1.02
+* add api Paytm_HTTP_Initialise_POST_EXT
+* api Paytm_PlayFileFromDir support play first MP3 file
+* implement api Paytm_GetPowerOnReason
+
+2024.05.30	PKT_Lib_V1.03
+* Added OTA RESET and SOFT reset to api Paytm_GetPowerOnReason return value
+
+2024.06.06	PKT_Lib_V1.04
+* Added api Paytm_WasLastSwitchOffDueToBatteryCheck
+
+2024.06.12	PKT_Lib_V1.05
+* Optimize low power detetction
+
+2024.07.17	PKT_Lib_V1.06
+* fix remove director crash, increase sleep time after remove one file
+
+2024.08.02	PKT_Lib_V1.07
+* Added response of api Paytm_audvol_test() 
+
+2024.08.29	LCD_Lib_V1.08
+* Add the function of clearing 0000 only 
