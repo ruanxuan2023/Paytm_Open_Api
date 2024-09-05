@@ -21,3 +21,6 @@
 
 2024.08.02	PKT_Lib_V1.07
 * Added response of api Paytm_audvol_test() 
+
+2024.09.05	PKT_Lib_V1.07
+* Modify the Lib version and the maximum volume

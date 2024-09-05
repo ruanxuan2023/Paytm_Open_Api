@@ -37,4 +37,11 @@ int32_t Paytm_Lcd_Clear(void);
  * @return {*}  0-success, 1-already init
  */
 int32_t Paytm_Lcd_Config(Paytm_lcd_config_t config);
+/**
+ * @description: Used to remove the icons not to display amount and num.
+ * @param {bool amount} When the amount parameter is true, the lcd screen does not display the amount icon.
+ *        {bool num}    When the num parameter is true, the lcd screen does not display the num icon.
+ * @return {*}  0-success, 1-err
+ */
+int32_t Paytm_Lcd_Num_Clear(bool amount, bool num);
 #endif

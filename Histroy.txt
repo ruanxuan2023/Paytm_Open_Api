@@ -157,3 +157,6 @@
 
 2024.08.09  Lib_V1.126
 * Adapt to some mp3 files which can't be played
+
+2024.09.05  Lib_V1.126
+* Modify the Lib version
