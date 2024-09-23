@@ -74,7 +74,7 @@
         {
           "name": "nvm",
           "format": "raw",
-          "size": "1000KiB"
+          "size": "1060KiB"
         },
         {
           "name": "customer_app",
