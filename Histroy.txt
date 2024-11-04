@@ -160,3 +160,6 @@
 
 2024.09.05  Lib_V1.126
 * Modify the Lib version
+
+2024.11.04  Lib_V1.127
+* Fix the problem of different formats of audio files cannot be played
