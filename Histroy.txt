@@ -163,3 +163,6 @@
 
 2024.11.04  Lib_V1.127
 * Fix the problem of different formats of audio files cannot be played
+
+2024.11.06  Lib_V1.128
+* Fix the api interface of different formats of audio files cannot be played
