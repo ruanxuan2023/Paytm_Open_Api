@@ -166,3 +166,6 @@
 
 2024.11.06  Lib_V1.128
 * Fix the api interface of different formats of audio files cannot be played
+
+2024.11.06  Lib_V1.129
+* Modify the charging percent status
